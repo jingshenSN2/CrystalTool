@@ -1,57 +1,45 @@
+import itertools
 import math
 
-class Atom():
-    def __int__(self, type, cords):
-        self.type = type
-        self.cords = cords
-        self.neighbors = set()
+import numpy as np
 
-    def addNeighbor(self, atom):
-        self.neighbors.add(atom)
+from Atom import Atom
 
 
-class Cell():
+class Cell:
     def __init__(self):
-        self.latParaA = 0
-        self.latParaB = 0
-        self.latParaC = 0
-        self.latParaAlpha = 0
-        self.latParaBeta = 0
-        self.latParaGamma = 0
-        self.atomList = []
+        self.a = 0
+        self.b = 0
+        self.c = 0
+        self.alpha = 0
+        self.beta = 0
+        self.gamma = 0
+        self.atom_list = []
 
-    def setLatPara(self, a, b, c):
-        self.latParaA = a
-        self.latParaB = b
-        self.latParaC = c
+    def set_lat_para(self, a, b, c, alpha, beta, gamma):
+        self.a = a
+        self.b = b
+        self.c = c
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
 
-    def setLatPara(self, a, b, c, alpha, beta, gamma):
-        self.setLatPara(self, a, b, c)
-        self.latParaAlpha = alpha
-        self.latParaBeta = beta
-        self.latParaGamma = gamma
-
-    def addAtom(self, atom):
-        self.atomList.append(atom)
+    def add_atom(self, element, cord, intensity):
+        self.atom_list.append(Atom(element, cord, intensity))
 
     def expand(self):
-        for atom in self.atomList:
-            newAtomList = []
-            for i in range(2):
-                for j in range(2):
-                    for k in range(2):
-                        if i * j * k != 0:
-                            newAtomList.append(
-                                Atom(atom.type, (atom.cords[0] + i, atom.cords[1] + j, atom.cords[2] + k)))
-            for newAtom in newAtomList:
-                self.atomList.append(newAtom)
-        # 我的想法是expand不变晶胞参数,然后新加的原子也可以用大于1的分数坐标表示,这样计算距离也很方便
+        for atom in self.atom_list.copy():
+            for i, j, k in itertools.permutations([0, 1, 2]):
+                print(i, j, k)
+                if i * j * k != 0:
+                    self.add_atom(atom.element, atom.cords + np.array([i, j, k]), atom.intensity)
 
-    def calcDist(self, atom1, atom2):
+    def distance(self, atom1, atom2):
+        atom1.cords * np.array([self.a, self.b, self.c])
         return math.inf
 
-    def calcNeighbors(self, distThres): # distThres表示距离阈值
-        for ind1 in range(len(self.atomList)):
-            for ind2 in range(ind1 + 1, len(self.atomList)):
-                if self.calcDist(self.atomList[ind1], self.atomList[ind2]) <= distThres:
-                    self.atomList[ind1].addNeighbor(self.atomList[ind2])
+    def calc_neighbors(self, max_distance):
+        for ind1 in range(len(self.atom_list)):
+            for ind2 in range(ind1 + 1, len(self.atom_list)):
+                if self.distance(self.atom_list[ind1], self.atom_list[ind2]) <= max_distance:
+                    self.atom_list[ind1].add_neighbor(self.atom_list[ind2])
