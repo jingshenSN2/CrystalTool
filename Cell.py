@@ -1,9 +1,12 @@
 import itertools
 import math
 
-import numpy as np
-
 from Atom import Atom
+
+
+def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
+    return a ** 2 * dx ** 2 + b ** 2 * dy ** 2 + c ** 2 * dz ** 2 + 2 * b * c * dy * dz * math.cos(alpha) \
+           + 2 * a * c * dx * dz * math.cos(beta) + 2 * a * b * dx * dy * math.cos(gamma)
 
 
 class Cell:
@@ -24,22 +27,30 @@ class Cell:
         self.beta = beta
         self.gamma = gamma
 
-    def add_atom(self, element, cord, intensity):
-        self.atom_list.append(Atom(element, cord, intensity))
+    def add_atom(self, element, x, y, z, intensity):
+        self.atom_list.append(Atom(element, x, y, z, intensity))
 
     def expand(self):
-        for atom in self.atom_list.copy():
-            for i, j, k in itertools.permutations([0, 1, 2]):
-                print(i, j, k)
-                if i * j * k != 0:
-                    self.add_atom(atom.element, atom.cords + np.array([i, j, k]), atom.intensity)
+        for i, j, k in itertools.product(*[0, 1] * 3):
+            if i == j == k == 0:
+                continue
+            print(i, j, k)
+            for atom in self.atom_list.copy():
+                self.add_atom(atom.element, atom.x + i, atom.y + j, atom.z + k, atom.intensity)
 
     def distance(self, atom1, atom2):
-        atom1.cords * np.array([self.a, self.b, self.c])
-        return math.inf
+        dx = atom2.x - atom1.x
+        dy = atom2.y - atom1.y
+        dz = atom2.z - atom1.z
+        return math.sqrt(square_distance(self.a, self.b, self.c, self.alpha, self.beta, self.gamma, dx, dy, dz))
 
     def calc_neighbors(self, max_distance):
-        for ind1 in range(len(self.atom_list)):
-            for ind2 in range(ind1 + 1, len(self.atom_list)):
-                if self.distance(self.atom_list[ind1], self.atom_list[ind2]) <= max_distance:
-                    self.atom_list[ind1].add_neighbor(self.atom_list[ind2])
+        for atom1, atom2 in itertools.combinations(self.atom_list, 2):
+            dist = self.distance(atom1, atom2)
+            if dist <= max_distance:
+                atom1.add_neighbor(atom2, dist)
+                atom2.add_neighbor(atom1, dist)
+        for atom in self.atom_list:
+            dic = atom.neighbors
+            l = sorted(dic.items(), key=lambda dic: dic[1], reverse=False)[:6]
+            atom.neighbors = dict(l)

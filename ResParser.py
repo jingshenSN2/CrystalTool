@@ -1,7 +1,5 @@
 import string
 
-import numpy as np
-
 from Cell import Cell
 
 
@@ -27,10 +25,11 @@ def parse_res(filename):
                 if len(tmp) == 8:
                     intensity = tmp[7]
                 print('add atom:', elename, x, y, z, intensity)
-                cell.add_atom(elename, np.array([x, y, z]), intensity)
+                cell.add_atom(elename, x, y, z, intensity)
     return cell
 
 
 cell = parse_res('c21.res')
+cell.calc_neighbors(1.8)
 
 print(1)
