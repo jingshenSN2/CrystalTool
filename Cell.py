@@ -27,8 +27,8 @@ class Cell:
         self.beta = beta
         self.gamma = gamma
 
-    def add_atom(self, element, x, y, z, intensity):
-        self.atom_list.append(Atom(element, x, y, z, intensity))
+    def add_atom(self, element, index, x, y, z, intensity):
+        self.atom_list.append(Atom(element, index, x, y, z, intensity))
 
     def expand(self):
         for i, j, k in itertools.product(*[0, 1] * 3):
@@ -36,7 +36,7 @@ class Cell:
                 continue
             print(i, j, k)
             for atom in self.atom_list.copy():
-                self.add_atom(atom.element, atom.x + i, atom.y + j, atom.z + k, atom.intensity)
+                self.add_atom(atom.element, atom.index, atom.x + i, atom.y + j, atom.z + k, atom.intensity)
 
     def distance(self, atom1, atom2):
         dx = atom2.x - atom1.x

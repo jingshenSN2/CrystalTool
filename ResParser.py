@@ -20,12 +20,13 @@ def parse_res(filename):
             if flag:
                 tmp = line.split()
                 elename = tmp[0].strip(string.digits)
+                index = tmp[0].strip(string.ascii_letters)
                 x, y, z = map(float, tmp[2:5])
                 intensity = -1
                 if len(tmp) == 8:
                     intensity = tmp[7]
-                print('add atom:', elename, x, y, z, intensity)
-                cell.add_atom(elename, x, y, z, intensity)
+                print('add atom:', elename, index, x, y, z, intensity)
+                cell.add_atom(elename, index, x, y, z, intensity)
     return cell
 
 
