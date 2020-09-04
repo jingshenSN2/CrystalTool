@@ -1,3 +1,5 @@
+import math
+
 class Atom():
     def __int__(self, type, cords):
         self.type = type
@@ -46,7 +48,7 @@ class Cell():
         # 我的想法是expand不变晶胞参数,然后新加的原子也可以用大于1的分数坐标表示,这样计算距离也很方便
 
     def calcDist(self, atom1, atom2):
-        pass
+        return math.inf
 
     def calcNeighbors(self, distThres): # distThres表示距离阈值
         for ind1 in range(len(self.atomList)):
