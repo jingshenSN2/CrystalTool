@@ -31,6 +31,6 @@ def parse_res(filename):
 
 
 cell = parse_res('c21.res')
-cell.calc_neighbors(1.8)
+cell.calc_neighbors()
 
-print(1)
+print(cell.atom_list)
