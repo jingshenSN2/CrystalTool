@@ -9,17 +9,17 @@ def parse_res(filename):
     with open(filename, 'r') as f:
         for line in f.readlines():
             line = line.strip('\n')
-            if line.startswith('CELL'):
+            if line.startswith('CELL'):  # 读取晶胞参数
                 line = line.strip('CELL ')
                 _, a, b, c, alpha, beta, gamma = map(float, line.split())
                 print('cell parameters:', a, b, c, alpha, beta, gamma)
                 cell.set_lat_para(a, b, c, alpha, beta, gamma)
-            if line.startswith('MOLE'):
+            if line.startswith('MOLE'):  # 准备读取分数坐标部分
                 flag = not flag
                 continue
             if flag:
                 tmp = line.split()
-                elename = tmp[0].strip(string.digits)
+                elename = tmp[0].strip(string.digits)  # 元素符号和序号分离
                 index = tmp[0].strip(string.ascii_letters)
                 x, y, z = map(float, tmp[2:5])
                 intensity = -1
