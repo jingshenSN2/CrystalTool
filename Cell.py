@@ -2,7 +2,7 @@ import itertools
 import math
 
 from Atom import Atom
-from AtomDistance import atom_pair_distance
+from AtomDistance import AtomDistanceHelper
 
 
 def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
@@ -19,6 +19,7 @@ class Cell:
         self.beta = 0
         self.gamma = 0
         self.atom_list = []
+        self.max_distances = AtomDistanceHelper('atom_properties.txt').max_distances
 
     def set_lat_para(self, a, b, c, alpha, beta, gamma):
         self.a = a
@@ -45,8 +46,7 @@ class Cell:
         dz = atom2.z - atom1.z
         dist = math.sqrt(square_distance(self.a, self.b, self.c, self.alpha, self.beta, self.gamma, dx, dy, dz))
         atom_pair = frozenset([atom1.element, atom2.element])
-        max_distances = atom_pair_distance('atom_properties.txt')
-        return True, dist if dist <= max_distances[atom_pair] else False
+        return True, dist if dist <= self.max_distances[atom_pair] else False
 
     def calc_neighbors(self):
         for atom1, atom2 in itertools.combinations(self.atom_list, 2):
