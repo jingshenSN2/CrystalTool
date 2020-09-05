@@ -2,6 +2,7 @@ import itertools
 import math
 
 from Atom import Atom
+from AtomDistance import atom_pair_distance
 
 
 def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
@@ -38,19 +39,22 @@ class Cell:
             for atom in self.atom_list.copy():
                 self.add_atom(atom.element, atom.index, atom.x + i, atom.y + j, atom.z + k, atom.intensity)
 
-    def distance(self, atom1, atom2):
+    def distance_judge(self, atom1, atom2):
         dx = atom2.x - atom1.x
         dy = atom2.y - atom1.y
         dz = atom2.z - atom1.z
-        return math.sqrt(square_distance(self.a, self.b, self.c, self.alpha, self.beta, self.gamma, dx, dy, dz))
+        dist = math.sqrt(square_distance(self.a, self.b, self.c, self.alpha, self.beta, self.gamma, dx, dy, dz))
+        atom_pair = frozenset([atom1.element, atom2.element])
+        max_distances = atom_pair_distance('atom_properties.txt')
+        return True, dist if dist <= max_distances[atom_pair] else False
 
-    def calc_neighbors(self, max_distance):
+    def calc_neighbors(self):
         for atom1, atom2 in itertools.combinations(self.atom_list, 2):
-            dist = self.distance(atom1, atom2)
-            if dist <= max_distance:
-                atom1.add_neighbor(atom2, dist)
-                atom2.add_neighbor(atom1, dist)
-        for atom in self.atom_list:
-            dic = atom.neighbors
-            l = sorted(dic.items(), key=lambda dic: dic[1], reverse=False)[:6]
-            atom.neighbors = dict(l)
+            res = self.distance_judge(atom1, atom2)
+            if res[0]:
+                atom1.add_neighbor(atom2, res[1])
+                atom2.add_neighbor(atom1, res[1])
+        # for atom in self.atom_list:
+        #     dic = atom.neighbors
+        #     l = sorted(dic.items(), key=lambda dic: dic[1], reverse=False)[:6]
+        #     atom.neighbors = dict(l)
