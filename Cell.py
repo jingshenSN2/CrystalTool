@@ -46,11 +46,14 @@ class Cell:
         dz = atom2.z - atom1.z
         dist = math.sqrt(square_distance(self.a, self.b, self.c, self.alpha, self.beta, self.gamma, dx, dy, dz))
         atom_pair = frozenset([atom1.element, atom2.element])
-        return True, dist if dist <= self.max_distances[atom_pair] else False
+        if dist <= self.max_distances[atom_pair]:
+            return True, dist
+        else:
+            return False, dist
 
     def calc_neighbors(self):
         for atom1, atom2 in itertools.combinations(self.atom_list, 2):
-            res = self.distance_judge(atom1, atom2)
-            if res[0]:
-                atom1.add_neighbor(atom2, res[1])
-                atom2.add_neighbor(atom1, res[1])
+            within, dist = self.distance_judge(atom1, atom2)
+            if within:
+                atom1.add_neighbor(atom2, dist)
+                atom2.add_neighbor(atom1, dist)
