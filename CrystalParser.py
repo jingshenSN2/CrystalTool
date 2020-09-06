@@ -28,9 +28,3 @@ def parse_res(filename):
                 print('add atom:', elename, index, x, y, z, intensity)
                 cell.add_atom(elename, index, x, y, z, intensity)
     return cell
-
-
-cell = parse_res('c21.res')
-cell.calc_neighbors()
-
-print(cell.atom_list)

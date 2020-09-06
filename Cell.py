@@ -1,8 +1,8 @@
 import itertools
 import math
 
+import DistanceHelper
 from Atom import Atom
-from AtomDistance import AtomDistanceHelper
 
 
 def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
@@ -19,7 +19,7 @@ class Cell:
         self.beta = 0
         self.gamma = 0
         self.atom_list = []
-        self.max_distances = AtomDistanceHelper('atom_properties.txt').max_distances
+        self.max_distances = DistanceHelper.gen_max_distances('atom_properties.txt')
 
     def set_lat_para(self, a, b, c, alpha, beta, gamma):
         self.a = a
@@ -54,7 +54,3 @@ class Cell:
             if res[0]:
                 atom1.add_neighbor(atom2, res[1])
                 atom2.add_neighbor(atom1, res[1])
-        # for atom in self.atom_list:
-        #     dic = atom.neighbors
-        #     l = sorted(dic.items(), key=lambda dic: dic[1], reverse=False)[:6]
-        #     atom.neighbors = dict(l)
