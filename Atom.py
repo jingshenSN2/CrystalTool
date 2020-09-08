@@ -10,3 +10,6 @@ class Atom:
 
     def add_neighbor(self, atom, distance):
         self.neighbors[atom] = distance
+
+    def remove_neighbor(self, atom):
+        del self.neighbors[atom]

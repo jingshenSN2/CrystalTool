@@ -19,7 +19,7 @@ class Cell:
         self.beta = 0
         self.gamma = 0
         self.atom_list = []
-        self.max_distances = DistanceHelper.gen_max_distances('atom_properties.txt')
+        self.max_distances, self.max_connect = DistanceHelper.get_atom_properties('atom_properties.txt')
 
     def set_lat_para(self, a, b, c, alpha, beta, gamma):
         self.a = a
@@ -57,3 +57,10 @@ class Cell:
             if within:
                 atom1.add_neighbor(atom2, dist)
                 atom2.add_neighbor(atom1, dist)
+        for atom in self.atom_list:
+            dic = atom.neighbors
+            if len(dic.keys()) > self.max_connect[atom.element]:
+                outranges = sorted(dic.items(), key=lambda dic: dic[1], reverse=False)[self.max_connect[atom.element]:]
+                for other, dist in outranges:
+                    atom.remove_neighbor(other)
+                    other.remove_neighbor(atom)
