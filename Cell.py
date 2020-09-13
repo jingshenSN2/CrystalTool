@@ -6,8 +6,10 @@ from Atom import Atom
 
 
 def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
-    return a ** 2 * dx ** 2 + b ** 2 * dy ** 2 + c ** 2 * dz ** 2 + 2 * b * c * dy * dz * math.cos(alpha) \
-           + 2 * a * c * dx * dz * math.cos(beta) + 2 * a * b * dx * dy * math.cos(gamma)
+    return a ** 2 * dx ** 2 + b ** 2 * dy ** 2 + c ** 2 * dz ** 2 + 2 * b * c * dy * dz * math.cos(
+        alpha * math.pi / 180.0) \
+           + 2 * a * c * dx * dz * math.cos(beta * math.pi / 180.0) + 2 * a * b * dx * dy * math.cos(
+        gamma * math.pi / 180.0)
 
 
 class Cell:
