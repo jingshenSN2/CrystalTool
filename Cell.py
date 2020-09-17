@@ -1,5 +1,8 @@
 import itertools
 import math
+import os
+
+current_path = os.path.dirname(__file__)
 
 import DistanceHelper
 from Atom import Atom
@@ -21,7 +24,7 @@ class Cell:
         self.beta = 0
         self.gamma = 0
         self.atom_list = []
-        self.max_distances, self.max_connect = DistanceHelper.get_atom_properties('atom_properties.txt')
+        self.max_distances, self.max_connect = DistanceHelper.get_atom_properties(current_path + '/atom_properties.txt')
 
     def set_lat_para(self, a, b, c, alpha, beta, gamma):
         self.a = a
@@ -35,7 +38,7 @@ class Cell:
         self.atom_list.append(Atom(element, index, x, y, z, intensity))
 
     def expand(self):
-        for i, j, k in itertools.product(*[0, 1] * 3):
+        for i, j, k in itertools.product([0, 1], repeat=3):
             if i == j == k == 0:
                 continue
             print(i, j, k)

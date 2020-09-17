@@ -3,6 +3,7 @@ import networkx as nx
 import CrystalParser
 import GraphHandler
 
+
 cell = CrystalParser.parse_res('c21_origin.res')
 cell.calc_neighbors()
 graph = GraphHandler.graph_converter(cell)
