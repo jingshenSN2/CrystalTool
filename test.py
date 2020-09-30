@@ -19,4 +19,10 @@ print(gm.subgraph_is_isomorphic())
 for i in gm.subgraph_isomorphisms_iter():
     GraphHandler.draw_graph_highlight(subgraph, i)
     print(i)
+    break
+
+pattern = CrystalParser.parse_pdb('petide.pdb')
+pattern.calc_neighbors()
+graph2 = GraphHandler.graph_converter(pattern)
+GraphHandler.draw_graph(graph2)
 

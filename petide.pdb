@@ -1,0 +1,198 @@
+REMARK   Materials Studio PDB file
+REMARK   Created:  Fri Sep 11 12:08:22 ?D1¨²¡À¨º¡Á?¨º¡À?? 2020
+ATOM      1  C   UNL C   1      -3.010   1.288   1.201  1.00  0.00           C    
+ATOM      2  N   UNL C   1      -2.942   1.237  -0.165  1.00  0.00           N    
+ATOM      3  C   UNL C   1      -1.779   1.288  -1.063  1.00  0.00           C    
+ATOM      4  C   UNL C   1      -0.601   0.330  -0.664  1.00  0.00           C    
+ATOM      5  O   UNL C   1       0.450   0.349  -1.284  1.00  0.00           O    
+ATOM      6  N   UNL C   1      -0.727  -0.506   0.395  1.00  0.00           N    
+ATOM      7  C   UNL C   1       0.434  -1.236   0.932  1.00  0.00           C    
+ATOM      8  C   UNL C   1       1.541  -0.203   1.339  1.00  0.00           C    
+ATOM      9  N   UNL C   1       2.802  -0.498   0.951  1.00  0.00           N    
+ATOM     10  C   UNL C   1       3.889   0.461   1.210  1.00  0.00           C    
+ATOM     11  C   UNL C   1       5.174   0.174   0.403  1.00  0.00           C    
+ATOM     12  C   UNL C   1       5.165  -0.038  -1.136  1.00  0.00           C    
+ATOM     13  C   UNL C   1       4.876   1.194  -2.048  1.00  0.00           C    
+ATOM     14  C   UNL C   1       3.715   2.148  -1.711  1.00  0.00           C    
+ATOM     15  C   UNL C   1       4.159   3.351  -0.875  1.00  0.00           C    
+ATOM     16  S   UNL C   1       2.856   4.602  -0.685  1.00  0.00           S    
+ATOM     17  C   UNL C   1       1.530   3.720   0.193  1.00  0.00           C    
+ATOM     18  C   UNL C   1       0.307   4.617   0.456  1.00  0.00           C    
+ATOM     19  C   UNL C   1      -0.950   3.932   0.926  1.00  0.00           C    
+ATOM     20  N   UNL C   1      -0.826   2.715   1.505  1.00  0.00           N    
+ATOM     21  C   UNL C   1      -1.965   2.036   2.127  1.00  0.00           C    
+ATOM     22  C   UNL C   1      -2.738   2.835   3.196  1.00  0.00           C    
+ATOM     23  O   UNL C   1      -2.067   4.403   0.782  1.00  0.00           O    
+ATOM     24  N   UNL C   1       0.601   5.781   1.351  1.00  0.00           N    
+ATOM     25  C   UNL C   1      -0.363   6.702   1.668  1.00  0.00           C    
+ATOM     26  O   UNL C   1      -1.121   6.996   0.558  1.00  0.00           O    
+ATOM     27  C   UNL C   1      -2.198   7.895   0.778  1.00  0.00           C    
+ATOM     28  O   UNL C   1      -0.487   7.203   2.766  1.00  0.00           O    
+ATOM     29  C   UNL C   1       4.327  -1.264  -1.500  1.00  0.00           C    
+ATOM     30  C   UNL C   1       3.088  -1.196  -2.135  1.00  0.00           C    
+ATOM     31  C   UNL C   1       2.357  -2.342  -2.437  1.00  0.00           C    
+ATOM     32  C   UNL C   1       2.867  -3.602  -2.121  1.00  0.00           C    
+ATOM     33  C   UNL C   1       4.112  -3.693  -1.496  1.00  0.00           C    
+ATOM     34  C   UNL C   1       4.821  -2.535  -1.192  1.00  0.00           C    
+ATOM     35  C   UNL C   1       4.374   0.519   2.710  1.00  0.00           C    
+ATOM     36  O   UNL C   1       5.319   1.210   3.043  1.00  0.00           O    
+ATOM     37  N   UNL C   1       3.769  -0.238   3.654  1.00  0.00           N    
+ATOM     38  O   UNL C   1       1.323   0.765   2.050  1.00  0.00           O    
+ATOM     39  C   UNL C   1       0.042  -1.951   2.235  1.00  0.00           C    
+ATOM     40  C   UNL C   1       0.815  -4.876   1.905  1.00  0.00           C    
+ATOM     41  C   UNL C   1       0.742  -5.703   3.025  1.00  0.00           C    
+ATOM     42  C   UNL C   1       1.890  -6.211   3.627  1.00  0.00           C    
+ATOM     43  C   UNL C   1       3.148  -5.895   3.108  1.00  0.00           C    
+ATOM     44  C   UNL C   1       3.237  -5.070   1.985  1.00  0.00           C    
+ATOM     45  C   UNL C   1       2.077  -4.573   1.396  1.00  0.00           C    
+ATOM     46  C   UNL C   1      -2.193   0.963  -2.506  1.00  0.00           C    
+ATOM     47  O   UNL C   1      -3.961   0.725   1.712  1.00  0.00           O    
+ATOM     48  H   UNL C   1      -3.757   0.779  -0.548  1.00  0.00           H    
+ATOM     49  H   UNL C   1      -1.325   2.289  -1.045  1.00  0.00           H    
+ATOM     50  H   UNL C   1      -1.592  -0.562   0.906  1.00  0.00           H    
+ATOM     51  H   UNL C   1       0.778  -1.965   0.179  1.00  0.00           H    
+ATOM     52  H   UNL C   1       2.984  -1.223   0.273  1.00  0.00           H    
+ATOM     53  H   UNL C   1       3.527   1.482   1.018  1.00  0.00           H    
+ATOM     54  H   UNL C   1       5.643  -0.726   0.841  1.00  0.00           H    
+ATOM     55  H   UNL C   1       5.869   1.008   0.618  1.00  0.00           H    
+ATOM     56  H   UNL C   1       6.212  -0.305  -1.384  1.00  0.00           H    
+ATOM     57  H   UNL C   1       4.759   0.820  -3.082  1.00  0.00           H    
+ATOM     58  H   UNL C   1       5.794   1.809  -2.084  1.00  0.00           H    
+ATOM     59  H   UNL C   1       2.884   1.621  -1.218  1.00  0.00           H    
+ATOM     60  H   UNL C   1       3.308   2.538  -2.661  1.00  0.00           H    
+ATOM     61  H   UNL C   1       4.536   3.057   0.115  1.00  0.00           H    
+ATOM     62  H   UNL C   1       4.989   3.866  -1.388  1.00  0.00           H    
+ATOM     63  H   UNL C   1       1.929   3.312   1.133  1.00  0.00           H    
+ATOM     64  H   UNL C   1       1.207   2.873  -0.433  1.00  0.00           H    
+ATOM     65  H   UNL C   1      -0.024   5.053  -0.500  1.00  0.00           H    
+ATOM     66  H   UNL C   1       0.075   2.279   1.647  1.00  0.00           H    
+ATOM     67  H   UNL C   1      -1.521   1.174   2.659  1.00  0.00           H    
+ATOM     68  H   UNL C   1      -2.033   3.304   3.900  1.00  0.00           H    
+ATOM     69  H   UNL C   1      -3.381   2.148   3.769  1.00  0.00           H    
+ATOM     70  H   UNL C   1      -3.368   3.625   2.764  1.00  0.00           H    
+ATOM     71  H   UNL C   1       1.165   5.505   2.139  1.00  0.00           H    
+ATOM     72  H   UNL C   1      -2.901   7.478   1.517  1.00  0.00           H    
+ATOM     73  H   UNL C   1      -2.739   8.054  -0.167  1.00  0.00           H    
+ATOM     74  H   UNL C   1      -1.825   8.866   1.137  1.00  0.00           H    
+ATOM     75  H   UNL C   1       2.667  -0.220  -2.412  1.00  0.00           H    
+ATOM     76  H   UNL C   1       1.381  -2.248  -2.936  1.00  0.00           H    
+ATOM     77  H   UNL C   1       2.300  -4.511  -2.369  1.00  0.00           H    
+ATOM     78  H   UNL C   1       4.533  -4.679  -1.250  1.00  0.00           H    
+ATOM     79  H   UNL C   1       5.805  -2.621  -0.707  1.00  0.00           H    
+ATOM     80  H   UNL C   1       2.885  -0.668   3.457  1.00  0.00           H    
+ATOM     81  H   UNL C   1       4.076  -0.070   4.596  1.00  0.00           H    
+ATOM     82  H   UNL C   1      -0.373  -1.205   2.937  1.00  0.00           H    
+ATOM     83  H   UNL C   1       0.966  -2.335   2.703  1.00  0.00           H    
+ATOM     84  H   UNL C   1      -0.246  -5.954   3.439  1.00  0.00           H    
+ATOM     85  H   UNL C   1       1.806  -6.860   4.512  1.00  0.00           H    
+ATOM     86  H   UNL C   1       4.058  -6.293   3.579  1.00  0.00           H    
+ATOM     87  H   UNL C   1       4.221  -4.815   1.566  1.00  0.00           H    
+ATOM     88  H   UNL C   1       2.152  -3.926   0.513  1.00  0.00           H    
+ATOM     89  H   UNL C   1      -2.587  -0.060  -2.594  1.00  0.00           H    
+ATOM     90  H   UNL C   1      -1.323   1.069  -3.175  1.00  0.00           H    
+ATOM     91  H   UNL C   1      -2.967   1.669  -2.845  1.00  0.00           H    
+ATOM     92  C   UNL C   1      -0.956  -3.115   2.096  1.00  0.00           C    
+ATOM     93  C   UNL C   1      -0.436  -4.310   1.273  1.00  0.00           C    
+ATOM     94  H   UNL C   1      -1.899  -2.743   1.656  1.00  0.00           H    
+ATOM     95  H   UNL C   1      -1.221  -3.473   3.108  1.00  0.00           H    
+ATOM     96  H   UNL C   1      -0.244  -4.002   0.233  1.00  0.00           H    
+ATOM     97  H   UNL C   1      -1.216  -5.089   1.216  1.00  0.00           H    
+TER      98 
+CONECT    1    2   21   47
+CONECT    2    1    3   48
+CONECT    3    2    4   49   46
+CONECT    4    3    5    6
+CONECT    5    4
+CONECT    6    4    7   50
+CONECT    7    6    8   51   39
+CONECT    8    7    9   38
+CONECT    9    8   10   52
+CONECT   10    9   35   53   11
+CONECT   11   54   55   10   12
+CONECT   12   29   56   11   13
+CONECT   13   57   58   12   14
+CONECT   14   59   60   13   15
+CONECT   15   16   61   62   14
+CONECT   16   15   17
+CONECT   17   16   63   64   18
+CONECT   18   19   24   65   17
+CONECT   19   18   20   23
+CONECT   20   19   21   66
+CONECT   21    1   20   67   22
+CONECT   22   68   69   70   21
+CONECT   23   19
+CONECT   24   18   25   71
+CONECT   25   24   26   28
+CONECT   26   25   27
+CONECT   27   26   72   73   74
+CONECT   28   25
+CONECT   29   12   30   34
+CONECT   30   29   31   75
+CONECT   31   30   32   76
+CONECT   32   31   33   77
+CONECT   33   32   34   78
+CONECT   34   29   33   79
+CONECT   35   10   36   37
+CONECT   36   35
+CONECT   37   35   80   81
+CONECT   38    8
+CONECT   39   82   83    7   92
+CONECT   40   41   45   93
+CONECT   41   40   42   84
+CONECT   42   41   43   85
+CONECT   43   42   44   86
+CONECT   44   43   45   87
+CONECT   45   40   44   88
+CONECT   46   89   90   91    3
+CONECT   47    1
+CONECT   48    2
+CONECT   49    3
+CONECT   50    6
+CONECT   51    7
+CONECT   52    9
+CONECT   53   10
+CONECT   54   11
+CONECT   55   11
+CONECT   56   12
+CONECT   57   13
+CONECT   58   13
+CONECT   59   14
+CONECT   60   14
+CONECT   61   15
+CONECT   62   15
+CONECT   63   17
+CONECT   64   17
+CONECT   65   18
+CONECT   66   20
+CONECT   67   21
+CONECT   68   22
+CONECT   69   22
+CONECT   70   22
+CONECT   71   24
+CONECT   72   27
+CONECT   73   27
+CONECT   74   27
+CONECT   75   30
+CONECT   76   31
+CONECT   77   32
+CONECT   78   33
+CONECT   79   34
+CONECT   80   37
+CONECT   81   37
+CONECT   82   39
+CONECT   83   39
+CONECT   84   41
+CONECT   85   42
+CONECT   86   43
+CONECT   87   44
+CONECT   88   45
+CONECT   89   46
+CONECT   90   46
+CONECT   91   46
+CONECT   92   39   93   94   95
+CONECT   93   92   40   96   97
+CONECT   94   92
+CONECT   95   92
+CONECT   96   93
+CONECT   97   93
+END

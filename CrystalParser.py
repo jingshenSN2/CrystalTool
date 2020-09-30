@@ -28,3 +28,19 @@ def parse_res(filename):
                 print('add atom:', elename, index, x, y, z, intensity)
                 cell.add_atom(elename, index, x, y, z, intensity)
     return cell
+
+def parse_pdb(filename):
+    cell = Cell()
+    with open(filename, 'r') as f:
+        for line in f.readlines():
+            line = line.strip('\n')
+            cell.set_lat_para(1, 1, 1, 90, 90, 90)
+            if line.startswith('ATOM'):
+                tmp = line.split()
+                element = tmp[-1]
+                if element == 'H':
+                    continue
+                index = tmp[1]
+                x, y, z = map(float, tmp[6:9])
+                cell.add_atom(element, index, x, y, z, 100)
+    return cell
