@@ -1,28 +1,21 @@
-import networkx as nx
-
 import CrystalParser
 import GraphHandler
 
 
-cell = CrystalParser.parse_res('c21_origin.res')
+cell = CrystalParser.parse_res('test/c21_origin.res')
 cell.calc_neighbors()
 graph = GraphHandler.graph_converter(cell)
-subgraph = GraphHandler.max_subgraph(graph)
-GraphHandler.draw_graph(subgraph)
-GraphHandler.draw_graph(graph)
+target = GraphHandler.max_subgraph(graph)
+GraphHandler.draw_graph(target, direction='a')
+GraphHandler.draw_graph(target, direction='b')
+GraphHandler.draw_graph(target, direction='c')
 
-benz = nx.Graph([(1,2),(2,3),(3,4),(4,5),(5,6),(6,1),(6,7),(7,8),(7,9),(7,10)])
 
-gm = nx.algorithms.isomorphism.GraphMatcher(subgraph, benz, node_match=lambda x,y: True,
-                                             edge_match=lambda x,y:True)
-print(gm.subgraph_is_isomorphic())
-for i in gm.subgraph_isomorphisms_iter():
-    GraphHandler.draw_graph_highlight(subgraph, i)
-    print(i)
-    break
-
-pattern = CrystalParser.parse_pdb('petide.pdb')
+pattern = CrystalParser.parse_pdb('test/C15H21NO3S_C2.pdb')
 pattern.calc_neighbors()
 graph2 = GraphHandler.graph_converter(pattern)
-GraphHandler.draw_graph(graph2)
+query = GraphHandler.max_subgraph(graph2)
+GraphHandler.draw_graph(query, direction='a')
+GraphHandler.draw_graph(query, direction='b')
+GraphHandler.draw_graph(query, direction='c')
 
