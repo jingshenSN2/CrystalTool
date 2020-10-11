@@ -1,12 +1,9 @@
-from networkx.algorithms.isomorphism import GraphMatcher
 import networkx as nx
+from networkx.algorithms.isomorphism import GraphMatcher
 
 
 def node_match(atom1,atom2):
-    cno = ['C','N','O','Q']
-    if atom1['element'] in cno and atom2['element'] in cno:
-        return True
-    return atom1['element'] == atom2['element']
+    return abs(atom1['mass'] - atom2['mass']) <= 3
 
 
 def edge_match(edge1, edge2):
@@ -33,7 +30,7 @@ class MatchRater:
         self.node_match = node_match
         self.edge_match = edge_match
 
-    def match(self):
+    def shirnk_match(self):
         gm = GraphMatcher(self.target, self.query, node_match=self.node_match,
                           edge_match=self.edge_match)
         while not gm.subgraph_is_isomorphic():
@@ -42,11 +39,5 @@ class MatchRater:
                 print('匹配失败')
                 return False
             gm = GraphMatcher(self.target, self.query, node_match=self.node_match,
-                          edge_match=self.edge_match)
+                              edge_match=self.edge_match)
         return gm.subgraph_isomorphisms_iter()
-
-
-
-
-
-

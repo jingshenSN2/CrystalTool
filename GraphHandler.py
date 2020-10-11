@@ -1,11 +1,11 @@
-import networkx as nx
 import matplotlib.pyplot as plt
+import networkx as nx
 
 
 def graph_converter(cell):
     g = nx.Graph()
     for atom in cell.atom_list:
-        g.add_node(atom, location=[atom.x, atom.y, atom.z], label=atom.element + atom.index, element=atom.element)
+        g.add_node(atom, location=[atom.x, atom.y, atom.z], label=atom.element + atom.index, mass=atom.mass)
         for neighbor in atom.neighbors.keys():
             if (atom, neighbor) not in g.edges:
                 g.add_edge(atom, neighbor, dist=round(atom.neighbors[neighbor], 2))

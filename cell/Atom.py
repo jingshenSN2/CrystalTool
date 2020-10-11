@@ -1,7 +1,8 @@
 class Atom:
-    def __init__(self, element, index, x, y, z, intensity):
+    def __init__(self, element, index, mass, x, y, z, intensity):
         self.element = element
         self.index = index
+        self.mass = mass
         self.x = x
         self.y = y
         self.z = z

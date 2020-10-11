@@ -2,10 +2,29 @@ import itertools
 import math
 import os
 
+from cell.Atom import Atom
+
 current_path = os.path.dirname(__file__)
 
-import DistanceHelper
-from Atom import Atom
+
+def get_atom_properties(filename):
+    atom_mass = {}
+    atom_dist = {}
+    atom_connect = {}
+    max_distances = {}
+    with open(filename, 'r') as f:
+        for line in f.readlines():
+            if line.startswith('#'):
+                continue
+            info_list = line.split(' ')
+            element = info_list[0]
+            atom_mass[element] = float(info_list[1])
+            atom_dist[element] = float(info_list[2])
+            atom_connect[element] = int(info_list[3])
+        for atom1, atom2 in itertools.combinations_with_replacement(atom_dist.keys(), 2):
+            atom_pair = frozenset([atom1, atom2])
+            max_distances[atom_pair] = round(atom_dist[atom1] + atom_dist[atom2], 2)
+    return atom_mass, max_distances, atom_connect
 
 
 def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
@@ -24,7 +43,8 @@ class Cell:
         self.beta = 0
         self.gamma = 0
         self.atom_list = []
-        self.max_distances, self.max_connect = DistanceHelper.get_atom_properties(current_path + '/atom_properties.txt')
+        self.atom_mass, self.max_distances, self.max_connect = get_atom_properties(
+            current_path + '/atom_properties.txt')
 
     def set_lat_para(self, a, b, c, alpha, beta, gamma):
         self.a = a
@@ -35,7 +55,7 @@ class Cell:
         self.gamma = gamma
 
     def add_atom(self, element, index, x, y, z, intensity):
-        self.atom_list.append(Atom(element, index, x, y, z, intensity))
+        self.atom_list.append(Atom(element, index, self.atom_mass[element], x, y, z, intensity))
 
     def expand(self):
         for i, j, k in itertools.product([0, 1], repeat=3):
