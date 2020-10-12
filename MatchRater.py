@@ -1,5 +1,5 @@
 import itertools
-
+import random
 import networkx as nx
 from networkx.algorithms.isomorphism import GraphMatcher
 
@@ -16,11 +16,11 @@ def shrink_one(graph):
     newgraph = nx.Graph(graph)
     degree = newgraph.degree
     flag = False
-    for node in newgraph.nodes():
-        if degree[node] == 1:
-            newgraph.remove_node(node)
-            flag = True
-            break
+    d1_nodes = [node for node in newgraph.nodes() if degree[node] == 1]
+    if len(d1_nodes) > 0:
+        remove_index = random.randint(0, len(d1_nodes)-1)
+        newgraph.remove_node(d1_nodes[remove_index])
+        flag = True
     return flag, newgraph
 
 
@@ -63,5 +63,3 @@ def match_2(target, query, loss_atom):
                 return res.subgraph_isomorphisms_iter()
     print('匹配失败')
     return False
-
-
