@@ -42,36 +42,26 @@ def check_subgraph(target, sub):
         return gm
 
 
-class MatchRater:
-    def __init__(self, target, query):
-        self.target = target
-        self.query = query
-        self.result = None
-
-    def match_1(self):
-        query = self.query
-        gm = GraphMatcher(self.target, query, node_match=node_match,
+def match_1(target, query, loss_atom):
+    query_copy = query
+    for i in range(loss_atom + 1):
+        gm = GraphMatcher(target, query_copy, node_match=node_match,
                           edge_match=edge_match)
-        while not gm.subgraph_is_isomorphic():
-            flag, query = shrink_one(query)
-            if not flag:
-                print('匹配失败')
-                return False
-            gm = GraphMatcher(self.target, query, node_match=node_match,
-                              edge_match=edge_match)
-        return gm.subgraph_isomorphisms_iter()
+        if gm.subgraph_is_isomorphic():
+            return gm.subgraph_isomorphisms_iter()
+        flag, query_copy = shrink_one(query_copy)
+    print('匹配失败')
+    return False
 
-    def match_2(self, loss_atom):
-        result = None
-        for i in range(loss_atom + 1):
-            subgraphs = gen_k(self.query, len(self.query.nodes) - i)
-            for sub in subgraphs:
-                res = check_subgraph(self.target, sub)
-                if res:
-                    result = res
-            if result is not None:
-                break
-        if result is None:
-            print('匹配失败')
-            return False
-        return result.subgraph_isomorphisms_iter()
+
+def match_2(target, query, loss_atom):
+    for i in range(loss_atom + 1):
+        subgraphs = gen_k(query, len(query.nodes) - i)
+        for sub in subgraphs:
+            res = check_subgraph(target, sub)
+            if res:
+                return res.subgraph_isomorphisms_iter()
+    print('匹配失败')
+    return False
+
+
