@@ -1,5 +1,6 @@
 import itertools
 import random
+import math
 import networkx as nx
 from networkx.algorithms.isomorphism import GraphMatcher
 
@@ -63,3 +64,15 @@ def match_2(target, query, loss_atom):
                 return res.subgraph_isomorphisms_iter()
     print('匹配失败')
     return False
+
+
+def rmsd(match_result):
+    res = 0.0
+    for atom1 in match_result.keys():
+        for neighbor in atom1.neighbors:
+            if neighbor in match_result.keys():
+                d1 = atom1.neighbors[neighbor]
+                d2 = match_result[atom1].neighbors[match_result[neighbor]]
+                res += (d1 - d2) ** 2
+    return math.sqrt(res/2)
+

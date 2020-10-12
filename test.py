@@ -25,7 +25,8 @@ result1 = MatchRater.match_1(target, query, 10)
 if result1:
     for i in result1:
         GraphHandler.draw_graph_highlight(target, i)
-        break
+        rmsd = MatchRater.rmsd(i)
+        print('rmsd %.2f' % rmsd)
 end = time.process_time()
 print(end - start)
 
@@ -34,6 +35,7 @@ result2 = MatchRater.match_2(target, query, 5)
 if result2:
     for i in result2:
         GraphHandler.draw_graph_highlight(target, i)
-        break
+        rmsd = MatchRater.rmsd(i)
+        print('rmsd %.2f' % rmsd)
 end = time.process_time()
 print(end - start)
