@@ -38,5 +38,3 @@ if result2:
         break
 end = time.process_time()
 print(end - start)
-
-print(1)

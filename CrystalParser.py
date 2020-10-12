@@ -12,7 +12,7 @@ def parse_res(filename):
             if line.startswith('CELL'):  # 读取晶胞参数
                 line = line.strip('CELL ')
                 _, a, b, c, alpha, beta, gamma = map(float, line.split())
-                #print('cell parameters:', a, b, c, alpha, beta, gamma)
+                # print('cell parameters:', a, b, c, alpha, beta, gamma)
                 cell.set_lat_para(a, b, c, alpha, beta, gamma)
             if line.startswith('MOLE'):  # 准备读取分数坐标部分
                 flag = not flag
@@ -25,9 +25,10 @@ def parse_res(filename):
                 intensity = -1
                 if len(tmp) == 8:
                     intensity = tmp[7]
-                #print('add atom:', element, index, x, y, z, intensity)
+                # print('add atom:', element, index, x, y, z, intensity)
                 cell.add_atom(element, index, x, y, z, intensity)
     return cell
+
 
 def parse_pdb(filename):
     cell = Cell()
@@ -43,6 +44,6 @@ def parse_pdb(filename):
                 continue
             index = tmp[1]
             x, y, z = map(float, tmp[-6:-3])
-            #print('add atom:', element, index, x, y, z, intensity)
+            # print('add atom:', element, index, x, y, z, intensity)
             cell.add_atom(element, index, x, y, z, 100)
     return cell
