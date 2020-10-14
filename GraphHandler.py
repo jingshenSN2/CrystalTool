@@ -17,6 +17,10 @@ def max_subgraph(graph):
     return graph.subgraph(c)
 
 
+def max_subgraph_converter(cell):
+    return max_subgraph(graph_converter(cell))
+
+
 def draw_graph(graph, direction='c'):
     plt.figure(figsize=(10, 9))
     cord = nx.get_node_attributes(graph, 'location')
@@ -66,3 +70,4 @@ def draw_graph_highlight(graph, highlight, direction='c'):
     plt.axis('off')
     plt.tight_layout()
     plt.show()
+

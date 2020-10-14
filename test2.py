@@ -5,7 +5,6 @@ import GraphHandler
 import MatchRater
 
 pattern = CrystalParser.parse_pdb('test/C15H21NO3S_C2.pdb')
-pattern.calc_neighbors()
 graph2 = GraphHandler.graph_converter(pattern)
 query = GraphHandler.max_subgraph(graph2)
 GraphHandler.draw_graph(query, direction='c')
@@ -13,7 +12,6 @@ GraphHandler.draw_graph(query, direction='c')
 
 def test(filename, loss_atom):
     cell = CrystalParser.parse_res('test/' + filename)
-    cell.calc_neighbors()
     target = GraphHandler.graph_converter(cell)
     # target = GraphHandler.max_subgraph(graph)
     # GraphHandler.draw_graph(target, direction='a')

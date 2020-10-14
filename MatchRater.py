@@ -2,6 +2,7 @@ import itertools
 import random
 import math
 import networkx as nx
+import GraphHandler
 from networkx.algorithms.isomorphism import GraphMatcher
 
 
@@ -44,7 +45,9 @@ def check_subgraph(target, sub):
         return gm
 
 
-def match_1(target, query, loss_atom):
+def match_1(target, query, loss_atom=0.2):
+    if isinstance(loss_atom, float):
+        loss_atom = int(math.ceil(len(query.nodes) * loss_atom))
     query_copy = query
     for i in range(min(loss_atom, len(query.nodes)) + 1):
         gm = GraphMatcher(target, query_copy, node_match=node_match,
@@ -52,18 +55,18 @@ def match_1(target, query, loss_atom):
         if gm.subgraph_is_isomorphic():
             return gm.subgraph_isomorphisms_iter()
         flag, query_copy = shrink_one(query_copy)
-    print('匹配失败')
     return False
 
 
-def match_2(target, query, loss_atom):
+def match_2(target, query, loss_atom=0.2):
+    if isinstance(loss_atom, float):
+        loss_atom = int(math.ceil(len(query.nodes) * loss_atom))
     for i in range(min(loss_atom, len(query.nodes)) + 1):
         subgraphs = gen_k(query, len(query.nodes) - i)
         for sub in subgraphs:
             res = check_subgraph(target, sub)
             if res:
                 return res.subgraph_isomorphisms_iter()
-    print('匹配失败')
     return False
 
 
@@ -77,3 +80,13 @@ def rmsd(match_result):
                 res += (d1 - d2) ** 2
     return math.sqrt(res/2)
 
+
+def best_result(match_results):
+    min_rmsd = 10000
+    best_result = None
+    for i in match_results:
+        cur_rmsd = rmsd(i)
+        if cur_rmsd < min_rmsd:
+            min_rmsd = cur_rmsd
+            best_result = i
+    return min_rmsd, best_result

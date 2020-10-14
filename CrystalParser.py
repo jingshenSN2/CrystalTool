@@ -27,6 +27,7 @@ def parse_res(filename):
                     intensity = tmp[7]
                 # print('add atom:', element, index, x, y, z, intensity)
                 cell.add_atom(element, index, x, y, z, intensity)
+    cell.calc_neighbors()
     return cell
 
 
@@ -46,4 +47,5 @@ def parse_pdb(filename):
             x, y, z = map(float, tmp[-6:-3])
             # print('add atom:', element, index, x, y, z, intensity)
             cell.add_atom(element, index, x, y, z, 100)
+    cell.calc_neighbors()
     return cell
