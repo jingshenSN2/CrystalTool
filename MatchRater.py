@@ -6,7 +6,8 @@ from networkx.algorithms.isomorphism import GraphMatcher
 
 
 def node_match(atom1, atom2):
-    return abs(atom1['mass'] - atom2['mass']) <= 3
+    ratio = atom1['mass'] / atom2['mass']
+    return 0.8 < ratio < 1.2
 
 
 def edge_match(edge1, edge2):
@@ -45,7 +46,7 @@ def check_subgraph(target, sub):
 
 def match_1(target, query, loss_atom):
     query_copy = query
-    for i in range(loss_atom + 1):
+    for i in range(min(loss_atom, len(query.nodes)) + 1):
         gm = GraphMatcher(target, query_copy, node_match=node_match,
                           edge_match=edge_match)
         if gm.subgraph_is_isomorphic():
@@ -56,7 +57,7 @@ def match_1(target, query, loss_atom):
 
 
 def match_2(target, query, loss_atom):
-    for i in range(loss_atom + 1):
+    for i in range(min(loss_atom, len(query.nodes)) + 1):
         subgraphs = gen_k(query, len(query.nodes) - i)
         for sub in subgraphs:
             res = check_subgraph(target, sub)

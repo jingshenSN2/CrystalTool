@@ -27,6 +27,7 @@ if result1:
         GraphHandler.draw_graph_highlight(target, i)
         rmsd = MatchRater.rmsd(i)
         print('rmsd %.2f' % rmsd)
+        break
 end = time.process_time()
 print(end - start)
 
@@ -37,5 +38,6 @@ if result2:
         GraphHandler.draw_graph_highlight(target, i)
         rmsd = MatchRater.rmsd(i)
         print('rmsd %.2f' % rmsd)
+        break
 end = time.process_time()
 print(end - start)
