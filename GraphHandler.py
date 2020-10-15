@@ -22,7 +22,7 @@ def max_subgraph_converter(cell):
 
 
 def draw_graph(graph, direction='c'):
-    plt.figure(figsize=(10, 9))
+    plt.figure(figsize=(10, 10))
     cord = nx.get_node_attributes(graph, 'location')
     pos = {}
     for key in cord.keys():
@@ -42,12 +42,11 @@ def draw_graph(graph, direction='c'):
     nx.draw_networkx_labels(graph, pos, labels=label)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_label)
     plt.axis('off')
-    plt.tight_layout()
     plt.show()
 
 
 def draw_graph_highlight(graph, highlight, direction='c'):
-    plt.figure(figsize=(10, 9))
+    plt.figure(figsize=(10, 10))
     cord = nx.get_node_attributes(graph, 'location')
     pos = {}
     for key in cord.keys():
@@ -68,6 +67,4 @@ def draw_graph_highlight(graph, highlight, direction='c'):
     nx.draw_networkx_labels(graph, pos, labels=label)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_label)
     plt.axis('off')
-    plt.tight_layout()
-    plt.show()
 

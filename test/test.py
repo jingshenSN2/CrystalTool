@@ -4,7 +4,7 @@ import CrystalParser
 import GraphHandler
 import MatchRater
 
-cell = CrystalParser.parse_res('test/c21_origin.res')
+cell = CrystalParser.parse_res('c21_origin.res')
 cell.calc_neighbors()
 graph = GraphHandler.graph_converter(cell)
 target = GraphHandler.max_subgraph(graph)

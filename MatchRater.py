@@ -2,7 +2,6 @@ import itertools
 import random
 import math
 import networkx as nx
-import GraphHandler
 from networkx.algorithms.isomorphism import GraphMatcher
 
 
