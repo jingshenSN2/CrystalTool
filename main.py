@@ -2,9 +2,7 @@ import sys
 import os
 import getopt
 import configparser
-import CrystalParser as CP
-import GraphHandler as GH
-import MatchRater as MR
+from src import CrystalParser as CP, MatchRater as MR, GraphHandler as GH
 import matplotlib.pyplot as plt
 
 
@@ -32,10 +30,10 @@ def run_task(id, setting):
     if result:
         rmsd, best_result = MR.best_result(result)
         GH.draw_graph_highlight(target, best_result)
-        plt.title('%s target=%s query=%s match_mode=%s loss_atom=%s rmsd=%.2f' % (id, setting['target'], setting['query'], match, setting['loss'], rmsd))
+        plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s rmsd=%.2f' % (id, setting['target'], setting['query'], match, setting['loss'], rmsd))
         if setting['fig'] in ('1', '2'):
             os.makedirs(setting['output_path'], exist_ok=True)
-            plt.savefig(setting['output_path'] + id.strip('task:') + '.jpg')
+            plt.savefig('%s%s.jpg' % (setting['output_path'], id.strip('task:')))
         if setting['fig'] == '2':
             plt.show()
         plt.close()

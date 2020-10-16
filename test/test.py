@@ -1,10 +1,8 @@
 import time
 
-import CrystalParser
-import GraphHandler
-import MatchRater
+from src import CrystalParser, MatchRater, GraphHandler
 
-cell = CrystalParser.parse_res('c21_origin.res')
+cell = CrystalParser.parse_res('test/c21_origin.res')
 cell.calc_neighbors()
 graph = GraphHandler.graph_converter(cell)
 target = GraphHandler.max_subgraph(graph)
@@ -12,13 +10,14 @@ target = GraphHandler.max_subgraph(graph)
 # GraphHandler.draw_graph(target, direction='b')
 GraphHandler.draw_graph(target, direction='c')
 
-pattern = CrystalParser.parse_pdb('test/C15H21NO3S_C2.pdb')
+pattern = CrystalParser.parse_pdb('test/query.pdb')
 pattern.calc_neighbors()
 graph2 = GraphHandler.graph_converter(pattern)
 query = GraphHandler.max_subgraph(graph2)
 # GraphHandler.draw_graph(query, direction='a')
 # GraphHandler.draw_graph(query, direction='b')
 GraphHandler.draw_graph(query, direction='c')
+
 
 start = time.process_time()
 result1 = MatchRater.match_1(target, query, 10)

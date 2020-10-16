@@ -2,7 +2,23 @@ import itertools
 import math
 import os
 
-from cell.Atom import Atom
+class Atom:
+    def __init__(self, element, index, mass, x, y, z, intensity):
+        self.element = element
+        self.index = index
+        self.mass = mass
+        self.x = x
+        self.y = y
+        self.z = z
+        self.intensity = intensity
+        self.neighbors = {}
+
+    def add_neighbor(self, atom, distance):
+        self.neighbors[atom] = distance
+
+    def remove_neighbor(self, atom):
+        del self.neighbors[atom]
+
 
 current_path = os.path.dirname(__file__)
 
@@ -56,14 +72,6 @@ class Cell:
 
     def add_atom(self, element, index, x, y, z, intensity):
         self.atom_list.append(Atom(element, index, self.atom_mass[element], x, y, z, intensity))
-
-    def expand(self):
-        for i, j, k in itertools.product([0, 1], repeat=3):
-            if i == j == k == 0:
-                continue
-            print(i, j, k)
-            for atom in self.atom_list.copy():
-                self.add_atom(atom.element, atom.index, atom.x + i, atom.y + j, atom.z + k, atom.intensity)
 
     def distance_judge(self, atom1, atom2):
         dx = atom2.x - atom1.x

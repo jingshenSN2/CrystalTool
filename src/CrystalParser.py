@@ -1,6 +1,6 @@
 import string
 
-from cell.Cell import Cell
+from src.Cell import Cell
 
 
 def parse_res(filename):

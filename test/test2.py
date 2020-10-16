@@ -1,8 +1,6 @@
 import time
 
-import CrystalParser
-import GraphHandler
-import MatchRater
+from src import CrystalParser, MatchRater, GraphHandler
 
 pattern = CrystalParser.parse_pdb('test/C15H21NO3S_C2.pdb')
 graph2 = GraphHandler.graph_converter(pattern)
