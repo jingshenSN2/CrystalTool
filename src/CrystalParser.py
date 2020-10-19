@@ -131,19 +131,21 @@ def parse_res(filename):
 
 def parse_pdb(filename):
     cell = Cell()
+    cell.set_lat_para(1, 1, 1, 90, 90, 90)
     with open(filename, 'r') as f:
-        for line in f.readlines()[2:]:
+        for line in f.readlines():
             line = line.strip('\n')
-            cell.set_lat_para(1, 1, 1, 90, 90, 90)
             tmp = line.split()
-            if line.startswith('CONECT') or len(tmp) < 8:
+            if len(tmp) < 8:
+                continue
+            if line.startswith('CONECT'):
                 break
             element = tmp[-1]
             if element == 'H':
                 continue
             index = tmp[1]
             x, y, z = map(float, tmp[-6:-3])
-            # print('add atom:', element, index, x, y, z, intensity)
+            # print('add atom:', element, index, x, y, z)
             cell.add_atom(element, index, x, y, z, 100)
     cell.calc_neighbors()
     return cell

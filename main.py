@@ -31,10 +31,10 @@ def run_task(id, setting):
         rmsd, best_result = MR.best_result(result)
         GH.draw_graph_highlight(target, best_result)
         plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s rmsd=%.2f' % (id, setting['target'], setting['query'], match, setting['loss'], rmsd))
-        if setting['fig'] in ('1', '2'):
+        if setting['output_fig'] in ('1', '2'):
             os.makedirs(setting['output_path'], exist_ok=True)
             plt.savefig('%s%s.jpg' % (setting['output_path'], id.strip('task:')))
-        if setting['fig'] == '2':
+        if setting['output_fig'] == '2':
             plt.show()
         plt.close()
     print('%s True %.2f' % (id, rmsd)) if result else print('%s False' % id)
