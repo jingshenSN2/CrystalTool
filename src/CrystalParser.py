@@ -149,3 +149,36 @@ def parse_pdb(filename):
             cell.add_atom(element, index, x, y, z, 100)
     cell.calc_neighbors()
     return cell
+
+
+def to_res(input_filename, output_filename, match_result):
+    element_map = {}
+    for atom1, atom2 in match_result.items():
+        elename = atom1.element + atom1.index
+        element_map[elename] = atom2.element
+    with open(input_filename, 'r') as inp, open(output_filename, 'w+') as output:
+        counter = 0
+        index_map = {}
+        for line in inp.readlines():
+            if line.startswith('SFAC'):
+                tmp = line.split()
+                for i in range(1, len(tmp)):
+                    index_map[tmp[i]] = i
+            if line.startswith('MOLE'):
+                counter = counter + 1
+            elif counter == 1:
+                tmp = line.split()
+                elename = tmp[0]
+                if elename in element_map:
+                    tmp[0] = element_map[elename]
+                else:
+                    tmp[0] = 'H'
+                tmp[1] = str(index_map[tmp[0]])
+                line = ' '.join(tmp) + '\n'
+            output.write(line)
+
+
+
+
+
+
