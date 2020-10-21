@@ -30,21 +30,24 @@ def run_task(id, setting):
     if result:
         rmsd, best_result = MR.best_result(result)
         GH.draw_graph_highlight(target, best_result)
-        plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s rmsd=%.2f' % (id, setting['target'], setting['query'], match, setting['loss'], rmsd))
+        plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s rmsd=%.2f' % (
+        id, setting['target'], setting['query'], match, setting['loss'], rmsd))
         if setting['output_fig'] in ('1', '2'):
             os.makedirs(setting['output_path'], exist_ok=True)
             plt.savefig('%s%s.jpg' % (setting['output_path'], id.strip('task:')))
         if setting['output_fig'] == '2':
             plt.show()
         plt.close()
+        if setting['output_res'] == 'True':
+            CP.to_res(setting['target'], '%s%s.res' % (setting['output_path'], id.strip('task:')), best_result)
     print('%s True %.2f' % (id, rmsd)) if result else print('%s False' % id)
 
 
-def main(argv):
+def config_mode(argv):
     opts, args = getopt.getopt(argv, '-c', ['config='])
     config_file = 'config.ini'
     for opt, arg in opts:
-        if opt in ('c','config'):
+        if opt in ('c', 'config'):
             config_file = arg
     cfp = configparser.ConfigParser()
     cfp.read(config_file, encoding='utf-8')
@@ -58,5 +61,27 @@ def main(argv):
         run_task(task, setting)
 
 
+# python .\main.py test/c21_origin.res test/query.pdb --match=2 --loss=0.2 --output_path=out/ --output_fig=2
+# --output_res --silent
+def cmd_mode(argv):
+    setting = {'target': argv[0], 'query': argv[1], 'match': 1, 'loss': 0.2, 'output_path': '', 'output_fig': 2,
+               'output_res': False, 'silent': False}
+    opts, args = getopt.getopt(argv[2:], '', ['match=', 'loss=', 'score=', 'output_path=',
+                                              'output_fig=', 'output_res', 'silent'])
+    for opt, arg in opts:
+        if opt == '--silent':
+            setting['silent'] = 'True'
+        elif opt == '--output_res':
+            setting['output_res'] = 'True'
+        else:
+            setting[opt[2:]] = arg
+    run_task('task:default', setting)
+
+
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    if len(sys.argv) == 1:
+        config_mode('')
+    elif sys.argv[1].startswith('-'):
+        config_mode(sys.argv[1:])
+    else:
+        cmd_mode(sys.argv[1:])
