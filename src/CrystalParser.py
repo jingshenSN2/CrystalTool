@@ -106,9 +106,9 @@ def parse_res(filename):
     cell = Cell()
     with open(filename, 'r') as f:
         for line in f.readlines():
-            line = line.strip('\n')
+            line = line.rstrip('\n')
             if line.startswith('CELL'):  # 读取晶胞参数
-                line = line.strip('CELL ')
+                line = line.lstrip('CELL ')
                 _, a, b, c, alpha, beta, gamma = map(float, line.split())
                 # print('cell parameters:', a, b, c, alpha, beta, gamma)
                 cell.set_lat_para(a, b, c, alpha, beta, gamma)
@@ -117,8 +117,8 @@ def parse_res(filename):
                 continue
             if flag:
                 tmp = line.split()
-                element = tmp[0].strip(string.digits)  # 元素符号和序号分离
-                index = tmp[0].strip(string.ascii_letters)
+                element = tmp[0].rstrip(string.digits)  # 元素符号和序号分离
+                index = tmp[0].lstrip(string.ascii_letters)
                 x, y, z = map(float, tmp[2:5])
                 intensity = -1
                 if len(tmp) == 8:
@@ -134,7 +134,7 @@ def parse_pdb(filename):
     cell.set_lat_para(1, 1, 1, 90, 90, 90)
     with open(filename, 'r') as f:
         for line in f.readlines():
-            line = line.strip('\n')
+            line = line.rstrip('\n')
             tmp = line.split()
             if len(tmp) < 8:
                 continue
