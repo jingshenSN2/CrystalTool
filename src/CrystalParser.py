@@ -5,7 +5,17 @@ import string
 
 
 class Atom:
+    """ 这里是原子类
+    Attributes:
+        element: str,元素符号
+        index: str,原子编号
+        mass: float,原子量
+        x,y,z: float,分数坐标
+        intensity: float,强度（只在res文件中）
+        neighbors: dict(Atom : distance),与该原子相连的其他原子
+    """
     def __init__(self, element, index, mass, x, y, z, intensity):
+        """初始化类成员"""
         self.element = element
         self.index = index
         self.mass = mass
@@ -16,16 +26,20 @@ class Atom:
         self.neighbors = {}
 
     def add_neighbor(self, atom, distance):
+        """添加原子邻居"""
         self.neighbors[atom] = distance
 
     def remove_neighbor(self, atom):
+        """移除原子邻居"""
         del self.neighbors[atom]
 
 
-current_path = os.path.dirname(__file__)
-
-
 def get_atom_properties(filename):
+    """
+    获取原子信息（原子质量、半径、最大连接数）
+    :parameter filename: 原子信息的文件名
+    :return: dict(fronzenset(Atom, Atom), value), 返回原子质量和两两原子的最大距离、最大连接数
+    """
     atom_mass = {}
     atom_dist = {}
     atom_connect = {}
@@ -46,6 +60,7 @@ def get_atom_properties(filename):
 
 
 def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
+    """辅助函数，计算晶胞中两原子的距离"""
     return a ** 2 * dx ** 2 + b ** 2 * dy ** 2 + c ** 2 * dz ** 2 + 2 * b * c * dy * dz * math.cos(
         alpha * math.pi / 180.0) \
            + 2 * a * c * dx * dz * math.cos(beta * math.pi / 180.0) + 2 * a * b * dx * dy * math.cos(
@@ -53,7 +68,18 @@ def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
 
 
 class Cell:
+    """
+    这里是晶胞类
+    Attributes:
+        a,b,c,alpha,beta,gamma: float,晶胞参数
+        atom_list: list(Atom),原子列表
+        atom_mass: 原子质量表
+        max_distances: 原子最大距离表
+        atom_connect: 原子最大连接数表
+    """
     def __init__(self):
+        """初始化类成员"""
+        current_path = os.path.dirname(__file__)
         self.a = 0
         self.b = 0
         self.c = 0
@@ -65,6 +91,7 @@ class Cell:
             current_path + '/atom_properties.txt')
 
     def set_lat_para(self, a, b, c, alpha, beta, gamma):
+        """设置晶胞参数"""
         self.a = a
         self.b = b
         self.c = c
@@ -73,9 +100,11 @@ class Cell:
         self.gamma = gamma
 
     def add_atom(self, element, index, x, y, z, intensity):
+        """添加新原子"""
         self.atom_list.append(Atom(element, index, self.atom_mass[element], x, y, z, intensity))
 
     def distance_judge(self, atom1, atom2):
+        """辅助函数，判断两原子距离是否满足max_distances"""
         dx = atom2.x - atom1.x
         dy = atom2.y - atom1.y
         dz = atom2.z - atom1.z
@@ -87,6 +116,7 @@ class Cell:
             return False, dist
 
     def calc_neighbors(self):
+        """计算原子键联关系"""
         for atom1, atom2 in itertools.combinations(self.atom_list, 2):
             within, dist = self.distance_judge(atom1, atom2)
             if within:
@@ -102,6 +132,7 @@ class Cell:
 
 
 def parse_res(filename):
+    """解析res文件中的晶胞信息"""
     flag = False
     cell = Cell()
     with open(filename, 'r') as f:
@@ -130,6 +161,7 @@ def parse_res(filename):
 
 
 def parse_pdb(filename):
+    """解析pdb文件中的晶胞信息"""
     cell = Cell()
     cell.set_lat_para(1, 1, 1, 90, 90, 90)
     with open(filename, 'r') as f:
@@ -152,6 +184,7 @@ def parse_pdb(filename):
 
 
 def to_res(input_filename, output_filename, match_result):
+    """储存Cell类到res文件"""
     element_map = {}
     for atom1, atom2 in match_result.items():
         elename = atom1.element + atom1.index
@@ -176,9 +209,3 @@ def to_res(input_filename, output_filename, match_result):
                 tmp[1] = str(index_map[tmp[0]])
                 line = ' '.join(tmp) + '\n'
             output.write(line)
-
-
-
-
-
-
