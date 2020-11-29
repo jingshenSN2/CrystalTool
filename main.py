@@ -29,7 +29,13 @@ def run_task(id, setting):
     rmsd = -1
     if result:
         rmsd, best_result = MR.best_result(result)
-        GH.draw_graph_highlight(target, best_result)
+        plt.figure(figsize=(50, 10))
+        plt.subplot(131)
+        GH.draw_graph_highlight(target, best_result, 'a')
+        plt.subplot(132)
+        GH.draw_graph_highlight(target, best_result, 'b')
+        plt.subplot(133)
+        GH.draw_graph_highlight(target, best_result, 'c')
         plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s rmsd=%.2f' % (
         id, setting['target'], setting['query'], match, setting['loss'], rmsd))
         if setting['output_fig'] in ('1', '2'):

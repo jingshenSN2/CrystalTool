@@ -148,7 +148,9 @@ def parse_res(filename):
                 continue
             if flag:
                 tmp = line.split()
-                element = tmp[0].rstrip(string.digits)  # 元素符号和序号分离
+                if len(tmp) < 6:
+                    continue
+                element = tmp[0].rstrip(string.digits).capitalize()  # 元素符号和序号分离
                 index = tmp[0].lstrip(string.ascii_letters)
                 x, y, z = map(float, tmp[2:5])
                 intensity = -1
@@ -172,7 +174,7 @@ def parse_pdb(filename):
                 continue
             if line.startswith('CONECT'):
                 break
-            element = tmp[-1]
+            element = tmp[-1].capitalize()
             if element == 'H':
                 continue
             index = tmp[1]

@@ -3,6 +3,7 @@ import networkx as nx
 
 
 def graph_converter(cell):
+    """将Cell类转化为图数据结构"""
     g = nx.Graph()
     for atom in cell.atom_list:
         g.add_node(atom, location=[atom.x, atom.y, atom.z], label=atom.element + atom.index, mass=atom.mass)
@@ -13,15 +14,18 @@ def graph_converter(cell):
 
 
 def max_subgraph(graph):
+    """获取最大联通子图"""
     c = max(nx.connected_components(graph), key=len)
     return graph.subgraph(c)
 
 
 def max_subgraph_converter(cell):
+    """将Cell类转化为图数据结构，并获取最大联通子图"""
     return max_subgraph(graph_converter(cell))
 
 
 def draw_graph(graph, direction='c'):
+    """将图数据结构可视化"""
     plt.figure(figsize=(10, 10))
     cord = nx.get_node_attributes(graph, 'location')
     pos = {}
@@ -42,11 +46,9 @@ def draw_graph(graph, direction='c'):
     nx.draw_networkx_labels(graph, pos, labels=label)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_label)
     plt.axis('off')
-    plt.show()
 
 
 def draw_graph_highlight(graph, highlight, direction='c'):
-    plt.figure(figsize=(10, 10))
     cord = nx.get_node_attributes(graph, 'location')
     pos = {}
     for key in cord.keys():
