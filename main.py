@@ -1,22 +1,36 @@
-import sys
-import os
-import getopt
 import configparser
-from src import CrystalParser as CP, MatchRater as MR, GraphHandler as GH
+import getopt
+import os
+import sys
+
 import matplotlib.pyplot as plt
+
+from src import parser as CP, matcher as MR, graph as GH
+
+
+class Setting:
+    def __init__(self, setting_dict):
+        self.target = setting_dict['target']
+        self.query = setting_dict['query']
+        self.match = setting_dict['match']
+        self.loss = setting_dict['loss']
+        self.output_path = setting_dict['output_path']
+        self.output_fig = setting_dict['output_fig']
+        self.output_res = setting_dict['output_res']
+        self.silent = setting_dict['silent']
 
 
 def run_task(id, setting):
-    silent = (setting['silent'] == 'True')
+    silent = (setting.silent == 'True')
     print('开始执行%s' % id) if not silent else ''
-    print('读取res文件%s...' % setting['target']) if not silent else ''
-    target = GH.graph_converter(CP.parse_res(setting['target']))
-    print('读取pdb文件%s...' % setting['query']) if not silent else ''
-    query = GH.max_subgraph_converter(CP.parse_pdb(setting['query']))
-    match = setting['match']
+    print('读取res文件%s...' % setting.target) if not silent else ''
+    target = GH.convert_cell(CP.parse_res(setting.target))
+    print('读取pdb文件%s...' % setting.query) if not silent else ''
+    query = GH.max_subgraph_converter(CP.parse_pdb(setting.query))
+    match = setting.match
     print('开始匹配，匹配算法为match_%s' % match) if not silent else ''
     result = None
-    loss_atom = setting['loss']
+    loss_atom = setting.loss
     if '.' in loss_atom:
         loss_atom = float(loss_atom)
     else:
@@ -25,28 +39,20 @@ def run_task(id, setting):
         result = MR.match_1(target, query, loss_atom)
     elif match == '2':
         result = MR.match_2(target, query, loss_atom)
-    print('匹配成功！' if result else '匹配失败，请调整参数。') if not silent else ''
-    rmsd = -1
-    if result:
-        rmsd, best_result = MR.best_result(result)
-        plt.figure(figsize=(50, 10))
-        plt.subplot(131)
-        GH.draw_graph_highlight(target, best_result, 'a')
-        plt.subplot(132)
-        GH.draw_graph_highlight(target, best_result, 'b')
-        plt.subplot(133)
-        GH.draw_graph_highlight(target, best_result, 'c')
-        plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s rmsd=%.2f' % (
-        id, setting['target'], setting['query'], match, setting['loss'], rmsd))
-        if setting['output_fig'] in ('1', '2'):
-            os.makedirs(setting['output_path'], exist_ok=True)
-            plt.savefig('%s%s.jpg' % (setting['output_path'], id.lstrip('task:')))
-        if setting['output_fig'] == '2':
+
+    if result.is_matched:
+        GH.draw_graph_highlight(target, result.best_match)
+        plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s\n %s' % (
+            id, setting.target, setting.query, match, setting.loss, result.to_string()))
+        if setting.output_fig in ('1', '2'):
+            os.makedirs(setting.output_path, exist_ok=True)
+            plt.savefig('%s%s.jpg' % (setting.output_path, id.lstrip('task:')))
+        if setting.output_fig == '2':
             plt.show()
         plt.close()
-        if setting['output_res'] == 'True':
-            CP.to_res(setting['target'], '%s%s.res' % (setting['output_path'], id.lstrip('task:')), best_result)
-    print('%s True %.2f' % (id, rmsd)) if result else print('%s False' % id)
+        if setting.output_res == 'True':
+            CP.to_res(setting.target, '%s%s.res' % (setting.output_path, id.lstrip('task:')), result.best_match)
+    print('%s %s %s' % (id, result.is_matched, result.to_string()))
 
 
 def config_mode(argv):
@@ -64,22 +70,24 @@ def config_mode(argv):
         setting = global_setting.copy()
         for k, v in cfp.items(task):
             setting[k] = v
-        run_task(task, setting)
+        s = Setting(setting)
+        run_task(task, s)
 
 
 def cmd_mode(argv):
-    setting = {'target': argv[0], 'query': argv[1], 'match': 1, 'loss': 0.2, 'output_path': '', 'output_fig': 2,
-               'output_res': False, 'silent': False}
+    setting_dict = {'target': argv[0], 'query': argv[1], 'match': 1, 'loss': 0.2, 'output_path': '', 'output_fig': 2,
+                    'output_res': False, 'silent': False}
     opts, args = getopt.getopt(argv[2:], '', ['match=', 'loss=', 'score=', 'output_path=',
                                               'output_fig=', 'output_res', 'silent'])
     for opt, arg in opts:
         if opt == '--silent':
-            setting['silent'] = 'True'
+            setting_dict['silent'] = 'True'
         elif opt == '--output_res':
-            setting['output_res'] = 'True'
+            setting_dict['output_res'] = 'True'
         else:
-            setting[opt[2:]] = arg
-    run_task('task:default', setting)
+            setting_dict[opt[2:]] = arg
+    s = Setting(setting_dict)
+    run_task('task:default', s)
 
 
 if __name__ == '__main__':

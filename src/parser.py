@@ -2,20 +2,16 @@ import itertools
 import math
 import os
 import string
+from hashlib import md5
+
+from src.config import get_atom_properties
 
 
 class Atom:
-    """ 这里是原子类
-    Attributes:
-        element: str,元素符号
-        index: str,原子编号
-        mass: float,原子量
-        x,y,z: float,分数坐标
-        intensity: float,强度（只在res文件中）
-        neighbors: dict(Atom : distance),与该原子相连的其他原子
-    """
     def __init__(self, element, index, mass, x, y, z, intensity):
         """初始化类成员"""
+        tmp = element + str(index) + str(mass) + str(x) + str(y) + str(z) + str(intensity)
+        self.uid = md5(tmp.encode('utf-8')).hexdigest()
         self.element = element
         self.index = index
         self.mass = mass
@@ -23,40 +19,7 @@ class Atom:
         self.y = y
         self.z = z
         self.intensity = intensity
-        self.neighbors = {}
-
-    def add_neighbor(self, atom, distance):
-        """添加原子邻居"""
-        self.neighbors[atom] = distance
-
-    def remove_neighbor(self, atom):
-        """移除原子邻居"""
-        del self.neighbors[atom]
-
-
-def get_atom_properties(filename):
-    """
-    获取原子信息（原子质量、半径、最大连接数）
-    :parameter filename: 原子信息的文件名
-    :return: dict(fronzenset(Atom, Atom), value), 返回原子质量和两两原子的最大距离、最大连接数
-    """
-    atom_mass = {}
-    atom_dist = {}
-    atom_connect = {}
-    max_distances = {}
-    with open(filename, 'r') as f:
-        for line in f.readlines():
-            if line.startswith('#'):
-                continue
-            info_list = line.split(' ')
-            element = info_list[0]
-            atom_mass[element] = float(info_list[1])
-            atom_dist[element] = float(info_list[2])
-            atom_connect[element] = int(info_list[3])
-        for atom1, atom2 in itertools.combinations_with_replacement(atom_dist.keys(), 2):
-            atom_pair = frozenset([atom1, atom2])
-            max_distances[atom_pair] = round(atom_dist[atom1] + atom_dist[atom2], 2)
-    return atom_mass, max_distances, atom_connect
+        self.connections = dict()
 
 
 def square_distance(a, b, c, alpha, beta, gamma, dx, dy, dz):
@@ -80,15 +43,15 @@ class Cell:
     def __init__(self):
         """初始化类成员"""
         current_path = os.path.dirname(__file__)
-        self.a = 0
-        self.b = 0
-        self.c = 0
-        self.alpha = 0
-        self.beta = 0
-        self.gamma = 0
-        self.atom_list = []
+        self.a = 1
+        self.b = 1
+        self.c = 1
+        self.alpha = 90
+        self.beta = 90
+        self.gamma = 90
+        self.atom_dict = dict()
         self.atom_mass, self.max_distances, self.max_connect = get_atom_properties(
-            current_path + '/atom_properties.txt')
+            current_path + '/atom_properties.json')
 
     def set_lat_para(self, a, b, c, alpha, beta, gamma):
         """设置晶胞参数"""
@@ -101,7 +64,9 @@ class Cell:
 
     def add_atom(self, element, index, x, y, z, intensity):
         """添加新原子"""
-        self.atom_list.append(Atom(element, index, self.atom_mass[element], x, y, z, intensity))
+        atom = Atom(element, index, self.atom_mass[element], x, y, z, intensity)
+        if atom.uid not in self.atom_dict.keys():
+            self.atom_dict[atom.uid] = atom
 
     def distance_judge(self, atom1, atom2):
         """辅助函数，判断两原子距离是否满足max_distances"""
@@ -117,18 +82,24 @@ class Cell:
 
     def calc_neighbors(self):
         """计算原子键联关系"""
-        for atom1, atom2 in itertools.combinations(self.atom_list, 2):
+        for k1, k2 in itertools.combinations(self.atom_dict, 2):
+            atom1 = self.atom_dict[k1]
+            atom2 = self.atom_dict[k2]
             within, dist = self.distance_judge(atom1, atom2)
             if within:
-                atom1.add_neighbor(atom2, dist)
-                atom2.add_neighbor(atom1, dist)
-        for atom in self.atom_list:
-            dic = atom.neighbors
-            if len(dic.keys()) > self.max_connect[atom.element]:
-                outranges = sorted(dic.items(), key=lambda dic: dic[1], reverse=False)[self.max_connect[atom.element]:]
-                for other, dist in outranges:
-                    atom.remove_neighbor(other)
-                    other.remove_neighbor(atom)
+                atom1.connections[k2] = dist
+                atom2.connections[k1] = dist
+
+    def remove_extra_connection(self):
+        """移除连接数超限的键"""
+        for uid in self.atom_dict:
+            atom = self.atom_dict[uid]
+            d = atom.connections
+            if len(d.keys()) > self.max_connect[atom.element]:
+                out_ranges = sorted(d.items(), key=lambda s: s[1], reverse=False)[self.max_connect[atom.element]:]
+                for other, dist in out_ranges:
+                    atom.connections.pop(other)
+                    self.atom_dict[other].remove_neighbor(uid)
 
 
 def parse_res(filename):
@@ -159,13 +130,13 @@ def parse_res(filename):
                 # print('add atom:', element, index, x, y, z, intensity)
                 cell.add_atom(element, index, x, y, z, intensity)
     cell.calc_neighbors()
+    cell.remove_extra_connection()
     return cell
 
 
 def parse_pdb(filename):
     """解析pdb文件中的晶胞信息"""
     cell = Cell()
-    cell.set_lat_para(1, 1, 1, 90, 90, 90)
     with open(filename, 'r') as f:
         for line in f.readlines():
             line = line.rstrip('\n')
@@ -182,11 +153,12 @@ def parse_pdb(filename):
             # print('add atom:', element, index, x, y, z)
             cell.add_atom(element, index, x, y, z, 100)
     cell.calc_neighbors()
+    cell.remove_extra_connection()
     return cell
 
 
 def to_res(input_filename, output_filename, match_result):
-    """储存Cell类到res文件"""
+    """储存Cell类到res文件, 测试版"""
     element_map = {}
     for atom1, atom2 in match_result.items():
         elename = atom1.element + atom1.index

@@ -2,30 +2,28 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 
-def graph_converter(cell):
-    """将Cell类转化为图数据结构"""
+def convert_cell(cell):
     g = nx.Graph()
-    for atom in cell.atom_list:
+    for k in cell.atom_dict:
+        atom = cell.atom_dict[k]
         g.add_node(atom, location=[atom.x, atom.y, atom.z], label=atom.element + atom.index, mass=atom.mass)
-        for neighbor in atom.neighbors.keys():
-            if (atom, neighbor) not in g.edges:
-                g.add_edge(atom, neighbor, dist=round(atom.neighbors[neighbor], 2))
+        for c in atom.connections:
+            neigh = cell.atom_dict[c]
+            if (atom, neigh) not in g.edges:
+                g.add_edge(atom, neigh, dist=round(atom.connections[c], 2))
     return g
 
 
 def max_subgraph(graph):
-    """获取最大联通子图"""
     c = max(nx.connected_components(graph), key=len)
     return graph.subgraph(c)
 
 
 def max_subgraph_converter(cell):
-    """将Cell类转化为图数据结构，并获取最大联通子图"""
-    return max_subgraph(graph_converter(cell))
+    return max_subgraph(convert_cell(cell))
 
 
 def draw_graph(graph, direction='c'):
-    """将图数据结构可视化"""
     plt.figure(figsize=(10, 10))
     cord = nx.get_node_attributes(graph, 'location')
     pos = {}
@@ -46,9 +44,11 @@ def draw_graph(graph, direction='c'):
     nx.draw_networkx_labels(graph, pos, labels=label)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_label)
     plt.axis('off')
+    plt.show()
 
 
 def draw_graph_highlight(graph, highlight, direction='c'):
+    plt.figure(figsize=(10, 10))
     cord = nx.get_node_attributes(graph, 'location')
     pos = {}
     for key in cord.keys():
