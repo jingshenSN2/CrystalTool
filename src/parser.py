@@ -40,6 +40,7 @@ class Cell:
         max_distances: 原子最大距离表
         atom_connect: 原子最大连接数表
     """
+
     def __init__(self):
         """初始化类成员"""
         current_path = os.path.dirname(__file__)

@@ -1,72 +1,87 @@
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
+
+
+def project(points, direction):
+    d = direction / np.linalg.norm(direction)
+    y0 = np.array([1, 0, 0]) if np.array([0, 0, 1]).dot(d) == 1 else np.array([0, 0, 1])
+    y1 = y0 - np.dot(d, y0) * d
+    norm_y = y1 / np.linalg.norm(y1)
+    x0 = np.cross(norm_y, d)
+    norm_x = x0 / np.linalg.norm(x0)
+    pos = {}
+    for k in points:
+        p0 = np.array(points[k])
+        p1 = p0 - np.dot(d, p0) * d
+        pos[k] = (np.dot(norm_y, p1), np.dot(norm_x, p1))
+    return pos
+
+
+class Graph:
+    def __init__(self, nx_graph=None):
+        self.g = nx.Graph(nx_graph)
+
+    def copy(self):
+        return Graph(self.g)
+
+    def add_node(self, node, **attr):
+        self.g.add_node(node, **attr)
+
+    def add_edge(self, node1, node2, **attr):
+        self.g.add_edge(node1, node2, **attr)
+
+    def remove_node(self, node):
+        self.g.remove_node(node)
+
+    def nodes(self):
+        return self.g.nodes
+
+    def edges(self):
+        return self.g.edges
+
+    def degree(self):
+        return self.g.degree
+
+    def subgraph(self, nodes):
+        return Graph(self.g.subgraph(nodes))
+
+    def max_subgraph(self):
+        mc = max(nx.connected_components(self.g), key=len)
+        return Graph(self.g.subgraph(mc))
+
+    def is_connected(self):
+        return nx.is_connected(self.g)
+
+    def get_node_attributes(self, attr):
+        return nx.get_node_attributes(self.g, attr)
+
+    def get_edge_attributes(self, attr):
+        return nx.get_edge_attributes(self.g, attr)
+
+    def draw_graph(self, highlight=None, direction=(0, 0, 1)):
+        plt.figure(figsize=(10, 10))
+        points = self.get_node_attributes('location')
+        print(points)
+        pos = project(points, np.array(direction))
+        print(pos)
+        label = self.get_node_attributes('label')
+        edge_label = self.get_edge_attributes('dist')
+        nx.draw_networkx(self.g, pos, alpha=0.7, with_labels=False, edge_color='.4')
+        if highlight is not None:
+            nx.draw_networkx_nodes(self.g, pos=pos, nodelist=highlight, node_color='r')
+        nx.draw_networkx_labels(self.g, pos, labels=label)
+        nx.draw_networkx_edge_labels(self.g, pos, edge_labels=edge_label)
+        plt.axis('off')
 
 
 def convert_cell(cell):
-    g = nx.Graph()
+    g = Graph()
     for k in cell.atom_dict:
         atom = cell.atom_dict[k]
-        g.add_node(atom, location=[atom.x, atom.y, atom.z], label=atom.element + atom.index, mass=atom.mass)
+        g.add_node(atom, location=(atom.x, atom.y, atom.z), label=atom.element + atom.index, mass=atom.mass)
         for c in atom.connections:
             neigh = cell.atom_dict[c]
-            if (atom, neigh) not in g.edges:
+            if (atom, neigh) not in g.edges():
                 g.add_edge(atom, neigh, dist=round(atom.connections[c], 2))
     return g
-
-
-def max_subgraph(graph):
-    c = max(nx.connected_components(graph), key=len)
-    return graph.subgraph(c)
-
-
-def max_subgraph_converter(cell):
-    return max_subgraph(convert_cell(cell))
-
-
-def draw_graph(graph, direction='c'):
-    plt.figure(figsize=(10, 10))
-    cord = nx.get_node_attributes(graph, 'location')
-    pos = {}
-    for key in cord.keys():
-        tmp = cord[key]
-        if direction == 'a':
-            pos[key] = (tmp[1], tmp[2])
-        elif direction == 'b':
-            pos[key] = (tmp[0], tmp[2])
-        elif direction == 'c':
-            pos[key] = (tmp[0], tmp[1])
-        else:
-            print('invalid direction.')
-            return
-    label = nx.get_node_attributes(graph, 'label')
-    edge_label = nx.get_edge_attributes(graph, 'dist')
-    nx.draw_networkx(graph, pos, alpha=0.7, with_labels=False, edge_color='.4')
-    nx.draw_networkx_labels(graph, pos, labels=label)
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_label)
-    plt.axis('off')
-    plt.show()
-
-
-def draw_graph_highlight(graph, highlight, direction='c'):
-    plt.figure(figsize=(10, 10))
-    cord = nx.get_node_attributes(graph, 'location')
-    pos = {}
-    for key in cord.keys():
-        tmp = cord[key]
-        if direction == 'a':
-            pos[key] = (tmp[1], tmp[2])
-        elif direction == 'b':
-            pos[key] = (tmp[0], tmp[2])
-        elif direction == 'c':
-            pos[key] = (tmp[0], tmp[1])
-        else:
-            print('invalid direction.')
-            return
-    label = nx.get_node_attributes(graph, 'label')
-    edge_label = nx.get_edge_attributes(graph, 'dist')
-    nx.draw_networkx(graph, pos, alpha=0.7, with_labels=False, edge_color='.4')
-    nx.draw_networkx_nodes(graph, pos=pos, nodelist=highlight, node_color='r')
-    nx.draw_networkx_labels(graph, pos, labels=label)
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_label)
-    plt.axis('off')
-

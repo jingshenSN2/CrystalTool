@@ -1,8 +1,4 @@
-import itertools
 import math
-import random
-
-import networkx as nx
 from networkx.algorithms.isomorphism import GraphMatcher
 
 
@@ -24,7 +20,7 @@ class Result:
 
     def to_string(self):
         return 'match_number=%d match_ratio=%.3f match_weighted_ratio=%.3f' % (
-        self.match_number, self.match_ratio, self.match_weighted_ratio)
+            self.match_number, self.match_ratio, self.match_weighted_ratio)
 
 
 def node_match(atom1, atom2):
@@ -38,61 +34,41 @@ def edge_match(edge1, edge2):
     return True
 
 
-def shrink_one(graph):
+def shrink_one(graph, keep_ring):
     """尝试删除graph的一个终端原子，返回删除后结果"""
-    new_graph = nx.Graph(graph)
-    degree = new_graph.degree
-    flag = False
-    d1_nodes = [node for node in new_graph.nodes() if degree[node] == 1]
-    if len(d1_nodes) > 0:
-        remove_index = random.randint(0, len(d1_nodes) - 1)
-        new_graph.remove_node(d1_nodes[remove_index])
-        flag = True
-    return flag, new_graph
+    result = set()
+    nodes = graph.nodes()
+    degree = graph.degree()
+    if keep_ring:
+        nodes = [n for n in nodes if degree[n] == 1]
+    for n in nodes:
+        new_graph = graph.copy()
+        new_graph.remove_node(n)
+        result.add(new_graph)
+    return result
 
 
-def gen_k(graph, k):
+def shrink(graph_set, keep_ring):
     """生成graph所有k个原子组成的子图"""
-    sub_graphs = set()
-    new_graph = nx.Graph(graph)
-    for atom_combine in itertools.combinations(new_graph.nodes, k):
-        sub = new_graph.subgraph(atom_combine)
-        sub_graphs.add(sub)
-    return sub_graphs
+    subgraph_set = set()
+    for graph in graph_set:
+        subgraph_set = subgraph_set.union(shrink_one(graph, keep_ring))
+    return subgraph_set
 
 
-def check_subgraph(target, sub):
-    """检查target是否包含于sub"""
-    if not nx.is_connected(sub):
-        return False
-    gm = GraphMatcher(target, sub, node_match=node_match,
-                      edge_match=edge_match)
-    if gm.subgraph_is_isomorphic():
-        return gm
-
-
-def match_1(target, query, loss_atom=0.2):
-    """快速匹配，每次随机删去原子后匹配"""
-    if isinstance(loss_atom, float):
-        loss_atom = int(math.ceil(len(query.nodes) * loss_atom))
-    query_copy = query
-    for i in range(min(loss_atom, len(query.nodes)) + 1):
-        gm = GraphMatcher(target, query_copy, node_match=node_match,
-                          edge_match=edge_match)
-        if gm.subgraph_is_isomorphic():
-            return Result(True, query, gm.subgraph_isomorphisms_iter())
-        flag, query_copy = shrink_one(query_copy)
-    return Result(False, None, None)
-
-
-def match_2(target, query, loss_atom=0.2):
+def match(target, query, keep_ring=False, loss_atom=0.2):
     """完整匹配，依次匹配全部的删去k个原子的子图"""
     if isinstance(loss_atom, float):
-        loss_atom = int(math.ceil(len(query.nodes) * loss_atom))
-    for i in range(min(loss_atom, len(query.nodes)) + 1):
-        subgraphs = gen_k(query, len(query.nodes) - i)
-        for sub in subgraphs:
-            res = check_subgraph(target, sub)
-            if res:
-                return Result(True, query, res.subgraph_isomorphisms_iter())
+        loss_atom = int(math.ceil(len(query.nodes()) * loss_atom))
+    gm = GraphMatcher(target.g, query.g, node_match=node_match, edge_match=edge_match)
+    if gm.subgraph_is_isomorphic():
+        print('matched without shrink')
+        return Result(True, query.g, gm.subgraph_isomorphisms_iter())
+    subgraph_set = shrink({query}, keep_ring)
+    for i in range(min(loss_atom, len(query.nodes()))):
+        for sub in subgraph_set:
+            gm = GraphMatcher(target.g, sub.g, node_match=node_match, edge_match=edge_match)
+            if gm.subgraph_is_isomorphic():
+                return Result(True, query.g, gm.subgraph_isomorphisms_iter())
+        subgraph_set = shrink(subgraph_set, keep_ring)
     return Result(False, None, None)

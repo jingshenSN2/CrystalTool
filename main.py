@@ -5,7 +5,7 @@ import sys
 
 import matplotlib.pyplot as plt
 
-from src import parser as CP, matcher as MR, graph as GH
+from src import parser, matcher, graph
 
 
 class Setting:
@@ -24,9 +24,9 @@ def run_task(id, setting):
     silent = (setting.silent == 'True')
     print('开始执行%s' % id) if not silent else ''
     print('读取res文件%s...' % setting.target) if not silent else ''
-    target = GH.convert_cell(CP.parse_res(setting.target))
+    target = graph.convert_cell(parser.parse_res(setting.target))
     print('读取pdb文件%s...' % setting.query) if not silent else ''
-    query = GH.max_subgraph_converter(CP.parse_pdb(setting.query))
+    query = graph.convert_cell(parser.parse_pdb(setting.query)).max_subgraph()
     match = setting.match
     print('开始匹配，匹配算法为match_%s' % match) if not silent else ''
     result = None
@@ -36,12 +36,12 @@ def run_task(id, setting):
     else:
         loss_atom = int(loss_atom)
     if match == '1':
-        result = MR.match_1(target, query, loss_atom)
+        result = matcher.match(target, query, True, loss_atom)
     elif match == '2':
-        result = MR.match_2(target, query, loss_atom)
+        result = matcher.match(target, query, False, loss_atom)
 
     if result.is_matched:
-        GH.draw_graph_highlight(target, result.best_match)
+        target.draw_graph(result.best_match)
         plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s\n %s' % (
             id, setting.target, setting.query, match, setting.loss, result.to_string()))
         if setting.output_fig in ('1', '2'):
@@ -51,7 +51,7 @@ def run_task(id, setting):
             plt.show()
         plt.close()
         if setting.output_res == 'True':
-            CP.to_res(setting.target, '%s%s.res' % (setting.output_path, id.lstrip('task:')), result.best_match)
+            parser.to_res(setting.target, '%s%s.res' % (setting.output_path, id.lstrip('task:')), result.best_match)
     print('%s %s %s' % (id, result.is_matched, result.to_string()))
 
 
