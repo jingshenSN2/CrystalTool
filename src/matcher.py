@@ -1,26 +1,5 @@
 import math
-from networkx.algorithms.isomorphism import GraphMatcher
-
-
-class Result:
-    def __init__(self, is_matched, matcher, match_iters):
-        self.is_matched = is_matched
-        self.match_iters = match_iters
-        self.match_number = 0
-        self.match_ratio = 0
-        self.match_weighted_ratio = 0
-        if is_matched:
-            for r in match_iters:
-                wr = sum([atom.mass for atom in r]) / sum([atom.mass for atom in matcher])
-                if wr > self.match_weighted_ratio:
-                    self.match_weighted_ratio = wr
-                    self.best_match = r
-            self.match_number = len(self.best_match.keys())
-            self.match_ratio = self.match_number / len(matcher)
-
-    def to_string(self):
-        return 'match_number=%d match_ratio=%.3f match_weighted_ratio=%.3f' % (
-            self.match_number, self.match_ratio, self.match_weighted_ratio)
+import networkx.algorithms.isomorphism as nxis
 
 
 def node_match(atom1, atom2):
@@ -56,19 +35,53 @@ def shrink(graph_set, keep_ring):
     return subgraph_set
 
 
-def match(target, query, keep_ring=False, loss_atom=0.2):
-    """完整匹配，依次匹配全部的删去k个原子的子图"""
-    if isinstance(loss_atom, float):
-        loss_atom = int(math.ceil(len(query.nodes()) * loss_atom))
-    gm = GraphMatcher(target.g, query.g, node_match=node_match, edge_match=edge_match)
-    if gm.subgraph_is_isomorphic():
-        print('matched without shrink')
-        return Result(True, query.g, gm.subgraph_isomorphisms_iter())
-    subgraph_set = shrink({query}, keep_ring)
-    for i in range(min(loss_atom, len(query.nodes()))):
-        for sub in subgraph_set:
-            gm = GraphMatcher(target.g, sub.g, node_match=node_match, edge_match=edge_match)
-            if gm.subgraph_is_isomorphic():
-                return Result(True, query.g, gm.subgraph_isomorphisms_iter())
-        subgraph_set = shrink(subgraph_set, keep_ring)
-    return Result(False, None, None)
+class GraphMatcher:
+    class Result:
+        """包装匹配结果类"""
+        def __init__(self, is_matched, matcher, match_iters):
+            self.is_matched = is_matched
+            self.match_iters = match_iters
+            self.match_number = 0
+            self.match_ratio = 0
+            self.match_weighted_ratio = 0
+            if is_matched:
+                for r in match_iters:
+                    wr = sum([r[k].mass for k in r]) / sum([atom.mass for atom in matcher])
+                    if wr > self.match_weighted_ratio:
+                        self.match_weighted_ratio = wr
+                        self.best_match = r
+                self.match_number = len(self.best_match.keys())
+                self.match_ratio = self.match_number / len(matcher)
+
+        def to_string(self):
+            return 'match_number=%d match_ratio=%.3f match_weighted_ratio=%.3f' % (
+                self.match_number, self.match_ratio, self.match_weighted_ratio)
+
+    def __init__(self, target, query, keep_ring=False, loss_atom=0.2):
+        self.target = target
+        self.query = query
+        self.keep_ring = keep_ring
+        self.loss_atom = loss_atom
+        if isinstance(self.loss_atom, float):
+            self.loss_atom = int(math.ceil(len(query.nodes()) * loss_atom))
+
+    def match(self):
+        """完整匹配，依次匹配全部的删去k个原子的子图"""
+        gm = nxis.GraphMatcher(self.target.g, self.query.g, node_match=node_match, edge_match=edge_match)
+        if gm.subgraph_is_isomorphic():
+            print('matched without shrink')
+            return self.Result(True, self.query.g, gm.subgraph_isomorphisms_iter())
+        subgraph_set = shrink({self.query}, self.keep_ring)
+        for i in range(min(self.loss_atom, len(self.query.nodes()))):
+            for sub in subgraph_set:
+                gm = nxis.GraphMatcher(self.target.g, sub.g, node_match=node_match, edge_match=edge_match)
+                if gm.subgraph_is_isomorphic():
+                    return self.Result(True, self.query.g, gm.subgraph_isomorphisms_iter())
+            subgraph_set = shrink(subgraph_set, self.keep_ring)
+        return self.Result(False, None, None)
+
+
+
+
+
+

@@ -2,13 +2,12 @@ import configparser
 import getopt
 import os
 import sys
-
 import matplotlib.pyplot as plt
-
 from src import parser, matcher, graph
 
 
 class Setting:
+    """任务参数类"""
     def __init__(self, setting_dict):
         self.target = setting_dict['target']
         self.query = setting_dict['query']
@@ -29,19 +28,14 @@ def run_task(id, setting):
     query = graph.convert_cell(parser.parse_pdb(setting.query)).max_subgraph()
     match = setting.match
     print('开始匹配，匹配算法为match_%s' % match) if not silent else ''
-    result = None
-    loss_atom = setting.loss
-    if '.' in loss_atom:
-        loss_atom = float(loss_atom)
-    else:
-        loss_atom = int(loss_atom)
-    if match == '1':
-        result = matcher.match(target, query, True, loss_atom)
-    elif match == '2':
-        result = matcher.match(target, query, False, loss_atom)
+    loss_atom = float(setting.loss) if '.' in setting.loss else int(setting.loss)
+    keep_ring = (match == 1)
+
+    gm = matcher.GraphMatcher(target, query, keep_ring, loss_atom)
+    result = gm.match()
 
     if result.is_matched:
-        target.draw_graph(result.best_match)
+        target.draw_graph(highlight=result.best_match)
         plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s\n %s' % (
             id, setting.target, setting.query, match, setting.loss, result.to_string()))
         if setting.output_fig in ('1', '2'):
