@@ -57,7 +57,7 @@ class GraphMatcher:
             return 'match_number=%d match_ratio=%.3f match_weighted_ratio=%.3f' % (
                 self.match_number, self.match_ratio, self.match_weighted_ratio)
 
-    def __init__(self, target, query, keep_ring=False, loss_atom=0.2):
+    def __init__(self, target, query, keep_ring, loss_atom=0.2):
         self.target = target
         self.query = query
         self.keep_ring = keep_ring

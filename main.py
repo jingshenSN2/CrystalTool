@@ -11,40 +11,41 @@ class Setting:
     def __init__(self, setting_dict):
         self.target = setting_dict['target']
         self.query = setting_dict['query']
-        self.match = setting_dict['match']
+        self.keep_ring = (setting_dict['keep_ring'] == 'True')
         self.loss = setting_dict['loss']
         self.output_path = setting_dict['output_path']
         self.output_fig = setting_dict['output_fig']
-        self.output_res = setting_dict['output_res']
-        self.silent = setting_dict['silent']
+        self.output_res = (setting_dict['output_res'] == 'True')
+        self.silent = (setting_dict['silent'] == 'True')
+
+    def to_string(self):
+        return '%s target=%s query=%s\n keep_ring=%s loss_atom=%s\n' \
+               % (id, self.target, self.query, self.keep_ring, self.loss)
 
 
 def run_task(id, setting):
-    silent = (setting.silent == 'True')
+    silent = setting.silent
     print('开始执行%s' % id) if not silent else ''
     print('读取res文件%s...' % setting.target) if not silent else ''
     target = graph.convert_cell(parser.parse_res(setting.target))
     print('读取pdb文件%s...' % setting.query) if not silent else ''
     query = graph.convert_cell(parser.parse_pdb(setting.query)).max_subgraph()
-    match = setting.match
-    print('开始匹配，匹配算法为match_%s' % match) if not silent else ''
+    print('开始匹配') if not silent else ''
     loss_atom = float(setting.loss) if '.' in setting.loss else int(setting.loss)
-    keep_ring = (match == 1)
 
-    gm = matcher.GraphMatcher(target, query, keep_ring, loss_atom)
+    gm = matcher.GraphMatcher(target, query, setting.keep_ring, loss_atom)
     result = gm.match()
 
     if result.is_matched:
         target.draw_graph(highlight=result.best_match)
-        plt.title('%s target=%s query=%s\n match_mode=%s loss_atom=%s\n %s' % (
-            id, setting.target, setting.query, match, setting.loss, result.to_string()))
+        plt.title('%s%s' % (setting.to_string(), result.to_string()))
         if setting.output_fig in ('1', '2'):
             os.makedirs(setting.output_path, exist_ok=True)
             plt.savefig('%s%s.jpg' % (setting.output_path, id.lstrip('task:')))
         if setting.output_fig == '2':
             plt.show()
         plt.close()
-        if setting.output_res == 'True':
+        if setting.output_res:
             parser.to_res(setting.target, '%s%s.res' % (setting.output_path, id.lstrip('task:')), result.best_match)
     print('%s %s %s' % (id, result.is_matched, result.to_string()))
 
@@ -69,9 +70,9 @@ def config_mode(argv):
 
 
 def cmd_mode(argv):
-    setting_dict = {'target': argv[0], 'query': argv[1], 'match': 1, 'loss': 0.2, 'output_path': '', 'output_fig': 2,
+    setting_dict = {'target': argv[0], 'query': argv[1], 'keep_ring': 1, 'loss': 0.2, 'output_path': '', 'output_fig': 2,
                     'output_res': False, 'silent': False}
-    opts, args = getopt.getopt(argv[2:], '', ['match=', 'loss=', 'score=', 'output_path=',
+    opts, args = getopt.getopt(argv[2:], '', ['keep_ring=', 'loss=', 'score=', 'output_path=',
                                               'output_fig=', 'output_res', 'silent'])
     for opt, arg in opts:
         if opt == '--silent':

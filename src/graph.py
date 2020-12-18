@@ -4,6 +4,11 @@ import numpy as np
 
 
 def project(points, direction):
+    """投影函数，将三维点集投影到二维
+    points: 三维点集
+    direction: 投影平面的法向量(u,v,w)，投影平面通过原点(0,0,0)
+    投影平面内的y方向为z轴投影(如果投影的法向量为z轴，则y方向为x轴投影)
+    """
     d = direction / np.linalg.norm(direction)
     y0 = np.array([1, 0, 0]) if np.array([0, 0, 1]).dot(d) == 1 else np.array([0, 0, 1])
     y1 = y0 - np.dot(d, y0) * d
@@ -19,6 +24,9 @@ def project(points, direction):
 
 
 class Graph:
+    """
+    包装nx.Graph的图类
+    """
     def __init__(self, nx_graph=None):
         self.g = nx.Graph(nx_graph)
 
@@ -74,12 +82,11 @@ class Graph:
 
 
 def convert_cell(cell):
+    """晶胞类转图类"""
     g = Graph()
     for k in cell.atom_dict:
         atom = cell.atom_dict[k]
         g.add_node(atom, location=(atom.x, atom.y, atom.z), label=atom.element + atom.index, mass=atom.mass)
         for c in atom.connections:
-            neigh = cell.atom_dict[c]
-            if (atom, neigh) not in g.edges():
-                g.add_edge(atom, neigh, dist=round(atom.connections[c], 2))
+            g.add_edge(atom, cell.atom_dict[c], dist=round(atom.connections[c], 2))
     return g
