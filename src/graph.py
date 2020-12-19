@@ -86,7 +86,7 @@ def convert_cell(cell):
     g = Graph()
     for k in cell.atom_dict:
         atom = cell.atom_dict[k]
-        g.add_node(atom, location=(atom.x, atom.y, atom.z), label=atom.element + atom.index, mass=atom.mass)
+        g.add_node(atom, location=(atom.x, atom.y, atom.z), label=atom.label, mass=atom.mass)
         for c in atom.connections:
             g.add_edge(atom, cell.atom_dict[c], dist=round(atom.connections[c], 2))
     return g

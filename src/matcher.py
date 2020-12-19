@@ -5,7 +5,7 @@ import networkx.algorithms.isomorphism as nxis
 def node_match(atom1, atom2):
     """节点匹配，原子质量之比0.8~1.2内为匹配"""
     ratio = atom1['mass'] / atom2['mass']
-    return 0.8 < ratio < 1.2
+    return 0.7 < ratio < 1.4
 
 
 def edge_match(edge1, edge2):
@@ -69,7 +69,7 @@ class GraphMatcher:
         """完整匹配，依次匹配全部的删去k个原子的子图"""
         gm = nxis.GraphMatcher(self.target.g, self.query.g, node_match=node_match, edge_match=edge_match)
         if gm.subgraph_is_isomorphic():
-            print('matched without shrink')
+            #print('matched without shrink')
             return self.Result(True, self.query.g, gm.subgraph_isomorphisms_iter())
         subgraph_set = shrink({self.query}, self.keep_ring)
         for i in range(min(self.loss_atom, len(self.query.nodes()))):

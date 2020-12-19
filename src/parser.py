@@ -8,12 +8,12 @@ from src.config import get_atom_properties
 
 
 class Atom:
-    def __init__(self, element, index, mass, x, y, z, intensity):
+    def __init__(self, element, label, mass, x, y, z, intensity):
         """初始化类成员"""
-        tmp = element + str(index) + str(mass) + str(x) + str(y) + str(z) + str(intensity)
+        tmp = element + label + str(mass) + str(x) + str(y) + str(z) + str(intensity)
         self.uid = md5(tmp.encode('utf-8')).hexdigest()
         self.element = element
-        self.index = index
+        self.label = label
         self.mass = mass
         self.x = x
         self.y = y
@@ -100,38 +100,40 @@ class Cell:
                 out_ranges = sorted(d.items(), key=lambda s: s[1], reverse=False)[self.max_connect[atom.element]:]
                 for other, dist in out_ranges:
                     atom.connections.pop(other)
-                    self.atom_dict[other].remove_neighbor(uid)
+                    self.atom_dict[other].connections.pop(uid)
 
 
-def parse_res(filename):
+def parse_res(filename, remove_extra=True):
     """解析res文件中的晶胞信息"""
     flag = False
     cell = Cell()
     with open(filename, 'r') as f:
+        atom_dict = {}
         for line in f.readlines():
             line = line.rstrip('\n')
-            if line.startswith('CELL'):  # 读取晶胞参数
-                line = line.lstrip('CELL ')
-                _, a, b, c, alpha, beta, gamma = map(float, line.split())
-                # print('cell parameters:', a, b, c, alpha, beta, gamma)
-                cell.set_lat_para(a, b, c, alpha, beta, gamma)
-            if line.startswith('MOLE'):  # 准备读取分数坐标部分
-                flag = not flag
+            s = line.split()
+            if len(s) == 0:
                 continue
-            if flag:
-                tmp = line.split()
-                if len(tmp) < 6:
-                    continue
-                element = tmp[0].rstrip(string.digits).capitalize()  # 元素符号和序号分离
-                index = tmp[0].lstrip(string.ascii_letters)
-                x, y, z = map(float, tmp[2:5])
+            if s[0] == 'CELL':
+                a, b, c, alpha, beta, gamma = map(float, s[2:])
+                cell.set_lat_para(a, b, c, alpha, beta, gamma)
+            elif s[0] == 'SFAC':
+                for i in range(1, len(s)):
+                    atom_dict[i] = s[i].capitalize()
+            if len(s) <= 6 or s[5] != '11.00000':
+                continue
+            else:
+                label = s[0]
+                x, y, z = map(float, s[2:5])
                 intensity = -1
-                if len(tmp) == 8:
-                    intensity = tmp[7]
+                if len(s) == 8:
+                    intensity = s[7]
+                element = atom_dict[int(s[1])]
                 # print('add atom:', element, index, x, y, z, intensity)
-                cell.add_atom(element, index, x, y, z, intensity)
+                cell.add_atom(element, label, x, y, z, intensity)
     cell.calc_neighbors()
-    cell.remove_extra_connection()
+    if remove_extra:
+        cell.remove_extra_connection()
     return cell
 
 
@@ -152,7 +154,7 @@ def parse_pdb(filename):
             index = tmp[1]
             x, y, z = map(float, tmp[-6:-3])
             # print('add atom:', element, index, x, y, z)
-            cell.add_atom(element, index, x, y, z, 100)
+            cell.add_atom(element, element+index, x, y, z, 100)
     cell.calc_neighbors()
     cell.remove_extra_connection()
     return cell
