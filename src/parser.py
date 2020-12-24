@@ -120,7 +120,7 @@ def parse_res(filename, remove_extra=True):
             elif s[0] == 'SFAC':
                 for i in range(1, len(s)):
                     atom_dict[i] = s[i].capitalize()
-            if len(s) <= 6 or s[5] != '11.00000':
+            if len(s) <= 6 or not s[5].startswith('11.0000'):
                 continue
             else:
                 label = s[0]

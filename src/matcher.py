@@ -74,6 +74,8 @@ class GraphMatcher:
             return self.Result(True, self.query.g, gm.subgraph_isomorphisms_iter())
         subgraph_set = shrink({self.query}, self.keep_ring)
         for i in range(min(self.loss_atom, len(self.query.nodes()))):
+            if len(subgraph_set) > 1000:
+                break
             for sub in subgraph_set:
                 gm = nxis.GraphMatcher(self.target.g, sub.g, node_match=node_match, edge_match=edge_match)
                 if gm.subgraph_is_isomorphic():

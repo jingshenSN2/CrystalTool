@@ -30,11 +30,16 @@ def run_task(id, setting):
     print('开始执行%s' % id) if not silent else ''
     print('读取res文件%s...' % setting.target) if not silent else ''
     target = graph.convert_cell(parser.parse_res(setting.target))
+    if len(target.g.nodes) == 0:
+        print('读取res文件失败，请直接使用shelxt程序给出的文件')
+        return
     print('读取pdb文件%s...' % setting.query) if not silent else ''
     query = graph.convert_cell(parser.parse_pdb(setting.query)).max_subgraph()
+    if len(query.g.nodes) == 0:
+        print('读取pdb文件失败，请直接使用Vesta程序给出的文件')
+        return
     print('开始匹配') if not silent else ''
     loss_atom = float(setting.loss) if '.' in setting.loss else int(setting.loss)
-
     gm = matcher.GraphMatcher(target, query, setting.keep_ring, loss_atom)
     result = gm.match()
 
@@ -54,7 +59,7 @@ def run_task(id, setting):
 
 def config_mode(argv):
     opts, args = getopt.getopt(argv, '-c', ['config='])
-    config_file = 'config.ini'
+    config_file = 'config-test1.ini'
     for opt, arg in opts:
         if opt in ('c', 'config'):
             config_file = arg
@@ -81,6 +86,7 @@ def config_mode(argv):
         else:
             s = Setting(setting)
             run_task(i, s)
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
