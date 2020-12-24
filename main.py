@@ -2,7 +2,9 @@ import configparser
 import getopt
 import os
 import sys
+
 import matplotlib.pyplot as plt
+
 from src import parser, matcher, graph
 
 
@@ -19,8 +21,8 @@ class Setting:
         self.silent = (setting_dict['silent'] == 'True')
 
     def to_string(self):
-        return '%s target=%s query=%s\n keep_ring=%s loss_atom=%s\n' \
-               % (id, self.target, self.query, self.keep_ring, self.loss)
+        return 'target=%s query=%s\n keep_ring=%s loss_atom=%s\n' \
+               % (self.target, self.query, self.keep_ring, self.loss)
 
 
 def run_task(id, setting):
@@ -41,18 +43,18 @@ def run_task(id, setting):
         plt.title('%s%s' % (setting.to_string(), result.to_string()))
         if setting.output_fig in ('1', '2'):
             os.makedirs(setting.output_path, exist_ok=True)
-            plt.savefig('%s%s.jpg' % (setting.output_path, id.lstrip('task:')))
+            plt.savefig('%s%s.jpg' % (setting.output_path, id))
         if setting.output_fig == '2':
             plt.show()
         plt.close()
         if setting.output_res:
             parser.to_res(setting.target, '%s%s.res' % (setting.output_path, id.lstrip('task:')), result.best_match)
-    print('%s %s %s' % (id, result.is_matched, result.to_string()))
+    print('; %s %s %s' % (setting.target, result.is_matched, result.to_string()))
 
 
 def config_mode(argv):
     opts, args = getopt.getopt(argv, '-c', ['config='])
-    config_file = 'config.ini'
+    config_file = 'config-test3-indole.ini'
     for opt, arg in opts:
         if opt in ('c', 'config'):
             config_file = arg
@@ -61,16 +63,29 @@ def config_mode(argv):
     section = cfp.sections()
     section.remove('global')
     global_setting = dict(cfp.items('global'))
+    i = 1
     for task in section:
         setting = global_setting.copy()
         for k, v in cfp.items(task):
             setting[k] = v
-        s = Setting(setting)
-        run_task(task, s)
+        if setting['all_res'] == 'True':
+            path = setting['target']
+            files = os.listdir(path)
+            for file in files:
+                filetype = os.path.splitext(file)[1]
+                if filetype == '.res':
+                    s = Setting(setting)
+                    s.target = path + file
+                    run_task(i, s)
+                    i = i + 1
+        else:
+            s = Setting(setting)
+            run_task(i, s)
 
 
 def cmd_mode(argv):
-    setting_dict = {'target': argv[0], 'query': argv[1], 'keep_ring': 1, 'loss': 0.2, 'output_path': '', 'output_fig': 2,
+    setting_dict = {'target': argv[0], 'query': argv[1], 'keep_ring': 1, 'loss': 0.2, 'output_path': '',
+                    'output_fig': 2,
                     'output_res': False, 'silent': False}
     opts, args = getopt.getopt(argv[2:], '', ['keep_ring=', 'loss=', 'score=', 'output_path=',
                                               'output_fig=', 'output_res', 'silent'])

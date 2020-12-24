@@ -1,0 +1,20 @@
+TITL 25_a.res in P-1
+REM Old TITL 25 in P1
+REM SHELXT solution in P-1: R1 0.472, Rweak 0.040, Alpha 0.101
+REM <I/s>   0.000 for    0 systematic absences,  Orientation as input
+REM Formula found by SHELXT:  C O2
+
+CELL  0.71073   4.9200  11.3600  21.8800   90.000   86.760   90.000
+ZERR   16.000   0.0010   0.0023   0.0044    0.030    0.030    0.030
+LATT  1
+SFAC C N O CL
+UNIT 16 16 16 16
+L.S. 10
+BOND
+LIST 6
+FMAP 2
+PLAN 20
+C001  1  0.50000  0.50000  0.50000 10.50000  0.00359  14.83
+O002  3  0.56225  0.51503  0.47119 11.00000  0.03911   9.49
+HKLF 4
+END

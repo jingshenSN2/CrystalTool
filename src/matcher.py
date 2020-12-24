@@ -1,9 +1,10 @@
 import math
+
 import networkx.algorithms.isomorphism as nxis
 
 
 def node_match(atom1, atom2):
-    """节点匹配，原子质量之比0.8~1.2内为匹配"""
+    """节点匹配，原子质量之比0.7~1.4内为匹配"""
     ratio = atom1['mass'] / atom2['mass']
     return 0.7 < ratio < 1.4
 

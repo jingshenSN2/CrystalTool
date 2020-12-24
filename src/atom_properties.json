@@ -38,5 +38,10 @@
     "atom_mass": 35.5,
     "atom_radius": 0.99,
     "max_connection": 1
+  },
+  "Br": {
+    "atom_mass": 79.9,
+    "atom_radius": 1.14,
+    "max_connection": 1
   }
 }
