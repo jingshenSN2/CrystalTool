@@ -54,7 +54,7 @@ def run_task(id, setting):
 
 def config_mode(argv):
     opts, args = getopt.getopt(argv, '-c', ['config='])
-    config_file = 'config-test3-indole.ini'
+    config_file = 'config.ini'
     for opt, arg in opts:
         if opt in ('c', 'config'):
             config_file = arg
@@ -82,28 +82,8 @@ def config_mode(argv):
             s = Setting(setting)
             run_task(i, s)
 
-
-def cmd_mode(argv):
-    setting_dict = {'target': argv[0], 'query': argv[1], 'keep_ring': 1, 'loss': 0.2, 'output_path': '',
-                    'output_fig': 2,
-                    'output_res': False, 'silent': False}
-    opts, args = getopt.getopt(argv[2:], '', ['keep_ring=', 'loss=', 'score=', 'output_path=',
-                                              'output_fig=', 'output_res', 'silent'])
-    for opt, arg in opts:
-        if opt == '--silent':
-            setting_dict['silent'] = 'True'
-        elif opt == '--output_res':
-            setting_dict['output_res'] = 'True'
-        else:
-            setting_dict[opt[2:]] = arg
-    s = Setting(setting_dict)
-    run_task('task:default', s)
-
-
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         config_mode('')
     elif sys.argv[1].startswith('-'):
         config_mode(sys.argv[1:])
-    else:
-        cmd_mode(sys.argv[1:])
