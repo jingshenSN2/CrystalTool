@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from src import parser
 
 
 def project(points, direction):
@@ -27,6 +28,7 @@ class Graph:
     """
     包装nx.Graph的图类
     """
+
     def __init__(self, nx_graph=None):
         self.g = nx.Graph(nx_graph)
 
@@ -81,7 +83,7 @@ class Graph:
         plt.axis('off')
 
 
-def convert_cell(cell):
+def convert_cell(cell: parser.Cell):
     """晶胞类转图类"""
     g = Graph()
     for k in cell.atom_dict:

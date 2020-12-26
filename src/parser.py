@@ -69,7 +69,7 @@ class Cell:
         if atom.uid not in self.atom_dict.keys():
             self.atom_dict[atom.uid] = atom
 
-    def distance_judge(self, atom1, atom2):
+    def distance_judge(self, atom1: Atom, atom2: Atom):
         """辅助函数，判断两原子距离是否满足max_distances"""
         dx = atom2.x - atom1.x
         dy = atom2.y - atom1.y

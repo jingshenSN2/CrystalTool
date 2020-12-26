@@ -2,7 +2,7 @@ import itertools
 import json
 
 
-def get_atom_properties(filename):
+def get_atom_properties(filename: str):
     """获取配置文件"""
     atom_mass = {}
     atom_dist = {}

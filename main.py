@@ -25,7 +25,7 @@ class Setting:
                % (self.target, self.query, self.keep_ring, self.loss)
 
 
-def run_task(id, setting):
+def run_task(id, setting:Setting):
     silent = setting.silent
     print('开始执行%s' % id) if not silent else ''
     print('读取res文件%s...' % setting.target) if not silent else ''
