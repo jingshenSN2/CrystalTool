@@ -1,8 +1,11 @@
 import itertools
 import json
+import os
 
 
-def get_atom_properties(filename: str):
+def get_atom_properties():
+    current_path = os.path.dirname(__file__)
+    filename = current_path + '/atom_properties.json'
     """获取配置文件"""
     atom_mass = {}
     atom_dist = {}
