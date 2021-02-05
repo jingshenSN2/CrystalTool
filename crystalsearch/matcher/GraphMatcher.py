@@ -39,46 +39,43 @@ def shrink(graph_set, keep_ring):
 class GraphMatcher:
     class Result:
         """包装匹配结果类"""
-        def __init__(self, is_matched, matcher, match_pairs):
+        def __init__(self, is_matched, target, query, match_pairs):
             self.is_matched = is_matched
             self.match_pairs = match_pairs
-            self.match_number = 0
-            self.match_ratio = 0
-            self.match_weighted_ratio = 0
-            if is_matched:
-                for r in match_pairs:
-                    wr = sum([r[k].mass for k in r]) / sum([atom.mass for atom in matcher])
-                    if wr > self.match_weighted_ratio:
-                        self.match_weighted_ratio = wr
-                        self.best_match = r
-                self.match_number = len(self.best_match.keys())
-                self.match_ratio = self.match_number / len(matcher)
+            self.target = target
+            self.query = query
+            self.results = {}
+            if self.is_matched:
+                self.calculate_match_result()
 
-        def to_string(self):
-            return 'match_number=%d match_ratio=%.3f match_weighted_ratio=%.3f' % (
-                self.match_number, self.match_ratio, self.match_weighted_ratio)
+        def calculate_match_result(self):
+            for p in self.match_pairs:
+                n = len(p.keys())
+                rm = n / len(self.target)
+                wr = sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query])
+                self.results[p] = (n, rm, wr)
 
-    def __init__(self, target: graph.Graph, query: graph.Graph, keep_ring=True, loss_atom=0.2):
+    def __init__(self, target: graph.Graph, query: graph.Graph, keep_ring=True, loss_atom=0.2, max_subgraph=1000):
         self.target = target
         self.query = query
         self.keep_ring = keep_ring
         self.loss_atom = loss_atom
         if isinstance(self.loss_atom, float):
             self.loss_atom = int(math.ceil(len(query.nodes()) * loss_atom))
+        self.max_subgraph = max_subgraph
 
     def match(self):
         """完整匹配，依次匹配全部的删去k个原子的子图"""
         gm = isomorphism.GraphMatcher(self.target.g, self.query.g, node_match=node_match, edge_match=edge_match)
         if gm.subgraph_is_isomorphic():
-            # print('matched without shrink')
-            return self.Result(True, self.query.g, gm.subgraph_isomorphisms_iter())
+            return self.Result(True, self.target.g, self.query.g, gm.subgraph_isomorphisms_iter())
         subgraph_set = shrink({self.query}, self.keep_ring)
         for i in range(min(self.loss_atom, len(self.query.nodes()))):
-            if len(subgraph_set) > 1000:
+            if len(subgraph_set) > self.max_subgraph:
                 break
             for sub in subgraph_set:
                 gm = isomorphism.GraphMatcher(self.target.g, sub.g, node_match=node_match, edge_match=edge_match)
                 if gm.subgraph_is_isomorphic():
-                    return self.Result(True, self.query.g, gm.subgraph_isomorphisms_iter())
+                    return self.Result(True, self.target.g, self.query.g, gm.subgraph_isomorphisms_iter())
             subgraph_set = shrink(subgraph_set, self.keep_ring)
-        return self.Result(False, None, None)
+        return self.Result(False, None, None, None)
