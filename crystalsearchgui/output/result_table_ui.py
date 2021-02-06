@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem
 
 
@@ -25,7 +26,19 @@ class ResultTableUI(QWidget):
         self.table.setRowCount(l)
         for i in range(l):
             r = results[i]
-            target = r.target.name
-            is_match = '是' if r.is_matched else '否'
-            self.table.setItem(i, 0, QTableWidgetItem(target))
-            self.table.setItem(i, 1, QTableWidgetItem(is_match))
+            target = QTableWidgetItem()
+            is_match = QTableWidgetItem()
+            max_nm = QTableWidgetItem()
+            max_rwm = QTableWidgetItem()
+            min_mse = QTableWidgetItem()
+            target.setData(Qt.DisplayRole, r.target.name)
+            is_match.setData(Qt.DisplayRole, '是' if r.is_matched else '否')
+            max_nm.setData(Qt.DisplayRole, r.best_feature[0])
+            max_rwm.setData(Qt.DisplayRole, '%.3f' % r.best_feature[1])
+            min_mse.setData(Qt.DisplayRole, '%.3f' % r.best_feature[2])
+
+            self.table.setItem(i, 0, target)
+            self.table.setItem(i, 1, is_match)
+            self.table.setItem(i, 2, max_nm)
+            self.table.setItem(i, 3, max_rwm)
+            self.table.setItem(i, 4, min_mse)

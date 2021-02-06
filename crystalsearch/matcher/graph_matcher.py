@@ -46,6 +46,7 @@ class GraphMatcher:
             self.match_pairs = match_pairs
             self.target = target
             self.query = query
+            self.best_feature = [0, 0, 1000]
             self.results = []
             if self.is_matched:
                 self.calculate_match_result()
@@ -55,15 +56,17 @@ class GraphMatcher:
                 n = len(p.keys())
                 wr = sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g])
                 ce = matcher.coordinate_error(p)
+                self.best_feature[0] = max(self.best_feature[0], n)
+                self.best_feature[1] = max(self.best_feature[1], wr)
+                self.best_feature[2] = min(self.best_feature[2], ce)
                 self.results.append((p, n, wr, ce))
 
         def only_best(self, according_to):
             if not self.is_matched:
                 return
-            max_value = max([v[according_to + 1] for v in self.results])
             new_results = []
             for v in self.results:
-                if v[according_to + 1] == max_value:
+                if v[according_to + 1] == self.best_feature[according_to]:
                     new_results.append(v)
             self.results = new_results
 

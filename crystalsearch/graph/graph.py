@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-from crystalsearch.graph import project3d
+from crystalsearch import graph
 
 
 class Graph:
@@ -54,7 +54,7 @@ class Graph:
     def draw_graph(self, highlight=None, direction=(0, 0, 1)):
         plt.figure(figsize=(10, 10))
         points = self.get_node_attributes('location')
-        pos = project3d(points, np.array(direction))
+        pos = graph.project3d(points, np.array(direction))
         label = self.get_node_attributes('label')
         edge_label = self.get_edge_attributes('dist')
         nx.draw_networkx(self.g, pos, alpha=0.7, with_labels=False, edge_color='.4')
