@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout, QRadioButton, QTextEdit, QLineEdit, QComboBox, QFormLayout, \
-    QButtonGroup
+from PyQt5.QtWidgets import QWidget, QRadioButton, QComboBox, QFormLayout
 
 
 class ResultParameterUI(QWidget):
@@ -24,4 +23,4 @@ class ResultParameterUI(QWidget):
         return self.rb.isChecked()
 
     def get_best_feature(self):
-        return self.cbb.currentText()
+        return self.cbb.currentIndex()

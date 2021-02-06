@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog, QGridLayout, QLabel, QFormLayout, QFrame
+from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog, QLabel, QFormLayout
 
 
 class FileInputUI(QWidget):
@@ -7,8 +7,8 @@ class FileInputUI(QWidget):
         super().__init__()
         self.init_ui()
         self.has_res = False
-        self.res_files = []
         self.has_pdb = False
+        self.res_files = []
         self.pdb_file = ''
 
     def init_ui(self):
@@ -43,3 +43,12 @@ class FileInputUI(QWidget):
             self.lb_pdb.setText(self.pdb_file.split('/')[-1])
             self.lb_pdb.setStyleSheet("color:black")
             self.has_pdb = True
+
+    def has_files(self):
+        return self.has_pdb and self.has_res
+
+    def get_res_files(self):
+        return self.res_files
+
+    def get_pdb_file(self):
+        return self.pdb_file

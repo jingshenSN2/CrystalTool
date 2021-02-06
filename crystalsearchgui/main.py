@@ -1,6 +1,8 @@
 from PyQt5.QtCore import QRect
 from PyQt5.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QHBoxLayout, QLabel, QFormLayout
 
+from crystalsearch.run import run
+from crystalsearchgui.input.calculate_button_ui import CalculateButtonUI
 from crystalsearchgui.input.file_input_ui import FileInputUI
 from crystalsearchgui.input.parameter_ui import ParameterUI
 from crystalsearchgui.input.result_parameter_ui import ResultParameterUI
@@ -34,10 +36,12 @@ class MainGUI(QWidget):
         self.file_input_ui = FileInputUI()
         self.para_input_ui = ParameterUI()
         self.result_para_input_ui = ResultParameterUI()
+        self.cal_button_ui = CalculateButtonUI(self)
 
-        self.input_layout.addLayout(self.file_input_ui.layout, 3)
+        self.input_layout.addLayout(self.file_input_ui.layout, 2)
         self.input_layout.addLayout(self.para_input_ui.layout, 1)
         self.input_layout.addLayout(self.result_para_input_ui.layout, 1)
+        self.input_layout.addLayout(self.cal_button_ui.layout, 1)
 
         self.output_layout = QHBoxLayout(self)
         self.layout.addLayout(self.output_layout, 1,0)
@@ -62,8 +66,20 @@ class MainGUI(QWidget):
         ob = self.result_para_input_ui.only_best_result()
         bf = self.result_para_input_ui.get_best_feature()
         self.q.setText(test_info
-            % ('\n'.join(res_f), pdb_f,
-               k, mla, msb, ob, bf))
+                       % ('\n'.join(res_f), pdb_f,
+                          k, mla, msb, ob, bf))
+
+    def match(self):
+        if not self.file_input_ui.has_files():
+            return
+        results = run(self.file_input_ui.res_files, self.file_input_ui.pdb_file,
+                      self.para_input_ui.keep_skeleton(), self.para_input_ui.get_max_loss_atom(),
+                      self.para_input_ui.get_max_subgraph(),
+                      self.result_para_input_ui.only_best_result(), self.result_para_input_ui.get_best_feature())
+        self.result_table_ui.updateResults(results)
+
+    def cal_coord_error(self):
+        return
 
 
 if __name__ == "__main__":

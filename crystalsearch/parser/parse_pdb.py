@@ -1,9 +1,10 @@
-from crystalsearch.Atom import AtomGroup
+from crystalsearch.atom import AtomGroup
 
 
-def parse_pdb(filename):
+def parseFromPDB(filename):
     """解析pdb文件中的晶胞信息"""
-    cell = AtomGroup()
+    name = filename.split('/')[-1]
+    cell = AtomGroup(name)
     with open(filename, 'r') as f:
         for line in f.readlines():
             line = line.rstrip('\n')

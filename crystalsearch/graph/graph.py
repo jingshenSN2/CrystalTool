@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-from crystalsearch.graph import project
+
+from crystalsearch.graph import project3d
 
 
 class Graph:
@@ -9,11 +10,12 @@ class Graph:
     包装nx.Graph的图类
     """
 
-    def __init__(self, nx_graph=None):
+    def __init__(self, name, nx_graph=None):
+        self.name = name
         self.g = nx.Graph(nx_graph)
 
     def copy(self):
-        return Graph(self.g)
+        return Graph(self.name, self.g)
 
     def add_node(self, node, **attr):
         self.g.add_node(node, **attr)
@@ -34,11 +36,11 @@ class Graph:
         return self.g.degree
 
     def subgraph(self, nodes):
-        return Graph(self.g.subgraph(nodes))
+        return Graph(self.name, self.g.subgraph(nodes))
 
     def max_subgraph(self):
         mc = max(nx.connected_components(self.g), key=len)
-        return Graph(self.g.subgraph(mc))
+        return Graph(self.name, self.g.subgraph(mc))
 
     def is_connected(self):
         return nx.is_connected(self.g)
@@ -52,7 +54,7 @@ class Graph:
     def draw_graph(self, highlight=None, direction=(0, 0, 1)):
         plt.figure(figsize=(10, 10))
         points = self.get_node_attributes('location')
-        pos = project(points, np.array(direction))
+        pos = project3d(points, np.array(direction))
         label = self.get_node_attributes('label')
         edge_label = self.get_edge_attributes('dist')
         nx.draw_networkx(self.g, pos, alpha=0.7, with_labels=False, edge_color='.4')

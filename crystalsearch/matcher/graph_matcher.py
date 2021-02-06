@@ -1,6 +1,8 @@
 import math
+
 from networkx.algorithms import isomorphism
-from crystalsearch import graph
+
+from crystalsearch import graph, matcher
 
 
 def node_match(atom1, atom2):
@@ -44,16 +46,26 @@ class GraphMatcher:
             self.match_pairs = match_pairs
             self.target = target
             self.query = query
-            self.results = {}
+            self.results = []
             if self.is_matched:
                 self.calculate_match_result()
 
         def calculate_match_result(self):
             for p in self.match_pairs:
                 n = len(p.keys())
-                rm = n / len(self.target)
-                wr = sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query])
-                self.results[p] = (n, rm, wr)
+                wr = sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g])
+                ce = matcher.coordinate_error(p)
+                self.results.append((p, n, wr, ce))
+
+        def only_best(self, according_to):
+            if not self.is_matched:
+                return
+            max_value = max([v[according_to + 1] for v in self.results])
+            new_results = []
+            for v in self.results:
+                if v[according_to + 1] == max_value:
+                    new_results.append(v)
+            self.results = new_results
 
     def __init__(self, target: graph.Graph, query: graph.Graph, keep_ring=True, loss_atom=0.2, max_subgraph=1000):
         self.target = target
@@ -68,7 +80,7 @@ class GraphMatcher:
         """完整匹配，依次匹配全部的删去k个原子的子图"""
         gm = isomorphism.GraphMatcher(self.target.g, self.query.g, node_match=node_match, edge_match=edge_match)
         if gm.subgraph_is_isomorphic():
-            return self.Result(True, self.target.g, self.query.g, gm.subgraph_isomorphisms_iter())
+            return self.Result(True, self.target, self.query, gm.subgraph_isomorphisms_iter())
         subgraph_set = shrink({self.query}, self.keep_ring)
         for i in range(min(self.loss_atom, len(self.query.nodes()))):
             if len(subgraph_set) > self.max_subgraph:
@@ -76,6 +88,6 @@ class GraphMatcher:
             for sub in subgraph_set:
                 gm = isomorphism.GraphMatcher(self.target.g, sub.g, node_match=node_match, edge_match=edge_match)
                 if gm.subgraph_is_isomorphic():
-                    return self.Result(True, self.target.g, self.query.g, gm.subgraph_isomorphisms_iter())
+                    return self.Result(True, self.target, self.query, gm.subgraph_isomorphisms_iter())
             subgraph_set = shrink(subgraph_set, self.keep_ring)
-        return self.Result(False, None, None, None)
+        return self.Result(False, self.target, self.query, None)

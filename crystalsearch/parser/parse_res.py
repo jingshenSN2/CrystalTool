@@ -1,9 +1,10 @@
-from crystalsearch.Atom import AtomGroup
+from crystalsearch.atom import AtomGroup
 
 
-def parse_res(filename, remove_extra=True):
+def parseFromRES(filename, remove_extra=True):
     """解析res文件中的晶胞信息"""
-    cell = AtomGroup()
+    name = filename.split('/')[-1]
+    cell = AtomGroup(name)
     with open(filename, 'r') as f:
         atom_dict = {}
         for line in f.readlines():

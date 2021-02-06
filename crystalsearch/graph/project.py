@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def project(points, direction):
+def project3d(points, direction):
     """投影函数，将三维点集投影到二维
     points: 三维点集
     direction: 投影平面的法向量(u,v,w)，投影平面通过原点(0,0,0)

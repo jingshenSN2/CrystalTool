@@ -1,3 +1,3 @@
-from .parse_res import parse_res
-from .parse_pdb import parse_pdb
+from .parse_pdb import parseFromPDB
+from .parse_res import parseFromRES
 from .to_res import to_res

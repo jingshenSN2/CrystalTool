@@ -1,9 +1,10 @@
 import itertools
-import numpy as np
 from collections import defaultdict
 
+import numpy as np
+
 from crystalsearch import config
-from .Atom import Atom
+from .atom import Atom
 
 
 class AtomGroup:
@@ -46,7 +47,8 @@ class AtomGroup:
             r[2, 2] = c * np.sqrt(volume) / sing
             self.rotation_matrix = r
 
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.atom_mass, self.max_distances, self.max_connect = config.get_atom_properties()
         self.cell_parameter = self.CellParameter()
         self.atom_count = 0
