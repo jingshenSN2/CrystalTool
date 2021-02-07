@@ -24,11 +24,9 @@ def coordinate_error(match_pair):
         Vt[2, :] *= -1
         R = Vt.T @ U.T
 
-    t = -R @ centroid_a + centroid_b
-
-    mat_b2 = R @ mat_a + t
-    mat_e = mat_b2 - mat_b
+    mat_bm2 = R @ mat_am
+    mat_e = mat_bm2 - mat_bm
     mat_e = mat_e * mat_e
     err = np.sum(mat_e)
-    rmse = np.sqrt(err / len(match_pair))
+    rmse = np.sqrt(err / len(set_b))
     return rmse

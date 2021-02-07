@@ -1,5 +1,6 @@
 class Setting:
     """任务参数类"""
+
     def __init__(self, setting_dict):
         self.target = setting_dict['target']
         self.query = setting_dict['query']

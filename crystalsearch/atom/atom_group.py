@@ -23,7 +23,7 @@ class AtomGroup:
                 return x, y, z
             new_xyz = np.matmul(self.rotation_matrix, np.array([x, y, z]).T)
             new_xyz = new_xyz.T
-            return np.round(new_xyz[0],2), np.round(new_xyz[1],2), np.round(new_xyz[2],2)
+            return np.round(new_xyz[0], 2), np.round(new_xyz[1], 2), np.round(new_xyz[2], 2)
 
         def set_parameter(self, a, b, c, alpha, beta, gamma):
             """设置晶胞参数"""

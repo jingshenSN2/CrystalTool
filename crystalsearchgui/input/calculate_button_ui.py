@@ -13,16 +13,10 @@ class CalculateButtonUI(QWidget):
         self.layout = QFormLayout()
 
         self.bt_match = QPushButton('开始匹配', self.widget)
-        self.bt_coord_error = QPushButton('计算坐标匹配', self.widget)
 
         self.layout.addRow('', self.bt_match)
-        self.layout.addRow('', self.bt_coord_error)
 
         self.bt_match.clicked.connect(self.match)
-        self.bt_coord_error.clicked.connect(self.cal_coord_error)
 
     def match(self):
         self.main.match()
-
-    def cal_coord_error(self):
-        self.main.cal_coord_error()

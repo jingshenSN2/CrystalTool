@@ -19,7 +19,7 @@ def run_task(task_id, setting: Setting):
     if len(query.g.nodes) == 0:
         print('读取pdb文件失败，请直接使用Vesta程序给出的文件')
         return
-    
+
     print('开始匹配') if not silent else ''
     loss_atom = float(setting.loss) if '.' in setting.loss else int(setting.loss)
     gm = matcher.GraphMatcher(target, query, setting.keep_ring, loss_atom)

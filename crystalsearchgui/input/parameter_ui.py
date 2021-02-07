@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout, QRadioButton, QTextEdit, QLineEdit, QComboBox, QFormLayout, \
-    QButtonGroup
+from PyQt5.QtWidgets import QWidget, QRadioButton, QComboBox, QFormLayout
 
 
 class ParameterUI(QWidget):
@@ -17,7 +16,7 @@ class ParameterUI(QWidget):
         self.cbb_mla = QComboBox(self.widget)
         self.cbb_mla.addItems([str(i) for i in range(11)])
         self.cbb_msbg = QComboBox(self.widget)
-        self.cbb_msbg.addItems(['10','20','50','100','200','500','1000'])
+        self.cbb_msbg.addItems(['10', '20', '50', '100', '200', '500', '1000'])
 
         self.layout.addRow('保留骨架', self.rb)
         self.layout.addRow('最大删除原子数', self.cbb_mla)
@@ -31,4 +30,3 @@ class ParameterUI(QWidget):
 
     def get_max_subgraph(self):
         return int(self.cbb_msbg.currentText())
-

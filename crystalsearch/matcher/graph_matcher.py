@@ -41,6 +41,7 @@ def shrink(graph_set, keep_ring):
 class GraphMatcher:
     class Result:
         """包装匹配结果类"""
+
         def __init__(self, is_matched, target, query, match_pairs):
             self.is_matched = is_matched
             self.match_pairs = match_pairs
@@ -60,15 +61,6 @@ class GraphMatcher:
                 self.best_feature[1] = max(self.best_feature[1], wr)
                 self.best_feature[2] = min(self.best_feature[2], ce)
                 self.results.append((p, n, wr, ce))
-
-        def only_best(self, according_to):
-            if not self.is_matched:
-                return
-            new_results = []
-            for v in self.results:
-                if v[according_to + 1] == self.best_feature[according_to]:
-                    new_results.append(v)
-            self.results = new_results
 
     def __init__(self, target: graph.Graph, query: graph.Graph, keep_ring=True, loss_atom=0.2, max_subgraph=1000):
         self.target = target

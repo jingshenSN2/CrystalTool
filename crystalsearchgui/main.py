@@ -5,7 +5,6 @@ from crystalsearch.run import run
 from crystalsearchgui.input.calculate_button_ui import CalculateButtonUI
 from crystalsearchgui.input.file_input_ui import FileInputUI
 from crystalsearchgui.input.parameter_ui import ParameterUI
-from crystalsearchgui.input.result_parameter_ui import ResultParameterUI
 from crystalsearchgui.output.result_table_ui import ResultTableUI
 
 test_info = '''res文件:
@@ -17,6 +16,7 @@ keep_skeleton:%s
 只显示最佳结果:%s
 最佳结果根据:%s'''
 
+
 class MainGUI(QWidget):
 
     def __init__(self):
@@ -24,27 +24,25 @@ class MainGUI(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.setFixedSize(1000, 1000)
+        self.setFixedSize(800, 600)
         self.setWindowTitle('电子衍射结构解析评分程序')
 
         self.layout = QGridLayout(self)
-        self.layout.setGeometry(QRect(20, 20, 1000, 1000))
+        self.layout.setGeometry(QRect(20, 20, 800, 600))
 
         self.input_layout = QHBoxLayout(self)
-        self.layout.addLayout(self.input_layout,0,0)
+        self.layout.addLayout(self.input_layout, 0, 0)
 
         self.file_input_ui = FileInputUI()
         self.para_input_ui = ParameterUI()
-        self.result_para_input_ui = ResultParameterUI()
         self.cal_button_ui = CalculateButtonUI(self)
 
         self.input_layout.addLayout(self.file_input_ui.layout, 2)
         self.input_layout.addLayout(self.para_input_ui.layout, 1)
-        self.input_layout.addLayout(self.result_para_input_ui.layout, 1)
         self.input_layout.addLayout(self.cal_button_ui.layout, 1)
 
         self.output_layout = QHBoxLayout(self)
-        self.layout.addLayout(self.output_layout, 1,0)
+        self.layout.addLayout(self.output_layout, 1, 0)
 
         self.result_table_ui = ResultTableUI()
         self.output_layout.addLayout(self.result_table_ui.layout)
@@ -63,23 +61,17 @@ class MainGUI(QWidget):
         k = self.para_input_ui.keep_skeleton()
         mla = self.para_input_ui.get_max_loss_atom()
         msb = self.para_input_ui.get_max_subgraph()
-        ob = self.result_para_input_ui.only_best_result()
-        bf = self.result_para_input_ui.get_best_feature()
         self.q.setText(test_info
                        % ('\n'.join(res_f), pdb_f,
-                          k, mla, msb, ob, bf))
+                          k, mla, msb))
 
     def match(self):
         if not self.file_input_ui.has_files():
             return
         results = run(self.file_input_ui.res_files, self.file_input_ui.pdb_file,
                       self.para_input_ui.keep_skeleton(), self.para_input_ui.get_max_loss_atom(),
-                      self.para_input_ui.get_max_subgraph(),
-                      self.result_para_input_ui.only_best_result(), self.result_para_input_ui.get_best_feature())
+                      self.para_input_ui.get_max_subgraph())
         self.result_table_ui.updateResults(results)
-
-    def cal_coord_error(self):
-        return
 
 
 if __name__ == "__main__":

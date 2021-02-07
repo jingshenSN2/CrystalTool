@@ -18,7 +18,7 @@ def parseFromPDB(filename):
                 continue
             index = tmp[1]
             x, y, z = map(float, tmp[-6:-3])
-            cell.add_atom(element, element+index, x, y, z, 100)
+            cell.add_atom(element, element + index, x, y, z, 100)
     cell.calc_neighbors()
     cell.remove_extra_connection()
     return cell

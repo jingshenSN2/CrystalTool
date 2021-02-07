@@ -33,9 +33,9 @@ class ResultTableUI(QWidget):
             min_mse = QTableWidgetItem()
             target.setData(Qt.DisplayRole, r.target.name)
             is_match.setData(Qt.DisplayRole, '是' if r.is_matched else '否')
-            max_nm.setData(Qt.DisplayRole, r.best_feature[0])
-            max_rwm.setData(Qt.DisplayRole, '%.3f' % r.best_feature[1])
-            min_mse.setData(Qt.DisplayRole, '%.3f' % r.best_feature[2])
+            max_nm.setData(Qt.DisplayRole, r.best_feature[0] if r.is_matched else '')
+            max_rwm.setData(Qt.DisplayRole, '%.f' % (r.best_feature[1] * 100) if r.is_matched else '')
+            min_mse.setData(Qt.DisplayRole, '%.3f' % r.best_feature[2] if r.is_matched else '')
 
             self.table.setItem(i, 0, target)
             self.table.setItem(i, 1, is_match)
