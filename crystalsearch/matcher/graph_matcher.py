@@ -53,10 +53,13 @@ class GraphMatcher:
                 self.calculate_match_result()
 
         def calculate_match_result(self):
+            feature_set = set()
             for p in self.match_pairs:
                 n = len(p.keys())
                 wr = sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g])
                 ce = matcher.coordinate_error(p)
+                if (n, wr, ce) in feature_set:
+                    continue
                 self.best_feature[0] = max(self.best_feature[0], n)
                 self.best_feature[1] = max(self.best_feature[1], wr)
                 self.best_feature[2] = min(self.best_feature[2], ce)

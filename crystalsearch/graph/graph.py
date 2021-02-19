@@ -52,7 +52,6 @@ class Graph:
         return nx.get_edge_attributes(self.g, attr)
 
     def draw_graph(self, highlight=None, direction=(0, 0, 1)):
-        plt.figure(figsize=(10, 10))
         points = self.get_node_attributes('location')
         pos = graph.project3d(points, np.array(direction))
         label = self.get_node_attributes('label')
