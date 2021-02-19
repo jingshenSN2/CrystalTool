@@ -24,11 +24,11 @@ class MainGUI(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.setFixedSize(800, 600)
+        self.setFixedSize(1000, 600)
         self.setWindowTitle('电子衍射结构解析评分程序')
 
         self.layout = QGridLayout(self)
-        self.layout.setGeometry(QRect(20, 20, 800, 600))
+        self.layout.setGeometry(QRect(20, 20, 1000, 600))
 
         self.input_layout = QHBoxLayout(self)
         self.layout.addLayout(self.input_layout, 0, 0)
@@ -48,7 +48,7 @@ class MainGUI(QWidget):
         self.output_layout.addLayout(self.result_table_ui.layout)
 
         self.test_layout = QFormLayout()
-        self.layout.addLayout(self.test_layout, 2, 0)
+        # self.layout.addLayout(self.test_layout, 2, 0)
         self.bt = QPushButton()
         self.bt.clicked.connect(self.show_info)
         self.q = QLabel()
