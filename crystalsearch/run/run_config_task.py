@@ -6,6 +6,7 @@ from crystalsearch.run import Setting, run_task
 
 
 def run_task_in_config(argv):
+    """根据配置文件在命令行模式下运行任务"""
     opts, args = getopt.getopt(argv, '-c', ['config='])
     config_file = 'task_config.ini'
     for opt, arg in opts:

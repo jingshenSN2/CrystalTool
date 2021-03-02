@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 
 from crystalsearch import graph
 
@@ -52,6 +53,7 @@ class Graph:
         return nx.get_edge_attributes(self.g, attr)
 
     def draw_graph(self, highlight=None, direction=(0, 0, 1)):
+        """用matlotlib画二维投影图"""
         points = self.get_node_attributes('location')
         pos = graph.project3d(points, np.array(direction))
         label = self.get_node_attributes('label')
@@ -62,3 +64,24 @@ class Graph:
         nx.draw_networkx_labels(self.g, pos, labels=label)
         nx.draw_networkx_edge_labels(self.g, pos, edge_labels=edge_label)
         plt.axis('off')
+
+    def draw_3d_graph(self, highlight=None):
+        """用matlotlib画三维图"""
+        points = self.get_node_attributes('location')
+        label = self.get_node_attributes('label')
+        fig = plt.figure(figsize=(10, 7))
+        ax = Axes3D(fig)
+        for key, value in points.items():
+            c = 'blue'
+            if key in highlight:
+                c = 'red'
+            xi, yi, zi = value
+            ax.scatter(xi, yi, zi, label[key], c=c, alpha=0.9)
+        for i, j in enumerate(self.edges()):
+            x = np.array((points[j[0]][0], points[j[1]][0]))
+            y = np.array((points[j[0]][1], points[j[1]][1]))
+            z = np.array((points[j[0]][2], points[j[1]][2]))
+            ax.plot(x, y, z, c='black', alpha=0.9)
+
+
+

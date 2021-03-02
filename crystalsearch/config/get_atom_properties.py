@@ -4,9 +4,9 @@ import os
 
 
 def get_atom_properties():
+    """获取原子信息配置文件"""
     current_path = os.path.dirname(__file__)
     filename = current_path + '/atom_properties.json'
-    """获取配置文件"""
     atom_mass = {}
     atom_dist = {}
     atom_connect = {}

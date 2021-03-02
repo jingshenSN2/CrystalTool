@@ -10,6 +10,7 @@ from .atom import Atom
 class AtomGroup:
     class CellParameter:
         def __init__(self):
+            """初始化晶胞参数"""
             self.a = 1
             self.b = 1
             self.c = 1
@@ -19,6 +20,7 @@ class AtomGroup:
             self.rotation_matrix = None
 
         def coordinate_transform(self, x, y, z):
+            """计算坐标转换结果"""
             if self.rotation_matrix is None:
                 return x, y, z
             new_xyz = np.matmul(self.rotation_matrix, np.array([x, y, z]).T)
@@ -48,6 +50,7 @@ class AtomGroup:
             self.rotation_matrix = r
 
     def __init__(self, name):
+        """初始化AtomGroup类成员"""
         self.name = name
         self.atom_mass, self.max_distances, self.max_connect = config.get_atom_properties()
         self.cell_parameter = self.CellParameter()

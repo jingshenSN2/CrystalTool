@@ -7,6 +7,7 @@ from crystalsearch.run import Setting
 
 
 def run_task(task_id, setting: Setting):
+    """根据参数Setting执行任务"""
     silent = setting.silent
     print('开始执行%s' % task_id) if not silent else ''
     print('读取res文件%s...' % setting.target) if not silent else ''

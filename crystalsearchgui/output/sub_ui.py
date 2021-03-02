@@ -43,12 +43,15 @@ class SubResultUI(QWidget):
 
     def generate_button(self, pair):
         button = QPushButton('查看图片')
+        button_3d = QPushButton('查看3d图')
         bt_widget = QWidget()
         hLayout = QHBoxLayout()
         hLayout.addWidget(button)
+        hLayout.addWidget(button_3d)
         hLayout.setContentsMargins(5, 2, 5, 2)
         bt_widget.setLayout(hLayout)
         button.clicked.connect(lambda: self.plot_result(self.result, pair))
+        button_3d.clicked.connect(lambda: self.plot_result_3d(self.result, pair))
         return bt_widget
 
     def plot_result(self, result, pair):
@@ -56,4 +59,8 @@ class SubResultUI(QWidget):
         result.target.draw_graph(pair.keys())
         plt.subplot(122)
         result.query.draw_graph(pair.values())
+        plt.show()
+
+    def plot_result_3d(self, result, pair):
+        result.target.draw_3d_graph(pair)
         plt.show()

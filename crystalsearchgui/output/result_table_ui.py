@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton
 
-from crystalsearchgui.sub_ui import SubResultUI
+from crystalsearchgui.output.sub_ui import SubResultUI
 
 
 class ResultTableUI(QWidget):

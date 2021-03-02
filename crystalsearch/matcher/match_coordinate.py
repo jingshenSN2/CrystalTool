@@ -2,6 +2,7 @@ import numpy as np
 
 
 def coordinate_error(match_pair):
+    """根据给定原子映射关系，计算旋转矩阵、平移向量和最小坐标误差"""
     set_a = []
     set_b = []
     for k, v in match_pair.items():
