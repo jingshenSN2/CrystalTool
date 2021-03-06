@@ -15,6 +15,12 @@ class Graph:
         self.name = name
         self.g = nx.Graph(nx_graph)
 
+    def __len__(self):
+        return len(self.nodes())
+
+    def __getitem__(self, node):
+        return self.g[node]
+
     def copy(self):
         return Graph(self.name, self.g)
 
@@ -33,7 +39,9 @@ class Graph:
     def edges(self):
         return self.g.edges
 
-    def degree(self):
+    def degree(self, node=None):
+        if node is not None:
+            return self.g.degree[node]
         return self.g.degree
 
     def subgraph(self, nodes):
@@ -82,6 +90,9 @@ class Graph:
             y = np.array((points[j[0]][1], points[j[1]][1]))
             z = np.array((points[j[0]][2], points[j[1]][2]))
             ax.plot(x, y, z, c='black', alpha=0.9)
+
+    def number_of_edges(self, u, v):
+        return self.g.number_of_edges(u, v)
 
 
 

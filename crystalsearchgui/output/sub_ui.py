@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, \
-    QTableWidget, QTableWidgetItem, QAbstractItemView
+    QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 import matplotlib.pyplot as plt
 
 
@@ -24,6 +24,7 @@ class SubResultUI(QWidget):
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setHorizontalHeaderLabels(['匹配上原子数', '加权匹配比例', '坐标匹配误差', '操作'])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         for i in range(l):
             pair, n, wr, ce = self.result.results[i]

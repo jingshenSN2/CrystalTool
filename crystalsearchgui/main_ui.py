@@ -54,5 +54,3 @@ class MainGUI(QWidget):
                       self.para_input_ui.keep_skeleton(), self.para_input_ui.get_max_loss_atom(),
                       self.para_input_ui.get_max_subgraph())
         self.result_table_ui.updateResults(results)
-
-

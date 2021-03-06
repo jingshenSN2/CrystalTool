@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton, \
+    QHeaderView
 
 from crystalsearchgui.output.sub_ui import SubResultUI
 
@@ -22,6 +23,7 @@ class ResultTableUI(QWidget):
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setHorizontalHeaderLabels(['序号', 'res文件', '匹配成功', '匹配上原子数', '加权匹配比例', '坐标匹配误差', '操作'])
         self.table.verticalHeader().setHidden(True)
+        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.layout.addWidget(self.table)
 
     def updateResults(self, results):

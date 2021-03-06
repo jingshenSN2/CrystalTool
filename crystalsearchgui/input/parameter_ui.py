@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QRadioButton, QComboBox, QFormLayout
+from PyQt5.QtWidgets import QWidget, QRadioButton, QComboBox, QFormLayout, QSpinBox, QHBoxLayout, QDoubleSpinBox
 
 
 class ParameterUI(QWidget):
@@ -9,24 +9,24 @@ class ParameterUI(QWidget):
 
     def init_ui(self):
         self.widget = QWidget()
-        self.layout = QFormLayout()
+        self.layout = QHBoxLayout()
 
         self.rb = QRadioButton(self.widget)
         self.rb.setAutoExclusive(False)
-        self.cbb_mla = QComboBox(self.widget)
-        self.cbb_mla.addItems([str(i) for i in range(11)])
-        self.cbb_msbg = QComboBox(self.widget)
-        self.cbb_msbg.addItems(['10', '20', '50', '100', '200', '500', '1000'])
+        self.mla = QSpinBox()
+        self.mla.setRange(0, 10)
+        self.msbg = QSpinBox()
+        self.msbg.setRange(10, 5000)
 
         self.layout.addRow('保留骨架', self.rb)
-        self.layout.addRow('最大删除原子数', self.cbb_mla)
-        self.layout.addRow('最大子结构数', self.cbb_msbg)
+        self.layout.addRow('最大删除原子数', self.mla)
+        self.layout.addRow('最大子结构数', self.msbg)
 
     def keep_skeleton(self):
         return self.rb.isChecked()
 
     def get_max_loss_atom(self):
-        return int(self.cbb_mla.currentText())
+        return self.mla.value()
 
     def get_max_subgraph(self):
-        return int(self.cbb_msbg.currentText())
+        return self.msbg.value()
