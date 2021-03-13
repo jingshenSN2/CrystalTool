@@ -1,5 +1,5 @@
 from crystalsearch import graph
-from crystalsearch.atom import AtomGroup
+from crystalsearch.atom_base import AtomGroup
 
 
 def cell2graph(cell: AtomGroup):

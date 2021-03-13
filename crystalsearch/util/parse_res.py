@@ -1,7 +1,7 @@
-from crystalsearch.atom import AtomGroup
+from crystalsearch.atom_base import AtomGroup
 
 
-def parseFromRES(filename, remove_extra=True):
+def parseFromRES(filename: str, remove_extra=True):
     """解析res文件中的晶胞信息"""
     name = filename.split('/')[-1]
     cell = AtomGroup(name)
@@ -27,7 +27,7 @@ def parseFromRES(filename, remove_extra=True):
                 if len(s) == 8:
                     intensity = s[7]
                 element = atom_dict[int(s[1])]
-                # print('add atom:', element, index, x, y, z, intensity)
+                # print('add atom_base:', element, index, x, y, z, intensity)
                 cell.add_atom(element, label, x, y, z, intensity)
     cell.calc_neighbors()
     if remove_extra:

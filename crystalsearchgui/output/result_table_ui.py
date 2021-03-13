@@ -1,6 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton
 
+from crystalsearch import matcher
 from crystalsearchgui.output.sub_result_table_ui import SubResultUI
 
 
@@ -21,7 +22,7 @@ class ResultTableUI(QWidget):
         self.table.setSortingEnabled(True)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.table.setHorizontalHeaderLabels(['序号', 'res文件', '匹配成功', '匹配上原子数', '加权匹配比例', '坐标匹配误差', '操作'])
+        self.table.setHorizontalHeaderLabels(['序号', 'res文件', '匹配成功', '匹配上原子数', '加权匹配比例', '坐标匹配残差', '操作'])
         self.table.verticalHeader().setHidden(True)
         self.layout.addWidget(self.table)
 
@@ -57,7 +58,7 @@ class ResultTableUI(QWidget):
                 bt_view = self.generate_button(r)
                 self.table.setCellWidget(i, 6, bt_view)
 
-    def generate_button(self, result):
+    def generate_button(self, result: matcher.Result):
         button = QPushButton('查看')
         bt_widget = QWidget()
         hLayout = QHBoxLayout()
@@ -67,7 +68,7 @@ class ResultTableUI(QWidget):
         button.clicked.connect(lambda: self.view_result(result))
         return bt_widget
 
-    def view_result(self, result):
+    def view_result(self, result: matcher.Result):
         if result not in self.results_ui:
             self.results_ui[result] = SubResultUI(result)
         self.results_ui[result].show()

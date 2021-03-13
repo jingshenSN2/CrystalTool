@@ -1,8 +1,8 @@
-from crystalsearch import matcher
+from crystalsearch import graph, matcher
 
 
 class Result:
-    def __init__(self, is_matched, target, query, match_pairs):
+    def __init__(self, is_matched: bool, target: graph.Graph, query: graph.Graph, match_pairs: dict):
         self.is_matched = is_matched
         self.match_pairs = match_pairs
         self.target = target

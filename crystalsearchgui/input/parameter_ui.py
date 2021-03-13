@@ -23,7 +23,7 @@ class ParameterUI(QWidget):
         self.bt_cfg = QPushButton('+')
 
         self.layout.addRow('使用旧算法', self.rb)
-        self.layout.addRow('最大删除原子数', self.mla)
+        self.layout.addRow('可缺失原子数', self.mla)
         self.layout.addRow('查看配置文件', self.bt_cfg)
 
         self.bt_cfg.clicked.connect(self.open_cfg)

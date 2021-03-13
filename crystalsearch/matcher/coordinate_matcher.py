@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def coordinate_error(match_pair):
+def coordinate_error(match_pair: dict):
     """根据给定原子映射关系，计算旋转矩阵、平移向量和最小坐标误差"""
     set_a = []
     set_b = []

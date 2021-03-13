@@ -1,9 +1,11 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog, QLabel, QFormLayout
 
+from crystalsearchgui import MainUI
+
 
 class MatchUI(QWidget):
 
-    def __init__(self, main):
+    def __init__(self, main: MainUI):
         super().__init__()
         self.init_ui()
         self.main = main
@@ -25,7 +27,7 @@ class MatchUI(QWidget):
         self.lb_pdb = QLabel('未选择文件,请选择待搜索pdb文件', self.widget)
         self.lb_pdb.setStyleSheet("color:red")
         self.bt_match = QPushButton('开始匹配', self.widget)
-        self.bt_match.setToolTip('如果没有RES文件，请先用左侧的求解结构，指定HKL和INS文件后，程序会用自带shelxt求解')
+        self.bt_match.setToolTip('如果没有RES文件，请先用左侧的求解结构，\n指定HKL和INS文件后，程序会用自带shelxt求解')
         self.lb_match_status = QLabel('', self.widget)
 
         self.bt_res = QPushButton('+', self.widget)
@@ -43,17 +45,17 @@ class MatchUI(QWidget):
         if not self.has_res_files():
             self.set_text('缺失文件')
             return
-        self.set_text('正在匹配...')
+        self.set_text('正在匹配...已完成0/%d' % len(self.res_files))
         self.main.match()
         self.set_text('匹配完成')
 
-    def set_process(self, process):
+    def set_process(self, process: int):
         res_count = len(self.res_files)
         if res_count == 0:
             return
         self.set_text('正在匹配...已完成%d/%d' % (process, res_count))
 
-    def set_text(self, text):
+    def set_text(self, text: str):
         self.lb_match_status.setText(text)
         self.lb_match_status.repaint()
 

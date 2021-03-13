@@ -1,22 +1,22 @@
 from crystalsearch import graph, matcher
 
 
-def calculate_prob(G1, G2):
+def calculate_prob(g1: graph.Graph, g2: graph.Graph):
     """计算匹配概率"""
     pf = {}
-    for u in G2.nodes():
+    for u in g2.nodes():
         pl, pd = 0, 0
-        d = G2.degree(u)
-        for v in G1.nodes():
+        d = g2.degree(u)
+        for v in g1.nodes():
             if matcher.node_match(u, v):
                 pl += 1
-            if G1.degree(v) >= d:
+            if g1.degree(v) >= d:
                 pd += 1
         pf[u] = pl * pd
     return pf
 
 
-def generate_node_order(pf):
+def generate_node_order(pf: dict):
     """根据匹配概率排序，概率大的节点靠前"""
     seq = sorted(pf.keys(), key=pf.__getitem__, reverse=True)
     return {seq[i]: i for i in range(len(seq))}
@@ -24,13 +24,12 @@ def generate_node_order(pf):
 
 class GraphMatcherVF2:
 
-    def __init__(self, G1: graph.Graph, G2: graph.Graph, keep_ring=True, loss_atom=0):
+    def __init__(self, G1: graph.Graph, G2: graph.Graph, loss_atom=0):
         self.G1 = G1
         self.G2 = G2
         self.G1_nodes = set(self.G1.nodes())
         self.G2_nodes = set(self.G2.nodes())
         self.stop_len = len(G2) - loss_atom
-        self.keep_ring = keep_ring
 
         self.core_1 = {}
         self.core_2 = {}
@@ -79,8 +78,8 @@ class GraphMatcherVF2:
                 if node not in self.core_1:
                     yield node, other_node
 
-    def syntactic_feasibility(self, u, v):
-        return matcher.node_match(u, v)
+    def syntactic_feasibility(self, G1_node, G2_node):
+        return matcher.node_match(G1_node, G2_node)
 
     def semantic_feasibility(self, G1_node, G2_node):
         """根据VF2规则，剪枝"""

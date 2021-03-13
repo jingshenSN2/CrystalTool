@@ -1,4 +1,7 @@
-def to_res(input_filename, output_filename, match_result):
+from crystalsearch import matcher
+
+
+def to_res_old(input_filename, output_filename, match_result):
     """储存Cell类到res文件, 测试版"""
     element_map = {}
     for atom1, atom2 in match_result.items():
@@ -24,3 +27,7 @@ def to_res(input_filename, output_filename, match_result):
                 tmp[1] = str(index_map[tmp[0]])
                 line = ' '.join(tmp) + '\n'
             output.write(line)
+
+
+def to_res(output_file: str, match_result: matcher.Result, match_pair: dict):
+    pass
