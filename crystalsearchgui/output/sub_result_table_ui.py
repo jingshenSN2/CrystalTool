@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, \
-    QTableWidget, QTableWidgetItem, QAbstractItemView
+    QTableWidget, QTableWidgetItem, QAbstractItemView, QFileDialog
 
-from crystalsearch import matcher
+from crystalsearch import matcher, util
 
 
 class SubResultUI(QWidget):
@@ -75,4 +75,6 @@ class SubResultUI(QWidget):
         plt.show()
 
     def save_res(self, result: matcher.Result, pair: dict):
-        print(len(result.target.nodes()))
+        output_file, success = QFileDialog.getSaveFileName(self, '选择新的RES保存路径', './', 'Res Files (*.res)')
+        if success:
+            util.to_res(output_file, result, pair)

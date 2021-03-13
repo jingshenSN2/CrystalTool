@@ -1,14 +1,12 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog, QLabel, QFormLayout
 
-from crystalsearchgui import MainUI
-
 
 class MatchUI(QWidget):
 
-    def __init__(self, main: MainUI):
+    def __init__(self, main_ui):
         super().__init__()
         self.init_ui()
-        self.main = main
+        self.main = main_ui
         self.has_hkl = False
         self.has_ins = False
         self.has_res = False
