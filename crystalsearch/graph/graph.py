@@ -60,9 +60,12 @@ class Graph:
     def get_edge_attributes(self, attr):
         return nx.get_edge_attributes(self.g, attr)
 
-    def draw_graph(self, highlight=None, direction=(0, 0, 1)):
+    def draw_graph(self, highlight=None, direction=(0, 0, 1), rotation=None):
         """用matlotlib画二维投影图"""
         points = self.get_node_attributes('location')
+        if rotation is not None:
+            for k in points:
+                points[k] = np.dot(points[k], rotation)
         pos = graph.project3d(points, np.array(direction))
         label = self.get_node_attributes('label')
         edge_label = self.get_edge_attributes('dist')
@@ -93,6 +96,3 @@ class Graph:
 
     def number_of_edges(self, u, v):
         return self.g.number_of_edges(u, v)
-
-
-

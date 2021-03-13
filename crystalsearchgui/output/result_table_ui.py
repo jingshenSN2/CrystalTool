@@ -1,8 +1,7 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton, \
-    QHeaderView
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton
 
-from crystalsearchgui.output.sub_ui import SubResultUI
+from crystalsearchgui.output.sub_result_table_ui import SubResultUI
 
 
 class ResultTableUI(QWidget):
@@ -18,12 +17,12 @@ class ResultTableUI(QWidget):
         self.table = QTableWidget()
         self.table.setColumnCount(7)
         self.table.setRowCount(6)
+        self.table.setColumnWidth(0, 80)
         self.table.setSortingEnabled(True)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setHorizontalHeaderLabels(['序号', 'res文件', '匹配成功', '匹配上原子数', '加权匹配比例', '坐标匹配误差', '操作'])
         self.table.verticalHeader().setHidden(True)
-        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.layout.addWidget(self.table)
 
     def updateResults(self, results):
@@ -41,7 +40,7 @@ class ResultTableUI(QWidget):
             max_nm = QTableWidgetItem()
             max_rwm = QTableWidgetItem()
             min_mse = QTableWidgetItem()
-            index.setData(Qt.DisplayRole, i)
+            index.setData(Qt.DisplayRole, i + 1)
             target.setText(r.target.name)
             is_match.setText('是' if r.is_matched else '否')
             max_nm.setData(Qt.DisplayRole, r.best_feature[0] if r.is_matched else 0)

@@ -1,86 +1,89 @@
 from crystalsearch import graph, matcher
 
 
-def node_match(atom1, atom2):
-    """节点匹配，原子质量之比0.7~1.4内为匹配"""
-    ratio = atom1['mass'] / atom2['mass']
-    return 0.7 < ratio < 1.4
+def calculate_prob(G1, G2):
+    """计算匹配概率"""
+    pf = {}
+    for u in G2.nodes():
+        pl, pd = 0, 0
+        d = G2.degree(u)
+        for v in G1.nodes():
+            if matcher.node_match(u, v):
+                pl += 1
+            if G1.degree(v) >= d:
+                pd += 1
+        pf[u] = pl * pd
+    return pf
+
+
+def generate_node_order(pf):
+    """根据匹配概率排序，概率大的节点靠前"""
+    seq = sorted(pf.keys(), key=pf.__getitem__, reverse=True)
+    return {seq[i]: i for i in range(len(seq))}
 
 
 class GraphMatcherVF2:
 
-    def __init__(self, G1: graph.Graph, G2: graph.Graph, node_match=node_match, loss_atom=0):
+    def __init__(self, G1: graph.Graph, G2: graph.Graph, keep_ring=True, loss_atom=0):
         self.G1 = G1
         self.G2 = G2
         self.G1_nodes = set(self.G1.nodes())
         self.G2_nodes = set(self.G2.nodes())
-        self.node_match = node_match
-        self.stop_len = len(G1) - loss_atom
-        self.state = State(self)
-
-        pf = self.calculate_prob()
-        self.G2_order = self.generate_node_order(pf)
+        self.stop_len = len(G2) - loss_atom
+        self.keep_ring = keep_ring
 
         self.core_1 = {}
         self.core_2 = {}
         self.inout_1 = {}
         self.inout_2 = {}
 
+        pf = calculate_prob(self.G1, self.G2)
+        self.G2_order = generate_node_order(pf)
+        self.state = State(self)
+        self.mappings = []
+
     def get_result(self):
-        return Result(self.subgraph_is_isomorphic(), self.G1, self.G2, self.subgraph_isomorphisms_iter())
-
-    def calculate_prob(self):
-        pf = {}
-        for u in self.G2_nodes:
-            pl = 0
-            pd = 0
-            d = self.G2.degree(u)
-            for v in self.G1_nodes:
-                if self.node_match(u, v):
-                    pl += 1
-                if self.G1.degree(v) >= d:
-                    pd += 1
-            pf[u] = pl * pd
-        return pf
-
-    def generate_node_order(self, pf):
-        seq = sorted(pf.keys(), key=lambda x:pf[x], reverse=True)
-        return {i: seq[i] for i in range(len(seq))}
+        """获取匹配结果，Result类"""
+        is_matched, iso_iter = self.subgraph_isomorphisms_iter()
+        return matcher.Result(is_matched, self.G1, self.G2, iso_iter)
 
     def match(self):
-        if len(self.core_1) >= self.stop_len:
-            self.mapping = self.core_1.copy()
-            yield self.mapping
-        else:
-            for u, v in self.candidate_pairs_iter():
-                if self.syntactic_feasibility(u, v):
-                    if self.semantic_feasibility(u, v):
-                        s = State(self, u, v)
-                        yield from self.match()
-                        s.restore()
+        """递归匹配函数"""
+        if len(self.core_2) >= self.stop_len:
+            self.mappings.append(self.core_1.copy())
+            if len(self.core_2) == len(self.G2):
+                return
+        for u, v in self.candidate_pairs_iter():
+            if self.syntactic_feasibility(u, v):
+                if self.semantic_feasibility(u, v):
+                    s = State(self, u, v)
+                    self.match()
+                    s.restore()
 
     def candidate_pairs_iter(self):
+        """根据VF2规则，生成可能的匹配对"""
         G1_nodes = self.G1_nodes
         G2_nodes = self.G2_nodes
-        min_order = self.G2_order.__getitem__
+        min_key = self.G2_order.__getitem__
 
         T1 = [node for node in self.inout_1 if node not in self.core_1]
         T2 = [node for node in self.inout_2 if node not in self.core_2]
 
         if T1 and T2:
-            node_2 = min(T2, key=min_order)
+            node_2 = min(T2, key=min_key)
             for node_1 in T1:
                 yield node_1, node_2
         else:
-            other_node = min(G2_nodes - set(self.core_2), key=min_order)
-            for node in self.G1_nodes:
+            other_node = min(G2_nodes - set(self.core_2), key=min_key)
+            for node in G1_nodes:
                 if node not in self.core_1:
                     yield node, other_node
 
     def syntactic_feasibility(self, u, v):
-        return self.node_match(u, v)
+        return matcher.node_match(u, v)
 
     def semantic_feasibility(self, G1_node, G2_node):
+        """根据VF2规则，剪枝"""
         if self.G1.degree(G1_node) < self.G2.degree(G2_node):
             return False
         for neighbor in self.G1[G1_node]:
@@ -120,18 +123,15 @@ class GraphMatcherVF2:
             return False
         return True
 
-    def subgraph_is_isomorphic(self):
-        try:
-            x = next(self.subgraph_isomorphisms_iter())
-            return True
-        except StopIteration:
-            return False
-
     def subgraph_isomorphisms_iter(self):
-        yield from self.match()
+        """返回匹配是否成功和所有的匹配映射"""
+        self.mappings = []
+        self.match()
+        return len(self.mappings) > 0, self.mappings
 
 
 class State:
+    """Networkx的VF2-State实现"""
 
     def __init__(self, GM: GraphMatcherVF2, G1_node=None, G2_node=None):
         self.GM = GM
@@ -183,30 +183,3 @@ class State:
             for node in list(vector.keys()):
                 if vector[node] == self.depth:
                     del vector[node]
-
-
-class Result:
-
-    def __init__(self, is_matched, target, query, match_pairs):
-        self.is_matched = is_matched
-        self.match_pairs = match_pairs
-        self.target = target
-        self.query = query
-        self.best_feature = [0, 0, 1000]
-        self.results = []
-        if self.is_matched:
-            self.calculate_match_result()
-
-    def calculate_match_result(self):
-        feature_set = set()
-        for p in self.match_pairs:
-            n = len(p.keys())
-            wr = sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g])
-            ce = matcher.coordinate_error(p)
-            if (n, wr, ce) in feature_set:
-                continue
-            self.best_feature[0] = max(self.best_feature[0], n)
-            self.best_feature[1] = max(self.best_feature[1], wr)
-            self.best_feature[2] = min(self.best_feature[2], ce)
-            self.results.append((p, n, wr, ce))
-
