@@ -2,7 +2,7 @@ from crystalsearch import graph, matcher
 
 
 class Result:
-    def __init__(self, is_matched: bool, target: graph.Graph, query: graph.Graph, match_pairs: dict):
+    def __init__(self, is_matched: bool, target: graph.Graph, query: graph.Graph, match_pairs: list):
         self.is_matched = is_matched
         self.match_pairs = match_pairs
         self.target = target
@@ -13,7 +13,10 @@ class Result:
         if self.is_matched:
             self.calculate_match_result()
 
-    def calculate_match_result(self):
+    def calculate_match_result(self, base_query=None):
+        if base_query is not None:
+            self.query = base_query
+        self.best_feature = [0, 0, 1000]
         feature_set = set()
         for p in self.match_pairs:
             n = len(p.keys())

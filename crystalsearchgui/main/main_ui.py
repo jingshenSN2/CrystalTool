@@ -1,7 +1,4 @@
-import queue
-import time
-
-from PyQt5.QtCore import QRect
+from PyQt5.QtCore import QRect, pyqtSignal
 from PyQt5.QtWidgets import QWidget, QGridLayout, QHBoxLayout
 
 from crystalsearch import run
@@ -12,10 +9,13 @@ from crystalsearchgui.output.result_table_ui import ResultTableUI
 
 
 class MainUI(QWidget):
+    solve_signal = pyqtSignal(int)
+    match_signal = pyqtSignal(int, list)
 
     def __init__(self):
         super().__init__()
         self.init_ui()
+        self.init_signal()
 
     def init_ui(self):
         self.setFixedSize(1000, 800)
@@ -41,37 +41,28 @@ class MainUI(QWidget):
         self.result_table_ui = ResultTableUI()
         self.output_layout.addLayout(self.result_table_ui.layout)
 
+    def init_signal(self):
+        self.solve_signal.connect(self.solve_update)
+        self.match_signal.connect(self.match_update)
+
     def solve(self):
-        process_q = queue.Queue()
         hkl_files = self.solve_ui.get_hkl_files()
         ins_file = self.solve_ui.get_ins_file()
-        thread = run.SolveThread(hkl_files, ins_file, process_q)
+        thread = run.SolveThread(hkl_files, ins_file, self.solve_process_signal)
         thread.start()
-        process = 0
-        while True:
-            time.sleep(5)
-            if not process_q.empty():
-                process = process_q.get()
-                self.solve_ui.set_process(process)
-            if process == len(hkl_files):
-                break
 
     def match(self):
-        process_q = queue.Queue()
-        result_q = queue.Queue()
         res_files = self.match_ui.get_res_files()
         pdb_file = self.match_ui.get_pdb_file()
         use_old_algorithm = self.para_input_ui.use_old_algorithm()
         max_loss_atom = self.para_input_ui.get_max_loss_atom()
-        thread = run.MatchThread(res_files, pdb_file, use_old_algorithm, max_loss_atom, process_q, result_q)
+        thread = run.MatchThread(res_files, pdb_file, use_old_algorithm, max_loss_atom, self.match_signal)
         thread.start()
-        while True:
-            if use_old_algorithm:
-                time.sleep(0.5)
-            if not process_q.empty():
-                process = process_q.get()
-                self.match_ui.set_process(process)
-            if not result_q.empty():
-                results = result_q.get()
-                break
-        self.result_table_ui.updateResults(results)
+
+    def solve_update(self, process):
+        self.solve_ui.set_process(process)
+
+    def match_update(self, process, results):
+        self.match_ui.set_process(process)
+        if len(results) != 0:
+            self.result_table_ui.updateResults(results)

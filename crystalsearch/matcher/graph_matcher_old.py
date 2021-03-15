@@ -12,10 +12,10 @@ def shrink_one(old_graph: graph.Graph):
     return result
 
 
-def shrink(graph_set: dict):
+def shrink(graph_dict: dict):
     """生成graph所有k个原子组成的子图"""
     subgraph_dict = {}
-    for g in graph_set:
+    for g in graph_dict:
         new_set = shrink_one(g)
         for sub in new_set:
             if sub not in subgraph_dict:
@@ -47,8 +47,7 @@ class GraphMatcherOld:
                 gm = matcher.GraphMatcherVF2(self.target, sub)
                 ret = gm.get_result()
                 if ret.is_matched:
-                    ret.query = self.query
-                    ret.calculate_match_result()
+                    ret.calculate_match_result(self.query)
                     return ret
             subgraph_dict = shrink(subgraph_dict)
-        return matcher.Result(False, self.target, self.query, None)
+        return matcher.Result(False, self.target, self.query, [])
