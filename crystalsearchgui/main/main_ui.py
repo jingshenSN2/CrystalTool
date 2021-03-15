@@ -48,7 +48,7 @@ class MainUI(QWidget):
     def solve(self):
         hkl_files = self.solve_ui.get_hkl_files()
         ins_file = self.solve_ui.get_ins_file()
-        thread = run.SolveThread(hkl_files, ins_file, self.solve_process_signal)
+        thread = run.SolveThread(hkl_files, ins_file, self.solve_signal)
         thread.start()
 
     def match(self):

@@ -45,13 +45,14 @@ class MatchUI(QWidget):
             return
         self.set_text('正在匹配...已完成0/%d' % len(self.res_files))
         self.main.match()
-        self.set_text('匹配完成')
 
     def set_process(self, process: int):
         res_count = len(self.res_files)
         if res_count == 0:
             return
         self.set_text('正在匹配...已完成%d/%d' % (process, res_count))
+        if process == res_count:
+            self.set_text('求解完成')
 
     def set_text(self, text: str):
         self.lb_match_status.setText(text)

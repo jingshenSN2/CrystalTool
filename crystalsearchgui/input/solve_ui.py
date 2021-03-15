@@ -41,13 +41,14 @@ class SolveUI(QWidget):
             return
         self.set_text('正在求解...')
         self.main.solve()
-        self.set_text('求解完成')
 
     def set_process(self, process: int):
         hkl_count = len(self.hkl_files)
         if hkl_count == 0:
             return
         self.set_text('正在求解...已完成%d/%d' % (process, hkl_count))
+        if process == hkl_count:
+            self.set_text('求解完成')
 
     def set_text(self, text: str):
         self.lb_solve_status.setText(text)
