@@ -37,8 +37,7 @@ class MatchThread(threading.Thread):
             result = match_one(res, self.pdb_file, self.use_old_algorithm, self.max_loss_atom)
             results.append(result)
             process += 1
-            self.signal.emit(process, [])
-        self.signal.emit(process, results)
+            self.signal.emit(process, results)
 
 
 def match_one(res_file: str, pdb_file: str, use_old_algorithm: bool, max_loss_atom: int):

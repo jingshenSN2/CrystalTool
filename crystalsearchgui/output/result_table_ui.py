@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QTableWidgetItem, QPushButton
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QHeaderView, QTableWidgetItem, QPushButton
 
 from crystalsearch import matcher
 from crystalsearchgui.output.sub_result_table_ui import SubResultUI
@@ -18,7 +18,7 @@ class ResultTableUI(QWidget):
         self.table = QTableWidget()
         self.table.setColumnCount(7)
         self.table.setRowCount(6)
-        self.table.setColumnWidth(0, 80)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
         self.table.setSortingEnabled(True)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)

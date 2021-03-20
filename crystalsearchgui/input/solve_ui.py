@@ -5,12 +5,12 @@ class SolveUI(QWidget):
 
     def __init__(self, main_ui):
         super().__init__()
-        self.init_ui()
         self.main = main_ui
         self.has_hkl = False
         self.has_ins = False
         self.hkl_files = []
         self.ins_file = ''
+        self.init_ui()
 
     def init_ui(self):
         self.widget = QWidget()
@@ -33,7 +33,14 @@ class SolveUI(QWidget):
 
         self.bt_hkl.clicked.connect(self.open_hkl)
         self.bt_ins.clicked.connect(self.open_ins)
-        self.bt_solve.clicked.connect(self.solve)
+        self.bt_solve.clicked.connect(self.main.solve)
+
+    def start_run(self):
+        if not self.has_files():
+            self.set_text('缺失文件')
+            return False
+        self.set_text('正在匹配...已完成0/%d' % len(self.res_files))
+        return True
 
     def solve(self):
         if not self.has_hkl_files():
@@ -70,7 +77,7 @@ class SolveUI(QWidget):
             self.lb_ins.setStyleSheet("color:black")
             self.has_ins = True
 
-    def has_hkl_files(self):
+    def has_files(self):
         return self.has_hkl and self.has_ins
 
     def get_hkl_files(self):

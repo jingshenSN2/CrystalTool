@@ -9,20 +9,22 @@ from crystalsearchgui.output.result_table_ui import ResultTableUI
 
 
 class MainUI(QWidget):
+
     solve_signal = pyqtSignal(int)
     match_signal = pyqtSignal(int, list)
 
     def __init__(self):
         super().__init__()
         self.init_ui()
-        self.init_signal()
+        self.solve_signal.connect(self.solve_update)
+        self.match_signal.connect(self.match_update)
 
     def init_ui(self):
-        self.setFixedSize(1000, 800)
+        self.setMinimumSize(1200, 800)
         self.setWindowTitle('电子衍射结构解析评分程序')
 
         self.layout = QGridLayout(self)
-        self.layout.setGeometry(QRect(20, 20, 1000, 800))
+        self.layout.setGeometry(QRect(20, 20, 1200, 800))
 
         self.input_layout = QHBoxLayout(self)
         self.layout.addLayout(self.input_layout, 0, 0)
@@ -41,19 +43,21 @@ class MainUI(QWidget):
         self.result_table_ui = ResultTableUI()
         self.output_layout.addLayout(self.result_table_ui.layout)
 
-    def init_signal(self):
-        self.solve_signal.connect(self.solve_update)
-        self.match_signal.connect(self.match_update)
-
     def solve(self):
-        hkl_files = self.solve_ui.get_hkl_files()
-        ins_file = self.solve_ui.get_ins_file()
+        solve_ui = self.solve_ui
+        if not solve_ui.start_run():
+            return
+        hkl_files = solve_ui.get_hkl_files()
+        ins_file = solve_ui.get_ins_file()
         thread = run.SolveThread(hkl_files, ins_file, self.solve_signal)
         thread.start()
 
     def match(self):
-        res_files = self.match_ui.get_res_files()
-        pdb_file = self.match_ui.get_pdb_file()
+        match_ui = self.match_ui
+        if not match_ui.start_run():
+            return
+        res_files = match_ui.get_res_files()
+        pdb_file = match_ui.get_pdb_file()
         use_old_algorithm = self.para_input_ui.use_old_algorithm()
         max_loss_atom = self.para_input_ui.get_max_loss_atom()
         thread = run.MatchThread(res_files, pdb_file, use_old_algorithm, max_loss_atom, self.match_signal)
@@ -64,5 +68,4 @@ class MainUI(QWidget):
 
     def match_update(self, process, results):
         self.match_ui.set_process(process)
-        if len(results) != 0:
-            self.result_table_ui.updateResults(results)
+        self.result_table_ui.updateResults(results)

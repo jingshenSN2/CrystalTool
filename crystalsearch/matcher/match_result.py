@@ -7,16 +7,19 @@ class Result:
         self.match_pairs = match_pairs
         self.target = target
         self.query = query
-        self.best_feature = [0, 0, 1000]
-        self.results = []
         self.rotation = None
+        self.init()
         if self.is_matched:
             self.calculate_match_result()
+
+    def init(self):
+        self.best_feature = [0, 0, 1000]
+        self.results = []
 
     def calculate_match_result(self, base_query=None):
         if base_query is not None:
             self.query = base_query
-        self.best_feature = [0, 0, 1000]
+        self.init()
         feature_set = set()
         for p in self.match_pairs:
             n = len(p.keys())

@@ -5,7 +5,6 @@ class MatchUI(QWidget):
 
     def __init__(self, main_ui):
         super().__init__()
-        self.init_ui()
         self.main = main_ui
         self.has_hkl = False
         self.has_ins = False
@@ -15,6 +14,7 @@ class MatchUI(QWidget):
         self.ins_file = ''
         self.res_files = []
         self.pdb_file = ''
+        self.init_ui()
 
     def init_ui(self):
         self.widget = QWidget()
@@ -37,14 +37,14 @@ class MatchUI(QWidget):
 
         self.bt_res.clicked.connect(self.open_res)
         self.bt_pdb.clicked.connect(self.open_pdb)
-        self.bt_match.clicked.connect(self.match)
+        self.bt_match.clicked.connect(self.main.match)
 
-    def match(self):
-        if not self.has_res_files():
+    def start_run(self):
+        if not self.has_files():
             self.set_text('缺失文件')
-            return
+            return False
         self.set_text('正在匹配...已完成0/%d' % len(self.res_files))
-        self.main.match()
+        return True
 
     def set_process(self, process: int):
         res_count = len(self.res_files)
@@ -74,7 +74,7 @@ class MatchUI(QWidget):
             self.lb_pdb.setStyleSheet("color:black")
             self.has_pdb = True
 
-    def has_res_files(self):
+    def has_files(self):
         return self.has_res and self.has_pdb
 
     def get_res_files(self):
