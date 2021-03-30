@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>tabmatchdetail</class>
+ <widget class="QWidget" name="tabmatchdetail">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="vL_detail_3d">
+     <item>
+      <widget class="QLabel" name="l_detaial_3d">
+       <property name="text">
+        <string>3D图（可旋转）</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="gV_3d"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="vL_detail_2d">
+     <item>
+      <layout class="QHBoxLayout" name="hL_detail_2d">
+       <item>
+        <widget class="QLabel" name="l_detail_2d">
+         <property name="text">
+          <string>二维投影图</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lE_detail_2d">
+         <property name="placeholderText">
+          <string>投影平面法向量，默认(0,0,1)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pB_detail_2d">
+         <property name="text">
+          <string>重新绘制</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="gV_2d"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

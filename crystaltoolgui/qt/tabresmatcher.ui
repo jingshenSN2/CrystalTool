@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>tabresmatcher</class>
+ <widget class="QWidget" name="tabresmatcher">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>697</width>
+    <height>570</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="vL_match_1">
+     <item>
+      <widget class="QLabel" name="l_match_res">
+       <property name="text">
+        <string>RES文件</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListView" name="lV_match_res"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hL_match_pB1">
+       <item>
+        <widget class="QPushButton" name="pB_match_choose_res">
+         <property name="text">
+          <string>选择RES文件</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pB_match_delete_res">
+         <property name="text">
+          <string>删除所选</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="vL_match_2">
+     <property name="topMargin">
+      <number>25</number>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" name="hL_match_pdb">
+       <item>
+        <widget class="QPushButton" name="pB_pdb">
+         <property name="text">
+          <string>选择待搜索结构(pdb)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_pdb">
+         <property name="text">
+          <string>未选择</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QFormLayout" name="fL_match_1">
+       <item row="0" column="0">
+        <widget class="QLabel" name="l_old_algorithm">
+         <property name="text">
+          <string>使用旧算法</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_loss_atom">
+         <property name="text">
+          <string>可损失原子数</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="sB_loss_atom"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_threshold">
+         <property name="text">
+          <string>汇报阈值基于</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cB_threshold">
+         <property name="currentText">
+          <string>无</string>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>无</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>匹配上次数Tm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>匹配比例Rm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>质量加权匹配比例Rwm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>电子加权匹配比例Rwe2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>强电子加权匹配比例Rwe4</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_dBS_threshold">
+         <property name="text">
+          <string>汇报阈值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QDoubleSpinBox" name="dSB_threshold"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="rB_old_algorithm">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hL_match_output">
+       <item>
+        <widget class="QLabel" name="l_match_output">
+         <property name="text">
+          <string>输出指标</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_Nm">
+         <property name="text">
+          <string>Nm</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_Rwm">
+         <property name="text">
+          <string>Rwm</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_Rwe2">
+         <property name="text">
+          <string>Rwe2</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_Rwe4">
+         <property name="text">
+          <string>Rwe4</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hL_match_start">
+       <item>
+        <widget class="QPushButton" name="pB_match_start">
+         <property name="text">
+          <string>开始匹配</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_match_start">
+         <property name="text">
+          <string>未开始匹配</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QProgressBar" name="bar_match">
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

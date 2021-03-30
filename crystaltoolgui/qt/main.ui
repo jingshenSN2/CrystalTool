@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CrystalTool</class>
+ <widget class="QMainWindow" name="CrystalTool">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1138</width>
+    <height>703</height>
+   </rect>
+  </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
+  <property name="windowTitle">
+   <string>CrystalTool</string>
+  </property>
+  <property name="windowOpacity">
+   <double>0.900000000000000</double>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="widgetAll">
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabAll">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Triangular</enum>
+      </property>
+      <property name="currentIndex">
+       <number>4</number>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
+      <widget class="TabHklEditor" name="tab_hkl_modify">
+       <attribute name="title">
+        <string>HKL编辑器</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <layout class="QVBoxLayout" name="vL_editor_1" stretch="0,0,0">
+          <item>
+           <widget class="QLabel" name="l_editor_origin">
+            <property name="text">
+             <string>原始HKL文件</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListView" name="lV_editor_origin"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="hL_editor_pB1">
+            <item>
+             <widget class="QPushButton" name="pB_editor_choose">
+              <property name="text">
+               <string>添加文件</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pB_editor_delect_origin">
+              <property name="text">
+               <string>删除所选</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="vL_editor_2" stretch="0,0,0,0,0">
+          <property name="spacing">
+           <number>9</number>
+          </property>
+          <property name="topMargin">
+           <number>25</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="cB_editor_method">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>请选择修改方式</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>强度幂</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>temp</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lE_editor_method">
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>此处输入修改参数范围</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="hL_editor_start">
+            <item>
+             <widget class="QPushButton" name="pB_editor_start">
+              <property name="text">
+               <string>开始自动编辑</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QLabel" name="l_editor_start">
+              <property name="text">
+               <string>正在生成新HKL...5/20</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::AutoText</enum>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
+              </property>
+              <property name="wordWrap">
+               <bool>false</bool>
+              </property>
+              <property name="indent">
+               <number>-1</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="bar_editor">
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="vL_editor_3" stretch="0,0,0">
+          <item>
+           <widget class="QLabel" name="l_editor_modified">
+            <property name="text">
+             <string>编辑后HKL文件</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListView" name="lV_editor_modified"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="hL_editor_pB2">
+            <item>
+             <widget class="QPushButton" name="pB_editor_reselect">
+              <property name="text">
+               <string>继续编辑所选</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pB_editor_send">
+              <property name="text">
+               <string>发送到求解器</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cB_editor_autosend">
+              <property name="text">
+               <string>自动</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="TabHklSolver" name="tab_hkl_to_res">
+       <attribute name="title">
+        <string>HKL求解器</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,1">
+        <item>
+         <layout class="QVBoxLayout" name="vL_solve_1">
+          <item>
+           <widget class="QLabel" name="l_solve_hkl">
+            <property name="text">
+             <string>HKL文件</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListView" name="lV_solve_hkl"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="hL_solve_pB1">
+            <item>
+             <widget class="QPushButton" name="pB_solve_choose_hkl">
+              <property name="text">
+               <string>选择HKL文件</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pB_solve_delete_hkl">
+              <property name="text">
+               <string>删除所选</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="vL_solve_2">
+          <property name="topMargin">
+           <number>25</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="hL_solve_ins">
+            <item>
+             <widget class="QPushButton" name="pB_solve_ins">
+              <property name="text">
+               <string>选择INS文件</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QLabel" name="l_solve_ins">
+              <property name="text">
+               <string>已选择XXX.INS</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="hL_solve">
+            <item>
+             <widget class="QPushButton" name="pB_solve">
+              <property name="text">
+               <string>开始求解</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignVCenter">
+             <widget class="QLabel" name="l_solve">
+              <property name="text">
+               <string>正在求解...1/5</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="bar_solve">
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="vL_solve_3">
+          <item>
+           <widget class="QLabel" name="l_solve_res">
+            <property name="text">
+             <string>RES文件</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListView" name="lV_solve_res"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="hL_solve_pB2">
+            <item>
+             <widget class="QPushButton" name="pB_solve_delete_res">
+              <property name="text">
+               <string>删除所选</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pB_solve_send">
+              <property name="text">
+               <string>发送到匹配器</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cB_solve_autosend">
+              <property name="text">
+               <string>自动</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="TabResMatcher" name="tab_res_match">
+       <attribute name="title">
+        <string>RES匹配器</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_16" stretch=""/>
+      </widget>
+      <widget class="TabMatchResult" name="tab_match_result">
+       <attribute name="title">
+        <string>匹配结果</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_17"/>
+      </widget>
+      <widget class="TabMatchDetail" name="tab_match_result_detail">
+       <attribute name="title">
+        <string>匹配结果详情</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_18"/>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TabHklEditor</class>
+   <extends>QWidget</extends>
+   <header>tabhkleditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabHklSolver</class>
+   <extends>QWidget</extends>
+   <header>tabhklsolver.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabResMatcher</class>
+   <extends>QWidget</extends>
+   <header>tabresmatcher.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabMatchResult</class>
+   <extends>QWidget</extends>
+   <header>tabmatchresult.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabMatchDetail</class>
+   <extends>QWidget</extends>
+   <header>tabmatchdetail.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>lV_editor_origin</tabstop>
+  <tabstop>pB_editor_choose</tabstop>
+  <tabstop>pB_editor_delect_origin</tabstop>
+  <tabstop>cB_editor_method</tabstop>
+  <tabstop>lE_editor_method</tabstop>
+  <tabstop>pB_editor_start</tabstop>
+  <tabstop>lV_editor_modified</tabstop>
+  <tabstop>pB_editor_reselect</tabstop>
+  <tabstop>pB_editor_send</tabstop>
+  <tabstop>cB_editor_autosend</tabstop>
+  <tabstop>lV_solve_hkl</tabstop>
+  <tabstop>pB_solve_choose_hkl</tabstop>
+  <tabstop>pB_solve_delete_hkl</tabstop>
+  <tabstop>pB_solve_ins</tabstop>
+  <tabstop>pB_solve</tabstop>
+  <tabstop>lV_solve_res</tabstop>
+  <tabstop>pB_solve_delete_res</tabstop>
+  <tabstop>pB_solve_send</tabstop>
+  <tabstop>cB_solve_autosend</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pB_solve_choose_hkl</sender>
+   <signal>clicked()</signal>
+   <receiver>lV_solve_hkl</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>593</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>151</x>
+     <y>469</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pB_solve_delete_hkl</sender>
+   <signal>clicked()</signal>
+   <receiver>lV_solve_hkl</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>283</x>
+     <y>598</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>278</x>
+     <y>519</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pB_solve_ins</sender>
+   <signal>clicked()</signal>
+   <receiver>l_solve_ins</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>467</x>
+     <y>181</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>595</x>
+     <y>184</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pB_solve_delete_res</sender>
+   <signal>clicked()</signal>
+   <receiver>lV_solve_res</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>788</x>
+     <y>598</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>797</x>
+     <y>545</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pB_editor_choose</sender>
+   <signal>clicked()</signal>
+   <receiver>lV_editor_origin</receiver>
+   <slot>reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>597</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>129</x>
+     <y>493</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pB_editor_delect_origin</sender>
+   <signal>clicked()</signal>
+   <receiver>lV_editor_origin</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>262</x>
+     <y>598</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>263</x>
+     <y>535</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pB_editor_reselect</sender>
+   <signal>clicked()</signal>
+   <receiver>lV_editor_modified</receiver>
+   <slot>clearSelection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>808</x>
+     <y>599</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>815</x>
+     <y>529</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
