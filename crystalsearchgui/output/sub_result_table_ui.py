@@ -1,14 +1,11 @@
 import matplotlib.pyplot as plt
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QPushButton, QHBoxLayout, \
-    QTableWidget, QTableWidgetItem, QAbstractItemView, QFileDialog
-
-from crystalsearch import matcher, util
+from ..libs import *
+from crystalsearch import saveToRes
 
 
 class SubResultUI(QWidget):
 
-    def __init__(self, result: matcher.Result):
+    def __init__(self, result):
         super().__init__()
         self.result = result
         self.init_ui()
@@ -63,18 +60,18 @@ class SubResultUI(QWidget):
         button_res.clicked.connect(lambda: self.save_res(self.result, pair))
         return bt_widget
 
-    def plot_result(self, result: matcher.Result, pair: dict):
+    def plot_result(self, result, pair: dict):
         plt.subplot(121)
         result.target.draw_graph(highlight=pair.keys(), rotation=self.result.rotation)
         plt.subplot(122)
         result.query.draw_graph(highlight=pair.values())
         plt.show()
 
-    def plot_result_3d(self, result: matcher.Result, pair: dict):
+    def plot_result_3d(self, result, pair: dict):
         result.target.draw_3d_graph(highlight=pair)
         plt.show()
 
-    def save_res(self, result: matcher.Result, pair: dict):
+    def save_res(self, result, pair: dict):
         output_file, success = QFileDialog.getSaveFileName(self, '选择新的RES保存路径', './', 'Res Files (*.res)')
         if success:
-            util.to_res(output_file, result, pair)
+            saveToRes(output_file, result, pair)

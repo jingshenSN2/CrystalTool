@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog, QLabel, QFormLayout
+from ..libs import *
 
 
 class MatchUI(QWidget):

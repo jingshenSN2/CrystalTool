@@ -1,7 +1,7 @@
-from crystalsearch import atom_base
+from crystalbase import Atom
 
 
-def node_match(atom1: atom_base.Atom, atom2: atom_base.Atom):
+def node_match(atom1: Atom, atom2: Atom):
     """节点匹配，原子质量之比0.7~1.4内为匹配"""
     ratio = atom1.mass / atom2.mass
     return 0.7 < ratio < 1.4

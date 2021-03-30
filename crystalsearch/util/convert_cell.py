@@ -1,10 +1,10 @@
-from crystalsearch import graph
-from crystalsearch.atom_base import AtomGroup
+from ..graph import Graph
+from crystalbase import AtomGroup
 
 
-def cell2graph(cell: AtomGroup):
+def cellToGraph(cell: AtomGroup):
     """晶胞类转图类"""
-    g = graph.Graph(cell.name)
+    g = Graph(cell.name)
     for k in cell.atom_dict:
         atom = cell.atom_dict[k]
         g.add_node(atom, location=(atom.x, atom.y, atom.z), label=atom.label, mass=atom.mass)

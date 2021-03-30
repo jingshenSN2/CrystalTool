@@ -1,6 +1,5 @@
 import os
-
-from PyQt5.QtWidgets import QWidget, QRadioButton, QFormLayout, QSpinBox, QPushButton
+from ..libs import *
 
 
 class ParameterUI(QWidget):

@@ -1,8 +1,9 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
-from crystalsearchgui.main.main_ui import MainUI
+from crystalsearchgui import MainUI
+from crystaltoolgui import MainUI
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -1,0 +1,47 @@
+{
+  "C": {
+    "atom_mass": 12,
+    "atom_radius": 0.77,
+    "max_connection": 4
+  },
+  "Q": {
+    "atom_mass": 14,
+    "atom_radius": 0.77,
+    "max_connection": 4
+  },
+  "N": {
+    "atom_mass": 14,
+    "atom_radius": 0.75,
+    "max_connection": 4
+  },
+  "O": {
+    "atom_mass": 16,
+    "atom_radius": 0.73,
+    "max_connection": 2
+  },
+  "F": {
+    "atom_mass": 19,
+    "atom_radius": 0.72,
+    "max_connection": 1
+  },
+  "P": {
+    "atom_mass": 31,
+    "atom_radius": 1.06,
+    "max_connection": 5
+  },
+  "S": {
+    "atom_mass": 32,
+    "atom_radius": 1.02,
+    "max_connection": 6
+  },
+  "Cl": {
+    "atom_mass": 35.5,
+    "atom_radius": 0.99,
+    "max_connection": 1
+  },
+  "Br": {
+    "atom_mass": 79.9,
+    "atom_radius": 1.14,
+    "max_connection": 1
+  }
+}

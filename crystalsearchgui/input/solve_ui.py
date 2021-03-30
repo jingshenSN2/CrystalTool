@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog, QLabel, QFormLayout
+from ..libs import *
 
 
 class SolveUI(QWidget):
@@ -41,13 +41,6 @@ class SolveUI(QWidget):
             return False
         self.set_text('正在匹配...已完成0/%d' % len(self.res_files))
         return True
-
-    def solve(self):
-        if not self.has_hkl_files():
-            self.set_text('缺失文件')
-            return
-        self.set_text('正在求解...')
-        self.main.solve()
 
     def set_process(self, process: int):
         hkl_count = len(self.hkl_files)

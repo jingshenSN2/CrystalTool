@@ -3,7 +3,7 @@ import networkx as nx
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-from crystalsearch import graph
+from .project import project3d
 
 
 class Graph:
@@ -66,7 +66,7 @@ class Graph:
         if rotation is not None:
             for k in points:
                 points[k] = np.dot(points[k], rotation)
-        pos = graph.project3d(points, np.array(direction))
+        pos = project3d(points, np.array(direction))
         label = self.get_node_attributes('label')
         edge_label = self.get_edge_attributes('dist')
         nx.draw_networkx(self.g, pos, alpha=0.7, with_labels=False, edge_color='.4')

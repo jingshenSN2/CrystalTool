@@ -1,11 +1,8 @@
-from PyQt5.QtCore import QRect, pyqtSignal
-from PyQt5.QtWidgets import QWidget, QGridLayout, QHBoxLayout
+from ..thread import SolveThread, MatchThread
+from ..libs import *
 
-from crystalsearch import run
-from crystalsearchgui.input.match_ui import MatchUI
-from crystalsearchgui.input.parameter_ui import ParameterUI
-from crystalsearchgui.input.solve_ui import SolveUI
-from crystalsearchgui.output.result_table_ui import ResultTableUI
+from ..input import MatchUI, ParameterUI, SolveUI
+from ..output import ResultTableUI
 
 
 class MainUI(QWidget):
@@ -49,7 +46,7 @@ class MainUI(QWidget):
             return
         hkl_files = solve_ui.get_hkl_files()
         ins_file = solve_ui.get_ins_file()
-        thread = run.SolveThread(hkl_files, ins_file, self.solve_signal)
+        thread = SolveThread(hkl_files, ins_file, self.solve_signal)
         thread.start()
 
     def match(self):
@@ -60,7 +57,7 @@ class MainUI(QWidget):
         pdb_file = match_ui.get_pdb_file()
         use_old_algorithm = self.para_input_ui.use_old_algorithm()
         max_loss_atom = self.para_input_ui.get_max_loss_atom()
-        thread = run.MatchThread(res_files, pdb_file, use_old_algorithm, max_loss_atom, self.match_signal)
+        thread = MatchThread(res_files, pdb_file, use_old_algorithm, max_loss_atom, self.match_signal)
         thread.start()
 
     def solve_update(self, process):

@@ -1,14 +1,16 @@
-from crystalsearch import graph, matcher
+from ..graph import Graph
+from .match_condition import node_match
+from .match_result import Result
 
 
-def calculate_prob(g1: graph.Graph, g2: graph.Graph):
+def calculate_prob(g1: Graph, g2: Graph):
     """计算匹配概率"""
     pf = {}
     for u in g2.nodes():
         pl, pd = 0, 0
         d = g2.degree(u)
         for v in g1.nodes():
-            if matcher.node_match(u, v):
+            if node_match(u, v):
                 pl += 1
             if g1.degree(v) >= d:
                 pd += 1
@@ -24,7 +26,7 @@ def generate_node_order(pf: dict):
 
 class GraphMatcherVF2:
 
-    def __init__(self, G1: graph.Graph, G2: graph.Graph, loss_atom=0):
+    def __init__(self, G1: Graph, G2: Graph, loss_atom=0):
         self.G1 = G1
         self.G2 = G2
         self.G1_nodes = set(self.G1.nodes())
@@ -44,7 +46,7 @@ class GraphMatcherVF2:
     def get_result(self):
         """获取匹配结果，Result类"""
         is_matched, iso_iter = self.subgraph_isomorphisms_iter()
-        return matcher.Result(is_matched, self.G1, self.G2, iso_iter)
+        return Result(is_matched, self.G1, self.G2, iso_iter)
 
     def match(self):
         """递归匹配函数"""
@@ -79,7 +81,7 @@ class GraphMatcherVF2:
                     yield node, other_node
 
     def syntactic_feasibility(self, G1_node, G2_node):
-        return matcher.node_match(G1_node, G2_node)
+        return node_match(G1_node, G2_node)
 
     def semantic_feasibility(self, G1_node, G2_node):
         """根据VF2规则，剪枝"""

@@ -1,8 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QTableWidget, QAbstractItemView, QHeaderView, QTableWidgetItem, QPushButton
-
-from crystalsearch import matcher
-from crystalsearchgui.output.sub_result_table_ui import SubResultUI
+from ..libs import *
+from . import SubResultUI
 
 
 class ResultTableUI(QWidget):
@@ -58,7 +55,7 @@ class ResultTableUI(QWidget):
                 bt_view = self.generate_button(r)
                 self.table.setCellWidget(i, 6, bt_view)
 
-    def generate_button(self, result: matcher.Result):
+    def generate_button(self, result):
         button = QPushButton('查看')
         bt_widget = QWidget()
         hLayout = QHBoxLayout()
@@ -68,7 +65,7 @@ class ResultTableUI(QWidget):
         button.clicked.connect(lambda: self.view_result(result))
         return bt_widget
 
-    def view_result(self, result: matcher.Result):
+    def view_result(self, result):
         if result not in self.results_ui:
             self.results_ui[result] = SubResultUI(result)
         self.results_ui[result].show()
