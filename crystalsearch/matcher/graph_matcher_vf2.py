@@ -43,10 +43,10 @@ class GraphMatcherVF2:
         self.state = State(self)
         self.mappings = []
 
-    def get_result(self):
+    def get_result(self, threshold):
         """获取匹配结果，Result类"""
         is_matched, iso_iter = self.subgraph_isomorphisms_iter()
-        return Result(is_matched, self.G1, self.G2, iso_iter)
+        return Result(is_matched, self.G1, self.G2, iso_iter, threshold)
 
     def match(self):
         """递归匹配函数"""

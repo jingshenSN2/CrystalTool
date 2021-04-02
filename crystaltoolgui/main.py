@@ -1,5 +1,5 @@
 from .tabs import *
-from .wrapper import HklSolver as HHKLSOLVER
+from .wrapper import *
 from .libs import *
 
 
@@ -10,8 +10,8 @@ class MainUI(QMainWindow):
         self.setWindowTitle('CrystalTool')
         self.tab = QTabWidget()
         self.tabhkleditor = QWidget()
-        self.tabhklsolver = HHKLSOLVER()
-        self.tabresmatcher = QWidget()
+        self.tabhklsolver = HklSolver()
+        self.tabresmatcher = ResMatcher()
         self.tabmatchresult = QWidget()
         self.tabmatchdetail = QWidget()
         self.tab.addTab(self.tabhkleditor, 'HKL编辑器')
@@ -20,11 +20,9 @@ class MainUI(QMainWindow):
         self.tab.addTab(self.tabmatchresult, '匹配结果')
         self.tab.addTab(self.tabmatchdetail, '匹配结果详情')
         self.hkleditor = HklEditor()
-        self.resmatcher = ResMatcher()
         self.matchresult = MatchResult()
         self.matchdetail = MatchDetail()
         self.hkleditor.setupUi(self.tabhkleditor)
-        self.resmatcher.setupUi(self.tabresmatcher)
         self.matchresult.setupUi(self.tabmatchresult)
         self.matchdetail.setupUi(self.tabmatchdetail)
         self.setCentralWidget(self.tab)

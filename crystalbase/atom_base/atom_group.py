@@ -7,10 +7,11 @@ from ..config import getAtomProperties
 
 
 class Atom:
-    def __init__(self, element, label, mass, x, y, z, intensity):
+    def __init__(self, element, label, aindex, mass, x, y, z, intensity):
         """初始化Atom类成员"""
         self.element = element
         self.label = label
+        self.aindex = aindex
         self.mass = mass
         self.x = x
         self.y = y
@@ -63,7 +64,7 @@ class AtomGroup:
     def __init__(self, name):
         """初始化AtomGroup类成员"""
         self.name = name
-        self.atom_mass, self.max_distances, self.max_connect = getAtomProperties()
+        self.atom_index, self.atom_mass, self.max_distances, self.max_connect = getAtomProperties()
         self.cell_parameter = self.CellParameter()
         self.atom_count = 0
         self.atom_dict = dict()
@@ -77,7 +78,7 @@ class AtomGroup:
     def add_atom(self, element, index, x, y, z, intensity):
         """添加新原子"""
         x, y, z = self.cell_parameter.coordinate_transform(x, y, z)
-        self.atom_dict[self.atom_count] = Atom(element, index, self.atom_mass[element], x, y, z, intensity)
+        self.atom_dict[self.atom_count] = Atom(element, index, self.atom_index[element], self.atom_mass[element], x, y, z, intensity)
         self.atom_count += 1
 
     def distance_judge(self, atom1: Atom, atom2: Atom):

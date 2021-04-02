@@ -21,5 +21,5 @@ def coordinate_error(match_pair: dict):
     R = u.dot(vt)
     scale = w.sum()
     mat_b = np.dot(mat_b, R.T) * scale
-    rmse = np.sum(np.square(mat_a - mat_b)) * 100 / len(set_a)
+    rmse = len(set_a) / np.sum(np.square(mat_a - mat_b))  # 取倒数，使得rmse越大匹配越好
     return rmse, R

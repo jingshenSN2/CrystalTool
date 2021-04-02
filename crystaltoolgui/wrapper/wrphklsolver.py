@@ -1,4 +1,4 @@
-from ..tabs import HklSolver as _HklSolver
+from ..tabs import Ui_tabhklsolver
 from ..libs import *
 from ..thread import SolveThread
 
@@ -12,7 +12,7 @@ class HklSolver(QWidget):
         self.hkl_files = []
         self.ins_files = []
         self.res_files = []
-        self.ui = _HklSolver()
+        self.ui = Ui_tabhklsolver()
         self.ui.setupUi(self)
         self.solve_signal.connect(self.set_process)
         self.ui.pB_solve_choose_hkl.clicked.connect(self.open_hkl)
@@ -66,7 +66,7 @@ class HklSolver(QWidget):
         self.ui.lV_solve_hkl.setModel(slm)
 
     def open_ins(self):
-        self.ins_files, success = QFileDialog.getOpenFileNames(caption='选择待搜索结构的INS文件', directory='./', filter='Ins Files (*.ins)')
+        self.ins_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的INS文件', directory='./', filter='Ins Files (*.ins)')
         if not success:
             return
         self.ui.l_solve_ins.setText('已选%s个INS文件' % len(self.ins_files))
