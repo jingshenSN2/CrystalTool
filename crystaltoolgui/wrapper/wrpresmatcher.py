@@ -1,8 +1,10 @@
-from ..tabs import Ui_tabresmatcher
+from .wrpmatchresult import MatchResult
 from ..libs import *
+from ..tabs import Ui_tabresmatcher
 from ..thread import MatchThread
 
 
+@singleton
 class ResMatcher(QWidget):
 
     match_signal = pyqtSignal(int, list)
@@ -11,7 +13,7 @@ class ResMatcher(QWidget):
         super().__init__()
         self.res_files = []
         self.pdb_file = ''
-        self.results = None
+        self.results = []
         self.ui = Ui_tabresmatcher()
         self.ui.setupUi(self)
         self.match_signal.connect(self.set_process)
@@ -33,23 +35,26 @@ class ResMatcher(QWidget):
             self.set_text('缺失文件')
             return
         self.set_text('开始求解...')
-        use_old_algorithm = self.use_old_algorithm()
-        max_loss_atom = self.get_max_loss_atom()
-        threshold = self.get_threshold()
-        thread = MatchThread(self.res_files, self.pdb_file, use_old_algorithm, max_loss_atom, threshold, self.match_signal)
+        thread = MatchThread(self.res_files, self.pdb_file, self.use_old_algorithm, self.max_loss_atom,
+                             self.threshold, self.sort_by, self.match_signal)
         thread.start()
 
     def set_process(self, process: int, results: list):
         if self.job_count == 0:
             return
         self.set_text('正在求解...已完成%d/%d' % (process, self.job_count))
+        self.ui.bar_match.setValue(int(process * 100 / self.job_count))
         self.results = results
         if process == self.job_count:
             self.set_text('求解完成')
+            result_ui = MatchResult()
+            result_ui.update_result(self.results, self.report_features)
+            from ..main import MainUI
+            MainUI().tab.setCurrentIndex(3)
 
     def set_text(self, text: str):
-        self.ui.l_match_res.setText(text)
-        self.ui.l_match_res.repaint()
+        self.ui.l_match_start.setText(text)
+        self.ui.l_match_start.repaint()
 
     def open_res(self):
         new_res_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的RES文件', directory='./', filter='Res Files (*.res)')
@@ -59,31 +64,35 @@ class ResMatcher(QWidget):
             if file not in self.res_files:
                 self.res_files.append(file)
         slm = QStringListModel()
-        slm.setStringList(self.hkl_files)
+        slm.setStringList(self.res_files)
         self.ui.lV_match_res.setModel(slm)
 
     def open_pdb(self):
         self.pdb_file, success = QFileDialog.getOpenFileName(caption='选择待搜索结构的PDB文件', directory='./', filter='Pdb Files (*.pdb)')
         if not success:
             return
-        self.ui.l_pdb.setText('已选%s' % self.ins_files)
+        self.ui.l_pdb.setText('已选%s' % self.pdb_file.split('/')[-1])
 
     def delete_selected_res(self):
         for index in self.ui.lV_match_res.selectedIndexes():
             self.ui.lV_match_res.model().removeRow(index.row())
 
+    @property
     def use_old_algorithm(self):
         return self.ui.rB_old_algorithm.isChecked()
 
-    def get_max_loss_atom(self):
+    @property
+    def max_loss_atom(self):
         return self.ui.sB_loss_atom.value()
 
-    def get_threshold(self):
+    @property
+    def threshold(self):
         if self.ui.cB_threshold.currentIndex() == 0:  # 未选择汇报阈值
             return {}
         return {self.ui.cB_threshold.currentText().split('(')[0]: self.ui.dSB_threshold.value()}
 
-    def get_report_features(self):
+    @property
+    def report_features(self):
         features = []
         if self.ui.cB_Nm.isChecked():
             features.append('Nm')
@@ -94,3 +103,7 @@ class ResMatcher(QWidget):
         if self.ui.cB_Rc.isChecked():
             features.append('Rc')
         return features
+
+    @property
+    def sort_by(self):
+        return self.ui.lE_match_sort.text().split(',')

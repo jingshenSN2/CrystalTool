@@ -177,21 +177,45 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="cB_Rwe2">
-         <property name="text">
-          <string>Rwe2</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cB_Rwe4">
-         <property name="text">
-          <string>Rwe4</string>
-         </property>
-        </widget>
-       </item>
+          <item>
+              <widget class="QCheckBox" name="cB_Rwe2">
+                  <property name="text">
+                      <string>Rwe2</string>
+                  </property>
+              </widget>
+          </item>
+          <item>
+              <widget class="QCheckBox" name="cB_Rc">
+                  <property name="text">
+                      <string>Rc</string>
+                  </property>
+              </widget>
+          </item>
       </layout>
+     </item>
+        <item>
+            <layout class="QHBoxLayout" name="hL_match_sort">
+                <item>
+                    <widget class="QLabel" name="l_match_sort">
+                        <property name="text">
+                            <string>排序规则</string>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QLineEdit" name="lE_match_sort">
+                        <property name="inputMask">
+                            <string/>
+                        </property>
+                        <property name="text">
+                            <string>-Rwe2,-Rwm,-Nm,-Rc</string>
+                        </property>
+                        <property name="maxLength">
+                            <number>32767</number>
+                        </property>
+                    </widget>
+                </item>
+            </layout>
      </item>
      <item>
       <spacer name="verticalSpacer_3">

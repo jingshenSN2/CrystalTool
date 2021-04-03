@@ -1,11 +1,11 @@
 from ..libs import *
-from ..tabs import Ui_tabhkleditor
+from ..tabs import Ui_tabmatchdetail
 
 
 @singleton
-class HklEditor(QWidget):
+class MatchDetail(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.ui = Ui_tabhkleditor()
+        self.ui = Ui_tabmatchdetail()
         self.ui.setupUi(self)

@@ -1,6 +1,6 @@
-from ..graph import Graph
 from .graph_matcher_vf2 import GraphMatcherVF2
 from .match_result import Result
+from ..graph import Graph
 
 
 def shrink_one(old_graph: Graph):
@@ -32,10 +32,10 @@ class GraphMatcherOld:
         self.query = query
         self.loss_atom = loss_atom
 
-    def get_result(self, threshold):
+    def get_result(self, threshold, sort_by):
         """完整匹配，依次匹配全部的删去k个原子的子图"""
         gm = GraphMatcherVF2(self.target, self.query)
-        ret = gm.get_result(threshold)
+        ret = gm.get_result(threshold, sort_by)
         if ret.is_matched:
             return ret
         subgraph_dict = shrink({self.query: 1})
@@ -47,9 +47,9 @@ class GraphMatcherOld:
                     return
                 subgraph_dict[sub] = 1
                 gm = GraphMatcherVF2(self.target, sub)
-                ret = gm.get_result(threshold)
+                ret = gm.get_result(threshold, sort_by)
                 if ret.is_matched:
                     ret.calculate_match_result(self.query)
                     return ret
             subgraph_dict = shrink(subgraph_dict)
-        return Result(False, self.target, self.query, [], {})
+        return Result(False, self.target, self.query, [], {}, [])

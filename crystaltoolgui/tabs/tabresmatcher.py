@@ -6,11 +6,12 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class Ui_tabresmatcher(object):
     def setupUi(self, tabresmatcher):
         tabresmatcher.setObjectName("tabresmatcher")
+        tabresmatcher.resize(697, 570)
         self.horizontalLayout = QtWidgets.QHBoxLayout(tabresmatcher)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.vL_match_1 = QtWidgets.QVBoxLayout()
@@ -92,9 +93,20 @@ class Ui_tabresmatcher(object):
         self.cB_Rwe2.setObjectName("cB_Rwe2")
         self.hL_match_output.addWidget(self.cB_Rwe2)
         self.cB_Rc = QtWidgets.QCheckBox(tabresmatcher)
-        self.cB_Rc.setObjectName("cB_Rwe4")
+        self.cB_Rc.setObjectName("cB_Rc")
         self.hL_match_output.addWidget(self.cB_Rc)
         self.vL_match_2.addLayout(self.hL_match_output)
+        self.hL_match_sort = QtWidgets.QHBoxLayout()
+        self.hL_match_sort.setObjectName("hL_match_sort")
+        self.l_match_sort = QtWidgets.QLabel(tabresmatcher)
+        self.l_match_sort.setObjectName("l_match_sort")
+        self.hL_match_sort.addWidget(self.l_match_sort)
+        self.lE_match_sort = QtWidgets.QLineEdit(tabresmatcher)
+        self.lE_match_sort.setInputMask("")
+        self.lE_match_sort.setMaxLength(32767)
+        self.lE_match_sort.setObjectName("lE_match_sort")
+        self.hL_match_sort.addWidget(self.lE_match_sort)
+        self.vL_match_2.addLayout(self.hL_match_sort)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.vL_match_2.addItem(spacerItem)
         self.hL_match_start = QtWidgets.QHBoxLayout()
@@ -130,17 +142,18 @@ class Ui_tabresmatcher(object):
         self.l_threshold.setText(_translate("tabresmatcher", "汇报阈值基于"))
         self.cB_threshold.setCurrentText(_translate("tabresmatcher", "无"))
         self.cB_threshold.setItemText(0, _translate("tabresmatcher", "无"))
-        self.cB_threshold.setItemText(1, _translate("tabresmatcher", "Tm(匹配上次数)"))
-        self.cB_threshold.setItemText(2, _translate("tabresmatcher", "Nm(匹配上原子数)"))
-        self.cB_threshold.setItemText(3, _translate("tabresmatcher", "Rwm(质量加权匹配比例)"))
-        self.cB_threshold.setItemText(4, _translate("tabresmatcher", "Rwe2(电子加权匹配比例)"))
-        self.cB_threshold.setItemText(5, _translate("tabresmatcher", "Rc(坐标匹配得分)"))
+        self.cB_threshold.setItemText(1, _translate("tabresmatcher", "匹配上次数Tm"))
+        self.cB_threshold.setItemText(2, _translate("tabresmatcher", "匹配比例Rm"))
+        self.cB_threshold.setItemText(3, _translate("tabresmatcher", "质量加权匹配比例Rwm"))
+        self.cB_threshold.setItemText(4, _translate("tabresmatcher", "电子加权匹配比例Rwe2"))
+        self.cB_threshold.setItemText(5, _translate("tabresmatcher", "坐标匹配相似度Rc"))
         self.l_dBS_threshold.setText(_translate("tabresmatcher", "汇报阈值"))
         self.l_match_output.setText(_translate("tabresmatcher", "输出指标"))
         self.cB_Nm.setText(_translate("tabresmatcher", "Nm"))
         self.cB_Rwm.setText(_translate("tabresmatcher", "Rwm"))
         self.cB_Rwe2.setText(_translate("tabresmatcher", "Rwe2"))
         self.cB_Rc.setText(_translate("tabresmatcher", "Rc"))
+        self.l_match_sort.setText(_translate("tabresmatcher", "排序规则"))
+        self.lE_match_sort.setText(_translate("tabresmatcher", "-Rwe2,-Rwm,-Nm,-Rc"))
         self.pB_match_start.setText(_translate("tabresmatcher", "开始匹配"))
         self.l_match_start.setText(_translate("tabresmatcher", "未开始匹配"))
-

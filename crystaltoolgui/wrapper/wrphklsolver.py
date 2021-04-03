@@ -1,8 +1,9 @@
-from ..tabs import Ui_tabhklsolver
 from ..libs import *
+from ..tabs import Ui_tabhklsolver
 from ..thread import SolveThread
 
 
+@singleton
 class HklSolver(QWidget):
 
     solve_signal = pyqtSignal(int, list)
@@ -41,6 +42,7 @@ class HklSolver(QWidget):
         if self.job_count == 0:
             return
         self.set_text('正在求解...已完成%d/%d' % (process, self.job_count))
+        self.ui.bar_solve.setValue(int(process * 100 / self.job_count))
         for file in new_res:
             if file not in self.res_files:
                 self.res_files.append(file)

@@ -1,6 +1,6 @@
-from ..graph import Graph
 from .match_condition import node_match
 from .match_result import Result
+from ..graph import Graph
 
 
 def calculate_prob(g1: Graph, g2: Graph):
@@ -43,10 +43,10 @@ class GraphMatcherVF2:
         self.state = State(self)
         self.mappings = []
 
-    def get_result(self, threshold):
+    def get_result(self, threshold, sort_by):
         """获取匹配结果，Result类"""
         is_matched, iso_iter = self.subgraph_isomorphisms_iter()
-        return Result(is_matched, self.G1, self.G2, iso_iter, threshold)
+        return Result(is_matched, self.G1, self.G2, iso_iter, threshold, sort_by)
 
     def match(self):
         """递归匹配函数"""

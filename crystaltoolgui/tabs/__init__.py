@@ -1,5 +1,5 @@
-from .tabhkleditor import Ui_tabhkleditor as HklEditor
+from .tabhkleditor import Ui_tabhkleditor
 from .tabhklsolver import Ui_tabhklsolver
+from .tabmatchdetail import Ui_tabmatchdetail
+from .tabmatchresult import Ui_tabmatchresult
 from .tabresmatcher import Ui_tabresmatcher
-from .tabmatchresult import Ui_tabmatchresult as MatchResult
-from .tabmatchdetail import Ui_tabmatchdetail as MatchDetail

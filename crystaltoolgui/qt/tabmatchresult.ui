@@ -4,10 +4,10 @@
  <widget class="QWidget" name="tabmatchresult">
   <property name="geometry">
    <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>400</width>
-    <height>300</height>
+       <x>0</x>
+       <y>0</y>
+       <width>886</width>
+       <height>651</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,37 +23,45 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QTableView" name="tV_result">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="alternatingRowColors">
-        <bool>false</bool>
-       </property>
-       <property name="selectionBehavior">
-        <enum>QAbstractItemView::SelectRows</enum>
-       </property>
-       <property name="sortingEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
+        <item>
+            <layout class="QHBoxLayout" name="hL_result_tV">
+                <item>
+                    <widget class="QTableView" name="tV_results">
+                        <property name="editTriggers">
+                            <set>QAbstractItemView::NoEditTriggers</set>
+                        </property>
+                        <property name="selectionBehavior">
+                            <enum>QAbstractItemView::SelectRows</enum>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QTableView" name="tV_results_detail">
+                        <property name="editTriggers">
+                            <set>QAbstractItemView::NoEditTriggers</set>
+                        </property>
+                        <property name="selectionBehavior">
+                            <enum>QAbstractItemView::SelectRows</enum>
+                        </property>
+                    </widget>
+                </item>
+            </layout>
+        </item>
      <item>
       <layout class="QHBoxLayout" name="hL_result_pB">
        <item>
-        <widget class="QPushButton" name="pB_result_select">
-         <property name="text">
-          <string>选择所有</string>
-         </property>
-        </widget>
+           <widget class="QPushButton" name="pB_result_to_res">
+               <property name="text">
+                   <string>另存为所选到新RES文件</string>
+               </property>
+           </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pB_result_to_res">
-         <property name="text">
-          <string>另存为所选到新RES文件</string>
-         </property>
-        </widget>
+           <widget class="QPushButton" name="pB_result_fig">
+               <property name="text">
+                   <string>查看图片</string>
+               </property>
+           </widget>
        </item>
       </layout>
      </item>
