@@ -29,19 +29,16 @@ class Result:
             for p in self.match_pairs:
                 new_set = tm_set.union(set(p.keys()))
                 if len(new_set) - len(tm_set) >= 0.5 * len(p.keys()):
-                    # ��ͬԭ�Ӵ���50%ʱ����Ϊ�ǲ�ͬ��ƥ��
                     tm_set = new_set
                     tm_count += 1
             if tm_count < tm:
                 self.is_matched = False
                 return
 
-        feats = {'Tm': -1}
         for p in self.match_pairs:
-            feats['pair'] = p
-            feats['Nm'] = len(p.keys())
-            feats['Rwm'] = sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g])
-            feats['Rwe2'] = sum([p[k].aindex ** 2 for k in p]) / sum([atom.aindex ** 2 for atom in self.query.g])
+            feats = {'Tm': -1, 'pair': p, 'Nm': len(p.keys()),
+                     'Rwm': sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g]),
+                     'Rwe2': sum([p[k].aindex ** 2 for k in p]) / sum([atom.aindex ** 2 for atom in self.query.g])}
             feats['Rc'], self.rotation = coordinate_error(p)
             flag = True
             for k in self.threshold:

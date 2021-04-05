@@ -12,7 +12,10 @@ class MatchResult(QWidget):
         self.results = None
         self.report_feats = None
         self.header = None
+        self.selected_result = None
+        self.selected_pair = None
         self.ui.tV_results.doubleClicked.connect(self.show_detail)
+        self.ui.tV_results_detail.doubleClicked.connect(self.send_to_detail)
 
     def update_result(self, results: list, report_feats: list):
         self.results = results
@@ -31,19 +34,18 @@ class MatchResult(QWidget):
                     row_data.append('%d' % result.best_feature[feat])
                 else:
                     row_data.append('%.1f%%' % (result.best_feature[feat] * 100))
-            for i in range(len(row_data)):
-                sim.setData(sim.index(row_index, i), row_data[i])
+            for j in range(len(row_data)):
+                sim.setData(sim.index(row_index, j), row_data[j])
 
-        idx = 0
-        for r in self.results:
-            add_one_row(sim, r, idx)
-            idx += 1
+        for i in range(result_len):
+            add_one_row(sim, self.results[i], i)
         self.ui.tV_results.setModel(sim)
 
     def show_detail(self, mi):
         row_index = mi.row()
         sim = QStandardItemModel()
         sim.setHorizontalHeaderLabels(self.header[2:])
+        self.selected_result = self.results[row_index]
         if not self.results[row_index].is_matched:
             self.ui.tV_results_detail.setModel(sim)
             return
@@ -57,11 +59,17 @@ class MatchResult(QWidget):
                     row_data.append('%d' % result[feat])
                 else:
                     row_data.append('%.1f%%' % (result[feat] * 100))
-            for i in range(len(row_data)):
-                sim.setData(sim.index(row_index, i), row_data[i])
+            for j in range(len(row_data)):
+                sim.setData(sim.index(row_index, j), row_data[j])
 
-        idx = 0
-        for r in detail:
-            add_one_detail(sim, r, idx)
-            idx += 1
+        for i in range(len(detail)):
+            add_one_detail(sim, detail[i], i)
         self.ui.tV_results_detail.setModel(sim)
+
+    def send_to_detail(self, mi):
+        row_index = mi.row()
+        self.selected_pair = self.selected_result.results[row_index]['pair']
+        from ..main import MainUI
+        MainUI().tabmatchdetail.update_and_draw(self.selected_result, self.selected_pair)
+        MainUI().tab.setCurrentIndex(4)
+

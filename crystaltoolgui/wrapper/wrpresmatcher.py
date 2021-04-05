@@ -1,4 +1,3 @@
-from .wrpmatchresult import MatchResult
 from ..libs import *
 from ..tabs import Ui_tabresmatcher
 from ..thread import MatchThread
@@ -47,9 +46,8 @@ class ResMatcher(QWidget):
         self.results = results
         if process == self.job_count:
             self.set_text('求解完成')
-            result_ui = MatchResult()
-            result_ui.update_result(self.results, self.report_features)
             from ..main import MainUI
+            MainUI().tabmatchresult.update_result(self.results, self.report_features)
             MainUI().tab.setCurrentIndex(3)
 
     def set_text(self, text: str):

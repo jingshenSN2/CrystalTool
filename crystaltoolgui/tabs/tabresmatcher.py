@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_tabresmatcher(object):
     def setupUi(self, tabresmatcher):
@@ -32,6 +32,11 @@ class Ui_tabresmatcher(object):
         self.hL_match_pB1.addWidget(self.pB_match_delete_res)
         self.vL_match_1.addLayout(self.hL_match_pB1)
         self.horizontalLayout.addLayout(self.vL_match_1)
+        self.line = QtWidgets.QFrame(tabresmatcher)
+        self.line.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.horizontalLayout.addWidget(self.line)
         self.vL_match_2 = QtWidgets.QVBoxLayout()
         self.vL_match_2.setContentsMargins(-1, 25, -1, -1)
         self.vL_match_2.setObjectName("vL_match_2")
@@ -146,7 +151,7 @@ class Ui_tabresmatcher(object):
         self.cB_threshold.setItemText(2, _translate("tabresmatcher", "匹配比例Rm"))
         self.cB_threshold.setItemText(3, _translate("tabresmatcher", "质量加权匹配比例Rwm"))
         self.cB_threshold.setItemText(4, _translate("tabresmatcher", "电子加权匹配比例Rwe2"))
-        self.cB_threshold.setItemText(5, _translate("tabresmatcher", "坐标匹配相似度Rc"))
+        self.cB_threshold.setItemText(5, _translate("tabresmatcher", "强电子加权匹配比例Rwe4"))
         self.l_dBS_threshold.setText(_translate("tabresmatcher", "汇报阈值"))
         self.l_match_output.setText(_translate("tabresmatcher", "输出指标"))
         self.cB_Nm.setText(_translate("tabresmatcher", "Nm"))
@@ -157,3 +162,4 @@ class Ui_tabresmatcher(object):
         self.lE_match_sort.setText(_translate("tabresmatcher", "-Rwe2,-Rwm,-Nm,-Rc"))
         self.pB_match_start.setText(_translate("tabresmatcher", "开始匹配"))
         self.l_match_start.setText(_translate("tabresmatcher", "未开始匹配"))
+
