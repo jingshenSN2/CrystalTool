@@ -1,5 +1,6 @@
 import threading
-from crystalbase import processHkl
+
+from crystalbase import solve_hkl
 
 
 class SolveThread(threading.Thread):
@@ -15,6 +16,6 @@ class SolveThread(threading.Thread):
         res_files = []
         for ins_file in self.ins_files:
             for hkl_file in self.hkl_files:
-                new_res = processHkl(hkl_file, ins_file)
+                new_res = solve_hkl(hkl_file, ins_file)
                 process += 1
                 self.signal.emit(process, new_res)

@@ -1,5 +1,6 @@
 import threading
-from crystalbase import processHkl
+
+from crystalbase import solve_hkl
 
 
 class SolveThread(threading.Thread):
@@ -13,6 +14,6 @@ class SolveThread(threading.Thread):
         """运行所有来自图形界面的任务"""
         process = 0
         for hkl_file in self.hkl_files:
-            processHkl(hkl_file, self.ins_file)
+            solve_hkl(hkl_file, self.ins_file)
             process += 1
             self.signal.emit(process)

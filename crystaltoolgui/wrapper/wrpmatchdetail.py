@@ -1,7 +1,10 @@
+import re
+
+import matplotlib
+
 from ..libs import *
 from ..tabs import Ui_tabmatchdetail
-import re
-import matplotlib
+
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -38,14 +41,18 @@ class MatchDetail(QWidget):
             return
         pd = self.project_direction()
         self.figure_2d = plt.figure()
-        self.figure_2d.add_subplot(1, 2, 1)
-        self.result.target.draw_graph(self.pair.keys(), direction=pd, rotation=self.result.rotation)
-        self.figure_2d.add_subplot(1, 2, 2)
-        self.result.query.draw_graph(self.pair.values(), direction=pd)
+        axe1 = self.figure_2d.add_subplot(1, 2, 1)
+        self.result.target.draw_graph(axe1, self.pair.keys(), direction=pd, rotation=self.result.rotation)
+        axe2 = self.figure_2d.add_subplot(1, 2, 2)
+        self.result.query.draw_graph(axe2, self.pair.values(), direction=pd)
         self.canvas_2d.draw()
 
     def _draw_3d(self):
-        pass
+        if self.result is None or self.pair is None:
+            print('未找到绘图所需的匹配结果和映射关系...')
+            return
+        self.result.target.draw_3d_graph(self.figure_3d, highlight=self.pair)
+        self.canvas_3d.draw()
 
     def project_direction(self):
         text = self.ui.lE_detail_2d.text()

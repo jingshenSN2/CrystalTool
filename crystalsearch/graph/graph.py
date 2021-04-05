@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
@@ -60,7 +59,7 @@ class Graph:
     def get_edge_attributes(self, attr):
         return nx.get_edge_attributes(self.g, attr)
 
-    def draw_graph(self, highlight=None, direction=(0, 0, 1), rotation=None):
+    def draw_graph(self, axes, highlight=None, direction=(0, 0, 1), rotation=None):
         """用matlotlib画二维投影图"""
         points = self.get_node_attributes('location')
         if rotation is not None:
@@ -69,18 +68,17 @@ class Graph:
         pos = project3d(points, np.array(direction))
         label = self.get_node_attributes('label')
         edge_label = self.get_edge_attributes('dist')
-        nx.draw_networkx(self.g, pos, alpha=0.7, with_labels=False, edge_color='.4')
+        nx.draw_networkx(self.g, pos, alpha=0.7, with_labels=False, edge_color='.4', ax=axes)
         if highlight is not None:
-            nx.draw_networkx_nodes(self.g, pos=pos, nodelist=highlight, node_color='r')
-        nx.draw_networkx_labels(self.g, pos, labels=label)
-        nx.draw_networkx_edge_labels(self.g, pos, edge_labels=edge_label)
-        plt.axis('off')
+            nx.draw_networkx_nodes(self.g, pos=pos, nodelist=highlight, node_color='r', ax=axes)
+        nx.draw_networkx_labels(self.g, pos, labels=label, ax=axes)
+        nx.draw_networkx_edge_labels(self.g, pos, edge_labels=edge_label, ax=axes)
+        axes.axis('off')
 
-    def draw_3d_graph(self, highlight=None):
+    def draw_3d_graph(self, fig, highlight=None):
         """用matlotlib画三维图"""
         points = self.get_node_attributes('location')
         label = self.get_node_attributes('label')
-        fig = plt.figure(figsize=(10, 7))
         ax = Axes3D(fig)
         for key, value in points.items():
             c = 'blue'
