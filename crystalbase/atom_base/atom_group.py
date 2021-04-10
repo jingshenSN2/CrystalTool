@@ -8,7 +8,17 @@ from ..config import getAtomProperties
 
 class Atom:
     def __init__(self, element, label, aindex, mass, x, y, z, intensity):
-        """初始化Atom类成员"""
+        """
+        原子类
+        :param element: 元素符号
+        :param label: 晶体文件里的原子标签，如C001
+        :param aindex: 原子序数，用于电子加权计算
+        :param mass: 原子质量，用于质量加权计算
+        :param x: 分数坐标
+        :param y: 分数坐标
+        :param z: 分数坐标
+        :param intensity: RES中的强度
+        """
         self.element = element
         self.label = label
         self.aindex = aindex
@@ -22,7 +32,9 @@ class Atom:
 class AtomGroup:
     class CellParameter:
         def __init__(self):
-            """初始化晶胞参数"""
+            """
+            rotation_matrix: 用于换算分数坐标和绝对坐标的旋转矩阵
+            """
             self.a = 1
             self.b = 1
             self.c = 1
@@ -52,6 +64,7 @@ class AtomGroup:
             cosg = np.cos(self.gamma)
             sing = np.sin(self.gamma)
             volume = 1 - cosa ** 2 - cosb ** 2 - cosg ** 2 + 2 * cosa * cosb * cosg
+            # 计算旋转矩阵
             r = np.zeros((3, 3))
             r[0, 0] = a
             r[0, 1] = b * cosg

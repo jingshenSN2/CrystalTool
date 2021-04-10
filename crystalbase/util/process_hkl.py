@@ -1,5 +1,6 @@
 import os
 import subprocess
+
 import numpy as np
 
 
@@ -12,33 +13,36 @@ def _copy(src, dst):
     dst_file.close()
 
 
-def solve_hkl(hkl_file: str, ins_file: str):
+def solve_hkl(hkl_file: str, ins_file: str, program='shelxt.exe'):
     # 打开shelxt计算临时路径
-    shelxt = os.path.dirname(__file__) + '/../../.temp/'
+    temp_path = os.path.dirname(__file__) + '/../../.temp/'
     hkl_path, hkl_full_name = os.path.split(hkl_file)
     ins_path, ins_full_name = os.path.split(ins_file)
     hkl_name = hkl_full_name.split('.')[0]
     ins_name = ins_full_name.split('.')[0]
     new_name = '%s_%s' % (hkl_name, ins_name)
-    output_path = shelxt + new_name
+    output_path = temp_path + new_name
     # 重命名并复制到临时文件夹
     _copy(hkl_file, '%s.hkl' % output_path)
     _copy(ins_file, '%s.ins' % output_path)
     # 记录目录下已存在的RES文件
     old_res = set()
-    for file in os.listdir(shelxt):
+    for file in os.listdir(temp_path):
         if file.endswith('.res'):
             old_res.add(file)
     # 执行shelxt，阻塞式
-    subprocess.Popen(['shelxt.exe', new_name], cwd=shelxt, shell=True).wait()
+    subprocess.Popen([program, new_name], cwd=temp_path, shell=True).wait()
     # 删除临时hkl和ins
     os.remove('%s.hkl' % output_path)
     os.remove('%s.ins' % output_path)
     # 筛选出新RES文件并返回
     new_res = []
-    for file in os.listdir(shelxt):
+    for file in os.listdir(temp_path):
         if file.endswith('.res') and file not in old_res:
             new_res.append(file)
+    if len(new_res) == 0:
+        # 求解失败则移除日志
+        os.remove('%s.lxt' % output_path)
     return new_res
 
 
