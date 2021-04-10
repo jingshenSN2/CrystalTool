@@ -18,8 +18,11 @@ def coordinate_error(match_pair: dict):
     mat_b /= np.linalg.norm(mat_b)
 
     u, w, vt = np.linalg.svd(mat_b.T.dot(mat_a).T)
-    R = u.dot(vt)
     scale = w.sum()
-    mat_b = np.dot(mat_b, R.T) * scale
+    R = u.dot(vt) * scale
+    if np.linalg.det(R) < 0:
+        vt[2, :] *= -1
+        R = u.dot(vt) * scale
+    mat_b = np.dot(mat_b, R.T)
     rmse = len(set_a) / np.sum(np.square(mat_a - mat_b)) / 10000.0  # 取倒数，使得rmse越大匹配越好
     return rmse, R

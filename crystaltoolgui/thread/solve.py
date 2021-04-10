@@ -13,7 +13,6 @@ class SolveThread(threading.Thread):
     def run(self):
         """运行所有来自图形界面的任务"""
         process = 0
-        res_files = []
         for ins_file in self.ins_files:
             for hkl_file in self.hkl_files:
                 new_res = solve_hkl(hkl_file, ins_file)

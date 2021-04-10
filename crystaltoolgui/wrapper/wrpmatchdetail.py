@@ -20,6 +20,8 @@ class MatchDetail(QWidget):
         self.result = None
         self.pair = None
         self.figure_2d = plt.figure()
+        self.axe1_2d = self.figure_2d.add_subplot(1, 2, 1)
+        self.axe2_2d = self.figure_2d.add_subplot(1, 2, 2)
         self.figure_3d = plt.figure()
         self.canvas_2d = FigureCanvas(self.figure_2d)
         self.canvas_3d = FigureCanvas(self.figure_3d)
@@ -40,11 +42,10 @@ class MatchDetail(QWidget):
             print('未找到绘图所需的匹配结果和映射关系...')
             return
         pd = self.project_direction()
-        self.figure_2d = plt.figure()
-        axe1 = self.figure_2d.add_subplot(1, 2, 1)
-        self.result.target.draw_graph(axe1, self.pair.keys(), direction=pd, rotation=self.result.rotation)
-        axe2 = self.figure_2d.add_subplot(1, 2, 2)
-        self.result.query.draw_graph(axe2, self.pair.values(), direction=pd)
+        self.axe1_2d.clear()
+        self.axe2_2d.clear()
+        self.result.target.draw_graph(self.axe1_2d, self.pair.keys(), direction=pd, rotation=self.result.rotation)
+        self.result.query.draw_graph(self.axe2_2d, self.pair.values(), direction=pd)
         self.canvas_2d.draw()
 
     def _draw_3d(self):

@@ -59,8 +59,7 @@ class ResMatcher(QWidget):
         if not success:
             return
         for file in new_res_files:
-            if file not in self.res_files:
-                self.res_files.append(file)
+            self.res_files.append(file)
         slm = QStringListModel()
         slm.setStringList(self.res_files)
         self.ui.lV_match_res.setModel(slm)
@@ -74,6 +73,7 @@ class ResMatcher(QWidget):
     def delete_selected_res(self):
         for index in self.ui.lV_match_res.selectedIndexes():
             self.ui.lV_match_res.model().removeRow(index.row())
+            self.res_files.pop(index.row())
 
     @property
     def use_old_algorithm(self):

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>829</width>
+    <width>922</width>
     <height>585</height>
    </rect>
   </property>
@@ -56,6 +56,9 @@
      </property>
      <item>
       <widget class="QComboBox" name="cB_editor_method">
+       <property name="currentText">
+        <string>请选择修改方式</string>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -66,7 +69,22 @@
        </item>
        <item>
         <property name="text">
-         <string>强度幂</string>
+         <string>Exp(F+sigma)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Exp(F)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Exp(sigma)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Scale(F+sigma)</string>
         </property>
        </item>
        <item>
@@ -111,7 +129,7 @@
        <item alignment="Qt::AlignVCenter">
         <widget class="QLabel" name="l_editor_start">
          <property name="text">
-          <string>正在生成新HKL...5/20</string>
+          <string/>
          </property>
          <property name="textFormat">
           <enum>Qt::AutoText</enum>

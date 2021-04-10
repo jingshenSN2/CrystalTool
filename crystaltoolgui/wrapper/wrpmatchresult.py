@@ -16,6 +16,7 @@ class MatchResult(QWidget):
         self.selected_pair = None
         self.ui.tV_results.doubleClicked.connect(self.show_detail)
         self.ui.tV_results_detail.doubleClicked.connect(self.send_to_detail)
+        self.ui.pB_result_to_res.clicked.connect(self.to_res)
 
     def update_result(self, results: list, report_feats: list):
         self.results = results
@@ -73,3 +74,6 @@ class MatchResult(QWidget):
         MainUI().tabmatchdetail.update_and_draw(self.selected_result, self.selected_pair)
         MainUI().tab.setCurrentIndex(4)
 
+    def to_res(self):
+        # TODO
+        pass

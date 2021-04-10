@@ -77,7 +77,9 @@ class HklSolver(QWidget):
     def delete_selected_hkl(self):
         for index in self.ui.lV_solve_hkl.selectedIndexes():
             self.ui.lV_solve_hkl.model().removeRow(index.row())
+            self.hkl_files.pop(index.row())
 
     def delete_selected_res(self):
         for index in self.ui.lV_solve_res.selectedIndexes():
             self.ui.lV_solve_res.model().removeRow(index.row())
+            self.res_files.pop(index.row())
