@@ -21,6 +21,7 @@ class HklSolver(QWidget):
         self.ui.pB_solve_delete_res.clicked.connect(self.delete_selected_res)
         self.ui.pB_solve_ins.clicked.connect(self.open_ins)
         self.ui.pB_solve.clicked.connect(self.solve)
+        self.ui.pB_solve_send.clicked.connect(self.send_selected)
 
     @property
     def has_files(self):
@@ -56,16 +57,17 @@ class HklSolver(QWidget):
         self.ui.l_solve.setText(text)
         self.ui.l_solve.repaint()
 
-    def open_hkl(self):
-        new_hkl_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的HKL文件', directory='./', filter='Hkl Files (*.hkl)')
-        if not success:
-            return
-        for file in new_hkl_files:
-            if file not in self.hkl_files:
-                self.hkl_files.append(file)
+    def update_hkl(self, hkl_files):
+        self.hkl_files = hkl_files
         slm = QStringListModel()
         slm.setStringList(self.hkl_files)
         self.ui.lV_solve_hkl.setModel(slm)
+
+    def open_hkl(self):
+        hkl_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的HKL文件', directory='./', filter='Hkl Files (*.hkl)')
+        if not success:
+            return
+        self.update_hkl(hkl_files)
 
     def open_ins(self):
         self.ins_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的INS文件', directory='./', filter='Ins Files (*.ins)')
@@ -75,11 +77,29 @@ class HklSolver(QWidget):
         self.ui.l_solve_ins.setToolTip('\n'.join(self.ins_files))
 
     def delete_selected_hkl(self):
+        model = self.ui.lV_solve_hkl.model()
         for index in self.ui.lV_solve_hkl.selectedIndexes():
-            self.ui.lV_solve_hkl.model().removeRow(index.row())
-            self.hkl_files.pop(index.row())
+            model.removeRow(index.row())
+        self.hkl_files.clear()
+        for row in range(model.rowCount()):
+            data = model.data(model.index(row), Qt.DisplayRole)
+            self.hkl_files.append(data)
 
     def delete_selected_res(self):
+        model = self.ui.lV_solve_res.model()
         for index in self.ui.lV_solve_res.selectedIndexes():
-            self.ui.lV_solve_res.model().removeRow(index.row())
-            self.res_files.pop(index.row())
+            model.removeRow(index.row())
+        self.res_files.clear()
+        for row in range(model.rowCount()):
+            data = model.data(model.index(row), Qt.DisplayRole)
+            self.res_files.append(data)
+
+    def send_selected(self):
+        res_files = []
+        for index in self.ui.lV_solve_res.selectedIndexes():
+            model = self.ui.lV_solve_res.model()
+            data = model.data(index, Qt.DisplayRole)
+            res_files.append(data)
+            model.removeRow(index.row())
+        from .wrpresmatcher import ResMatcher
+        ResMatcher().update_res(res_files)

@@ -81,12 +81,13 @@ class Graph:
         label = self.get_node_attributes('label')
         ax = Axes3D(fig)
         for key, value in points.items():
-            c = 'blue'
+            c = 'blue'  # 普通原子为蓝色
             if key in highlight:
-                c = 'red'
+                c = 'red'  # 高亮原子用红色表示
             xi, yi, zi = value
             ax.scatter(xi, yi, zi, label[key], c=c, alpha=0.9)
         for i, j in enumerate(self.edges()):
+            # 用两端原子的坐标连线，绘制化学键
             x = np.array((points[j[0]][0], points[j[1]][0]))
             y = np.array((points[j[0]][1], points[j[1]][1]))
             z = np.array((points[j[0]][2], points[j[1]][2]))

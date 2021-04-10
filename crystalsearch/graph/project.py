@@ -2,10 +2,11 @@ import numpy as np
 
 
 def project3d(points, direction):
-    """投影函数，将三维点集投影到二维
-    points: 三维点集
-    direction: 投影平面的法向量(u,v,w)，投影平面通过原点(0,0,0)
+    """
+    投影函数，将三维点集投影到二维
     投影平面内的y方向为z轴投影(如果投影的法向量为z轴，则y方向为x轴投影)
+    :param points: 三维点集
+    :param direction: 投影平面的法向量(u,v,w)，投影平面通过原点(0,0,0)
     """
     d = direction / np.linalg.norm(direction)
     y0 = np.array([1, 0, 0]) if np.array([0, 0, 1]).dot(d) == 1 else np.array([0, 0, 1])

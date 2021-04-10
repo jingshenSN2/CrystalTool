@@ -54,15 +54,17 @@ class ResMatcher(QWidget):
         self.ui.l_match_start.setText(text)
         self.ui.l_match_start.repaint()
 
-    def open_res(self):
-        new_res_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的RES文件', directory='./', filter='Res Files (*.res)')
-        if not success:
-            return
-        for file in new_res_files:
-            self.res_files.append(file)
+    def update_res(self, res_files):
+        self.res_files = res_files
         slm = QStringListModel()
         slm.setStringList(self.res_files)
         self.ui.lV_match_res.setModel(slm)
+
+    def open_res(self):
+        res_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的RES文件', directory='./', filter='Res Files (*.res)')
+        if not success:
+            return
+        self.update_res(res_files)
 
     def open_pdb(self):
         self.pdb_file, success = QFileDialog.getOpenFileName(caption='选择待搜索结构的PDB文件', directory='./', filter='Pdb Files (*.pdb)')

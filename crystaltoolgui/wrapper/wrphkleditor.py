@@ -21,17 +21,18 @@ class HklEditor(QWidget):
         self.ui.pB_editor_reselect.clicked.connect(self.reselect)
         self.ui.pB_editor_send.clicked.connect(self.send_selected)
 
-    def open_hkl(self):
-        new_hkl_files, success = QFileDialog.getOpenFileNames(caption='选择HKL文件', directory='./',
-                                                              filter='Hkl Files (*.hkl)')
-        if not success:
-            return
-        for file in new_hkl_files:
-            if file not in self.hkl_files:
-                self.hkl_files.append(file)
+    def update_hkl(self, hkl_files):
+        self.hkl_files = hkl_files
         slm = QStringListModel()
         slm.setStringList(self.hkl_files)
         self.ui.lV_editor_origin.setModel(slm)
+
+    def open_hkl(self):
+        hkl_files, success = QFileDialog.getOpenFileNames(caption='选择HKL文件', directory='./',
+                                                              filter='Hkl Files (*.hkl)')
+        if not success:
+            return
+        self.update_hkl(hkl_files)
 
     def edit(self):
         if not self.has_files:
@@ -41,6 +42,7 @@ class HklEditor(QWidget):
             self.set_text('未提供编辑参数')
             return
         self.set_text('开始编辑...')
+        self.new_hkl_files.clear()
         thread = EditThread(self.hkl_files, self.edit_method, self.edit_params, self.edit_signal)
         thread.start()
 
@@ -49,9 +51,9 @@ class HklEditor(QWidget):
             return
         self.set_text('正在生成新HKL...已完成%d/%d' % (process, self.job_count))
         self.ui.bar_editor.setValue(int(process * 100 / self.job_count))
-        for file in new_hkl:
-            if file not in self.new_hkl_files:
-                self.new_hkl_files.append(file)
+        for h in new_hkl:
+            if h not in self.new_hkl_files:
+                self.new_hkl_files.append(h)
         slm = QStringListModel()
         slm.setStringList(self.new_hkl_files)
         self.ui.lV_editor_modified.setModel(slm)
@@ -63,19 +65,32 @@ class HklEditor(QWidget):
         self.ui.l_editor_start.repaint()
 
     def delete_selected_origin(self):
+        model = self.ui.lV_editor_origin.model()
         for index in self.ui.lV_editor_origin.selectedIndexes():
-            self.ui.lV_editor_origin.model().removeRow(index.row())
-            self.hkl_files.pop(index.row())
+            model.removeRow(index.row())
+        self.hkl_files.clear()
+        for row in range(model.rowCount()):
+            data = model.data(model.index(row), Qt.DisplayRole)
+            self.hkl_files.append(data)
 
     def reselect(self):
+        hkl_files = []
         for index in self.ui.lV_editor_modified.selectedIndexes():
-            pass  # TODO
-            self.ui.lV_editor_origin.model().removeRow(index.row())
+            model = self.ui.lV_editor_modified.model()
+            data = model.data(index, Qt.DisplayRole)
+            hkl_files.append(data)
+            model.removeRow(index.row())
+        self.update_hkl(hkl_files)
 
     def send_selected(self):
+        hkl_files = []
         for index in self.ui.lV_editor_modified.selectedIndexes():
-            pass  # TODO
-            self.ui.lV_editor_origin.model().removeRow(index.row())
+            model = self.ui.lV_editor_modified.model()
+            data = model.data(index, Qt.DisplayRole)
+            hkl_files.append(data)
+            model.removeRow(index.row())
+        from .wrphklsolver import HklSolver
+        HklSolver().update_hkl(hkl_files)
 
     @property
     def has_files(self):

@@ -64,7 +64,7 @@ class AtomGroup:
             cosg = np.cos(self.gamma)
             sing = np.sin(self.gamma)
             volume = 1 - cosa ** 2 - cosb ** 2 - cosg ** 2 + 2 * cosa * cosb * cosg
-            # 计算旋转矩阵
+            # 计算分数坐标到绝对坐标的旋转矩阵
             r = np.zeros((3, 3))
             r[0, 0] = a
             r[0, 1] = b * cosg

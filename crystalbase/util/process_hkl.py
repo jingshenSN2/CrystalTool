@@ -57,14 +57,15 @@ def _edit_line(line, method, param):
         return new_line, True
     sp = line.split()
     if len(sp) <= 3:
+        # 跳过非关键行
         new_line = line
     else:
-        h, k, l = map(int, sp[:3])
-        F, sigma = map(float, sp[3:5])
+        h, k, l = map(int, sp[:3])  # 衍射指标
+        F, sigma = map(float, sp[3:5])  # 强度和强度误差
         if h == k == l == 0:
             return new_line, True
 
-        def smart_exp(a):
+        def smart_exp(a):  # 求幂函数，对于负数自动取绝对值求幂后补上符号
             if a == 0:
                 return str(a)
             symbol = abs(a) / a
@@ -79,7 +80,7 @@ def _edit_line(line, method, param):
         elif method == 4:  # 强度缩放
             sp[3], sp[4] = str(round(F * param, 2)), str(round(sigma * param, 2))
 
-        def indent(word, sep=' ', num=4):
+        def indent(word, sep=' ', num=4):  # 保持hkl的格式
             return sep * (num - len(word)) + word
 
         new_line = indent(str(h)) + indent(str(k)) + indent(str(l)) + '  %s  %s  %s\n' % (sp[3], sp[4], sp[5])
