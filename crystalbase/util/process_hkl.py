@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 
 import numpy as np
@@ -47,6 +48,7 @@ def solve_hkl(hkl_file: str, ins_file: str, program='shelxt.exe'):
 
 
 edit_hkl_methods = {0: 'undefined', 1: 'expFS', 2: 'expF', 3: 'expS', 4: 'scale'}
+float_pat = re.compile('(-?\\d+\\.\\d*)\\s+(-?\\d+\\.\\d*)')
 
 
 def _edit_line(line, method, param):
@@ -54,36 +56,26 @@ def _edit_line(line, method, param):
     #  未选择修改方式 跳过
     if method == 0:
         print('undefined')
-        return new_line, True
-    sp = line.split()
-    if len(sp) <= 3:
-        new_line = line
-    else:
-        h, k, l = map(int, sp[:3])
-        F, sigma = map(float, sp[3:5])
-        if h == k == l == 0:
-            return new_line, True
+        return new_line
+    result = re.search(float_pat, line).groups()
+    if result is None:
+        return new_line
+    intensity, sigma = result[0], result[1]
+    intensity_f, sigma_f = float(intensity), float(sigma)
 
-        def smart_exp(a):
-            if a == 0:
-                return str(a)
-            symbol = abs(a) / a
-            return str(round(symbol * pow(symbol * a, param), 2))
+    def smart_exp(a):
+        if a == 0:
+            return a
+        symbol = abs(a) / a
+        return symbol * pow(symbol * a, param)
 
-        if method == 1:  # 强度幂（F+sigma）
-            sp[3], sp[4] = smart_exp(F), smart_exp(sigma)
-        elif method == 2:  # 强度幂（F）
-            sp[3] = smart_exp(F)
-        elif method == 3:  # 强度幂（sigma）
-            sp[4] = smart_exp(sigma)
-        elif method == 4:  # 强度缩放
-            sp[3], sp[4] = str(round(F * param, 2)), str(round(sigma * param, 2))
+    new_intensity = smart_exp(intensity_f)
+    new_sigma = smart_exp(sigma_f)
 
-        def indent(word, sep=' ', num=4):
-            return sep * (num - len(word)) + word
+    new_line = new_line.replace(intensity, '%.2f' % new_intensity, 1)
+    new_line = new_line.replace(sigma, '%.2f' % new_sigma, 1)
 
-        new_line = indent(str(h)) + indent(str(k)) + indent(str(l)) + '  %s  %s  %s\n' % (sp[3], sp[4], sp[5])
-    return new_line, False
+    return new_line
 
 
 def _parse_params(params_str: str):
@@ -112,10 +104,8 @@ def edit_hkl(hkl_file: str, method: int, params_str: str):
         new_hkl = open(new_hkl_file, 'w')
         for line in hkl_lines:
             # 处理每行并写入新文件
-            new_line, stop = _edit_line(line, method, p)
+            new_line = _edit_line(line, method, p)
             new_hkl.write(new_line)
-            if stop:
-                break
         new_hkl.close()
         output_list.append(new_hkl_file)
     return output_list
