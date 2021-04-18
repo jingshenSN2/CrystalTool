@@ -1,7 +1,13 @@
-# graph.cellToGraph(util.parseFromRES('./test/c21.res')).draw_3d_graph()
-# plt.show()
+import matplotlib.pyplot as plt
 
-# target = graph.cellToGraph(util.parseFromRES('./test2/3.res'))
+from crystalbase import parseFromRES
+from crystalsearch import cellToGraph
+
+target = cellToGraph(parseFromRES('./test3/0620_expF_0_7_expS_1_4_0620_b.res', multilayer=(False, False, True)))
+fig = plt.Figure()
+target.draw_3d_graph(fig)
+fig.savefig('./11.png')
+
 # query = graph.cellToGraph(util.parseFromPDB('./test2/mdcb.pdb')).max_subgraph()
 
 # gm = matcher.GraphMatcher(target, query, True, 2, 1000)

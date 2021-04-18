@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class Ui_tabhkleditor(object):
     def setupUi(self, tabhkleditor):
@@ -20,6 +20,7 @@ class Ui_tabhkleditor(object):
         self.l_editor_origin.setObjectName("l_editor_origin")
         self.vL_editor_1.addWidget(self.l_editor_origin)
         self.lV_editor_origin = QtWidgets.QListView(tabhkleditor)
+        self.lV_editor_origin.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.lV_editor_origin.setObjectName("lV_editor_origin")
         self.vL_editor_1.addWidget(self.lV_editor_origin)
         self.hL_editor_pB1 = QtWidgets.QHBoxLayout()
@@ -77,6 +78,7 @@ class Ui_tabhkleditor(object):
         self.l_editor_modified.setObjectName("l_editor_modified")
         self.vL_editor_3.addWidget(self.l_editor_modified)
         self.lV_editor_modified = QtWidgets.QListView(tabhkleditor)
+        self.lV_editor_modified.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.lV_editor_modified.setObjectName("lV_editor_modified")
         self.vL_editor_3.addWidget(self.lV_editor_modified)
         self.hL_editor_pB2 = QtWidgets.QHBoxLayout()
@@ -101,7 +103,7 @@ class Ui_tabhkleditor(object):
         _translate = QtCore.QCoreApplication.translate
         tabhkleditor.setWindowTitle(_translate("tabhkleditor", "Form"))
         self.l_editor_origin.setText(_translate("tabhkleditor", "原始HKL文件"))
-        self.pB_editor_choose.setText(_translate("tabhkleditor", "添加文件"))
+        self.pB_editor_choose.setText(_translate("tabhkleditor", "选择HKL文件"))
         self.pB_editor_delect_origin.setText(_translate("tabhkleditor", "删除所选"))
         self.cB_editor_method.setCurrentText(_translate("tabhkleditor", "请选择修改方式"))
         self.cB_editor_method.setItemText(0, _translate("tabhkleditor", "请选择修改方式"))

@@ -140,7 +140,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="lV_solve_res"/>
+         <widget class="QListView" name="lV_solve_res">
+             <property name="selectionMode">
+                 <enum>QAbstractItemView::ExtendedSelection</enum>
+             </property>
+         </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="hL_solve_pB2">

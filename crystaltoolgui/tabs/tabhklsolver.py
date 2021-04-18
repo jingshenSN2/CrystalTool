@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class Ui_tabhklsolver(object):
     def setupUi(self, tabhklsolver):
@@ -78,6 +78,7 @@ class Ui_tabhklsolver(object):
         self.l_solve_res.setObjectName("l_solve_res")
         self.vL_solve_3.addWidget(self.l_solve_res)
         self.lV_solve_res = QtWidgets.QListView(tabhklsolver)
+        self.lV_solve_res.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.lV_solve_res.setObjectName("lV_solve_res")
         self.vL_solve_3.addWidget(self.lV_solve_res)
         self.hL_solve_pB2 = QtWidgets.QHBoxLayout()

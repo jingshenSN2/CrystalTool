@@ -24,7 +24,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="lV_match_res"/>
+         <widget class="QListView" name="lV_match_res">
+             <property name="selectionMode">
+                 <enum>QAbstractItemView::ExtendedSelection</enum>
+             </property>
+         </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="hL_match_pB1">
@@ -149,26 +153,58 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QDoubleSpinBox" name="dSB_threshold"/>
-       </item>
-       <item row="0" column="1">
-        <widget class="QRadioButton" name="rB_old_algorithm">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
+          <item row="3" column="1">
+              <widget class="QDoubleSpinBox" name="dSB_threshold"/>
+          </item>
+          <item row="0" column="1">
+              <widget class="QRadioButton" name="rB_old_algorithm">
+                  <property name="text">
+                      <string/>
+                  </property>
+              </widget>
+          </item>
       </layout>
      </item>
-     <item>
-      <layout class="QHBoxLayout" name="hL_match_output">
-       <item>
-        <widget class="QLabel" name="l_match_output">
-         <property name="text">
-          <string>输出指标</string>
-         </property>
-        </widget>
+        <item>
+            <layout class="QHBoxLayout" name="hL_match_thickness">
+                <item>
+                    <widget class="QLabel" name="l_match_thick">
+                        <property name="text">
+                            <string>晶胞加层</string>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QCheckBox" name="cB_thick_x">
+                        <property name="text">
+                            <string>x</string>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QCheckBox" name="cB_thick_y">
+                        <property name="text">
+                            <string>y</string>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QCheckBox" name="cB_thick_z">
+                        <property name="text">
+                            <string>z</string>
+                        </property>
+                    </widget>
+                </item>
+            </layout>
+        </item>
+        <item>
+            <layout class="QHBoxLayout" name="hL_match_output">
+                <item>
+                    <widget class="QLabel" name="l_match_output">
+                        <property name="text">
+                            <string>输出指标</string>
+                        </property>
+                    </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="cB_Nm">
@@ -184,21 +220,28 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="cB_Rwe2">
-         <property name="text">
-          <string>Rwe2</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cB_Rc">
-         <property name="text">
-          <string>Rc</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+                <item>
+                    <widget class="QCheckBox" name="cB_Rwe2">
+                        <property name="text">
+                            <string>Rwe2</string>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QCheckBox" name="cB_Ram">
+                        <property name="text">
+                            <string>Ram</string>
+                        </property>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QCheckBox" name="cB_Rc">
+                        <property name="text">
+                            <string>Rc</string>
+                        </property>
+                    </widget>
+                </item>
+            </layout>
      </item>
      <item>
       <layout class="QHBoxLayout" name="hL_match_sort">
@@ -215,7 +258,7 @@
           <string/>
          </property>
          <property name="text">
-          <string>-Rwe2,-Rwm,-Nm,-Rc</string>
+             <string>-Rwe2,-Rwm,-Nm,-Ram,-Rc</string>
          </property>
          <property name="maxLength">
           <number>32767</number>
