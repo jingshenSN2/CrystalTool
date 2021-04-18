@@ -37,6 +37,7 @@ class MatchResult(QWidget):
                     row_data.append('%.1f%%' % (result.best_feature[feat] * 100))
             for j in range(len(row_data)):
                 sim.setData(sim.index(row_index, j), row_data[j])
+            print('\t'.join(row_data))
 
         for i in range(result_len):
             add_one_row(sim, self.results[i], i)

@@ -60,9 +60,7 @@ class HklSolver(QWidget):
         new_hkl_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的HKL文件', directory='./', filter='Hkl Files (*.hkl)')
         if not success:
             return
-        for file in new_hkl_files:
-            if file not in self.hkl_files:
-                self.hkl_files.append(file)
+        self.hkl_files = new_hkl_files
         slm = QStringListModel()
         slm.setStringList(self.hkl_files)
         self.ui.lV_solve_hkl.setModel(slm)

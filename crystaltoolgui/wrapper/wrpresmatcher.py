@@ -35,7 +35,7 @@ class ResMatcher(QWidget):
             return
         self.set_text('开始求解...')
         thread = MatchThread(self.res_files, self.pdb_file, self.use_old_algorithm, self.max_loss_atom,
-                             self.threshold, self.sort_by, self.match_signal)
+                             self.multilayer, self.threshold, self.sort_by, self.match_signal)
         thread.start()
 
     def set_process(self, process: int, results: list):
@@ -58,8 +58,7 @@ class ResMatcher(QWidget):
         new_res_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的RES文件', directory='./', filter='Res Files (*.res)')
         if not success:
             return
-        for file in new_res_files:
-            self.res_files.append(file)
+        self.res_files = new_res_files
         slm = QStringListModel()
         slm.setStringList(self.res_files)
         self.ui.lV_match_res.setModel(slm)
@@ -84,6 +83,10 @@ class ResMatcher(QWidget):
         return self.ui.sB_loss_atom.value()
 
     @property
+    def multilayer(self):
+        return self.ui.cB_thick_x.isChecked(), self.ui.cB_thick_y.isChecked(), self.ui.cB_thick_z.isChecked()
+
+    @property
     def threshold(self):
         if self.ui.cB_threshold.currentIndex() == 0:  # 未选择汇报阈值
             return {}
@@ -98,6 +101,8 @@ class ResMatcher(QWidget):
             features.append('Rwm')
         if self.ui.cB_Rwe2.isChecked():
             features.append('Rwe2')
+        if self.ui.cB_Ram.isChecked():
+            features.append('Ram')
         if self.ui.cB_Rc.isChecked():
             features.append('Rc')
         return features
