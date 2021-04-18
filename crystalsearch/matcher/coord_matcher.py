@@ -24,5 +24,6 @@ def coordinate_error(match_pair: dict):
         vt[2, :] *= -1
         R = u.dot(vt) * scale
     mat_b = np.dot(mat_b, R.T)
-    rmse = len(set_a) / np.sum(np.square(mat_a - mat_b)) / 10000.0  # 取倒数，使得rmse越大匹配越好
-    return rmse, R
+    rmse = np.sum(np.square(mat_a - mat_b))
+    Rc = 1 - np.sqrt(rmse)
+    return Rc, R

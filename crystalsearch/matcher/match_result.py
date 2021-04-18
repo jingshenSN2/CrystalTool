@@ -12,7 +12,7 @@ class Result:
         self.rotation = None
         self.threshold = threshold
         self.sort_by = sort_by
-        self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Rc': 0}
+        self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
         self.results = []
         if self.is_matched:
             self.calculate_match_result()
@@ -20,7 +20,7 @@ class Result:
     def calculate_match_result(self, base_query=None):
         if base_query is not None:
             self.query = base_query
-        self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Rc': 0}
+        self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
         self.results.clear()
         tm_count = 0
         if 'Tm' in self.threshold:
@@ -38,7 +38,9 @@ class Result:
         for p in self.match_pairs:
             feats = {'Tm': -1, 'pair': p, 'Nm': len(p.keys()),
                      'Rwm': sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g]),
-                     'Rwe2': sum([p[k].aindex ** 2 for k in p]) / sum([atom.aindex ** 2 for atom in self.query.g])}
+                     'Rwe2': sum([p[k].aindex ** 2 for k in p]) / sum([atom.aindex ** 2 for atom in self.query.g]),
+                     'Ram': 1 - pow(sum([(k.mass - p[k].mass) ** 2 for k in p]) / sum([p[k].mass ** 2 for k in p]),
+                                    0.5)}
             feats['Rc'], self.rotation = coordinate_error(p)
             flag = True
             for k in self.threshold:
