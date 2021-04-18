@@ -4,12 +4,13 @@ from crystalsearch import match_one
 
 
 class MatchThread(threading.Thread):
-    def __init__(self, res_files, pdb_file, use_old_algorithm, max_loss_atom, threshold, sort_by, signal):
+    def __init__(self, res_files, pdb_file, use_old_algorithm, max_loss_atom, multilayer, threshold, sort_by, signal):
         super(MatchThread, self).__init__()
         self.res_files = res_files
         self.pdb_file = pdb_file
         self.use_old_algorithm = use_old_algorithm
         self.max_loss_atom = max_loss_atom
+        self.multilayer = multilayer
         self.threshold = threshold
         self.sort_by = sort_by
         self.signal = signal
@@ -19,8 +20,8 @@ class MatchThread(threading.Thread):
         results = []
         process = 0
         for res in self.res_files:
-            result = match_one(res, self.pdb_file, self.use_old_algorithm, self.max_loss_atom, self.threshold,
-                               self.sort_by)
+            result = match_one(res, self.pdb_file, self.use_old_algorithm, self.max_loss_atom,
+                               self.multilayer, self.threshold, self.sort_by)
             results.append(result)
             process += 1
             self.signal.emit(process, [])

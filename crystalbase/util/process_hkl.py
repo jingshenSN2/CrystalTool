@@ -57,12 +57,14 @@ def _edit_line(line, method, param):
     if method == 0:
         print('undefined')
         return new_line
+    # 正则匹配两个浮点数，分别是强度和强度方差
     result = re.search(float_pat, line).groups()
     if result is None:
         return new_line
     intensity, sigma = result[0], result[1]
     intensity_f, sigma_f = float(intensity), float(sigma)
 
+    # 计算新强度
     def smart_exp(a):
         if a == 0:
             return a
@@ -72,6 +74,7 @@ def _edit_line(line, method, param):
     new_intensity = smart_exp(intensity_f)
     new_sigma = smart_exp(sigma_f)
 
+    # 强度替换成新的
     new_line = new_line.replace(intensity, '%.2f' % new_intensity, 1)
     new_line = new_line.replace(sigma, '%.2f' % new_sigma, 1)
 

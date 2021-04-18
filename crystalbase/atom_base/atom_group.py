@@ -74,11 +74,12 @@ class AtomGroup:
             r[2, 2] = c * np.sqrt(volume) / sing
             self.rotation_matrix = r
 
-    def __init__(self, name):
+    def __init__(self, name, multilayer=(True, True, True)):
         """初始化AtomGroup类成员"""
         self.name = name
         self.atom_index, self.atom_mass, self.max_distances, self.max_connect = getAtomProperties()
         self.cell_parameter = self.CellParameter()
+        self.multilayer = multilayer
         self.atom_count = 0
         self.atom_dict = dict()
         self.connect_dict = defaultdict(int)
@@ -90,9 +91,27 @@ class AtomGroup:
 
     def add_atom(self, element, index, x, y, z, intensity):
         """添加新原子"""
-        x, y, z = self.cell_parameter.coordinate_transform(x, y, z)
-        self.atom_dict[self.atom_count] = Atom(element, index, self.atom_index[element], self.atom_mass[element], x, y, z, intensity)
-        self.atom_count += 1
+        xyz_list = [(x, y, z)]
+        if self.multilayer[0]:
+            temp_list = []
+            for xyz in xyz_list:
+                temp_list.append(tuple([xyz[0] + 1, xyz[1], xyz[2]]))
+            xyz_list.extend(temp_list)
+        if self.multilayer[1]:
+            temp_list = []
+            for xyz in xyz_list:
+                temp_list.append(tuple([xyz[0], xyz[1] + 1, xyz[2]]))
+            xyz_list.extend(temp_list)
+        if self.multilayer[2]:
+            temp_list = []
+            for xyz in xyz_list:
+                temp_list.append(tuple([xyz[0], xyz[1], xyz[2] + 1]))
+            xyz_list.extend(temp_list)
+        for xyz in xyz_list:
+            new_xyz = self.cell_parameter.coordinate_transform(xyz[0], xyz[1], xyz[2])
+            self.atom_dict[self.atom_count] = Atom(element, index, self.atom_index[element], self.atom_mass[element],
+                                                   new_xyz[0], new_xyz[1], new_xyz[2], intensity)
+            self.atom_count += 1
 
     def distance_judge(self, atom1: Atom, atom2: Atom):
         """辅助函数，判断两原子距离是否满足max_distances"""

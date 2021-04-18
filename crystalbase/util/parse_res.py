@@ -1,10 +1,10 @@
 from ..atom_base import AtomGroup
 
 
-def parseFromRES(filename: str, remove_extra=True):
+def parseFromRES(filename: str, multilayer=(False, False, False), remove_extra=True):
     """解析res文件中的晶胞信息"""
     name = filename.split('/')[-1]
-    cell = AtomGroup(name)
+    cell = AtomGroup(name, multilayer)
     with open(filename, 'r') as f:
         atom_dict = {}
         for line in f.readlines():

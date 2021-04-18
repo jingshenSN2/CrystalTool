@@ -75,7 +75,7 @@ class Graph:
         nx.draw_networkx_edge_labels(self.g, pos, edge_labels=edge_label, ax=axes)
         axes.axis('off')
 
-    def draw_3d_graph(self, fig, highlight=None):
+    def draw_3d_graph(self, fig, highlight=[]):
         """用matlotlib画三维图"""
         points = self.get_node_attributes('location')
         label = self.get_node_attributes('label')
