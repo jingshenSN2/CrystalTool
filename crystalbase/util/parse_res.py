@@ -59,5 +59,6 @@ def parseFromRES(filename: str, multilayer=(False, False, False), remove_extra=T
             cell.add_atom(element, label, x, y, z, intensity)
     cell.calc_neighbors()
     if remove_extra:
+        # 有时RES文件中CNO判断不准，不能按照元素移除多余的键
         cell.remove_extra_connection()
     return cell

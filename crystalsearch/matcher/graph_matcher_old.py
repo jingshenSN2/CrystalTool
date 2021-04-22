@@ -33,7 +33,7 @@ class GraphMatcherOld:
         self.loss_atom = loss_atom
 
     def get_result(self, threshold, sort_by):
-        """完整匹配，依次匹配全部的删去k个原子的子图"""
+        """旧匹配算法，依次匹配全部的删去k个原子的子图"""
         gm = GraphMatcherVF2(self.target, self.query)
         ret = gm.get_result(threshold, sort_by)
         if ret.is_matched:
@@ -41,15 +41,18 @@ class GraphMatcherOld:
         subgraph_dict = shrink({self.query: 1})
         for i in range(min(self.loss_atom, len(self.query.nodes()))):
             if len(subgraph_dict) > 2000:
+                # 子图数太多，终止匹配
                 break
             for sub in subgraph_dict:
                 if subgraph_dict[sub] == 1:
+                    # 已匹配过该子图，跳过
                     return
                 subgraph_dict[sub] = 1
                 gm = GraphMatcherVF2(self.target, sub)
                 ret = gm.get_result(threshold, sort_by)
                 if ret.is_matched:
+                    # 匹配成功
                     ret.calculate_match_result(self.query)
                     return ret
-            subgraph_dict = shrink(subgraph_dict)
+            subgraph_dict = shrink(subgraph_dict)  # 生成更小子图
         return Result(False, self.target, self.query, [], {}, [])

@@ -9,6 +9,7 @@ def match_one(res_file, pdb_file, use_old_algorithm: bool, max_loss_atom: int, m
     target = cellToGraph(parseFromRES(res_file, multilayer))
     query = cellToGraph(parseFromPDB(pdb_file)).max_subgraph()
     if use_old_algorithm:
+        # 旧算法
         gm = GraphMatcherOld(target, query, loss_atom=max_loss_atom)
     else:
         gm = GraphMatcherVF2(target, query, loss_atom=max_loss_atom)
