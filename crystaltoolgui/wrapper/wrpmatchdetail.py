@@ -34,7 +34,7 @@ class MatchDetail(QWidget):
             self.result = result
         if pair is not None:
             self.pair = pair
-        self._draw_2d()
+            self._draw_2d()
         self._draw_3d()
 
     def _draw_2d(self):
@@ -49,10 +49,10 @@ class MatchDetail(QWidget):
         self.canvas_2d.draw()
 
     def _draw_3d(self):
-        if self.result is None or self.pair is None:
-            print('未找到绘图所需的匹配结果和映射关系...')
+        if self.result is None:
+            print('未找到绘图所需的匹配结果...')
             return
-        self.result.target.draw_3d_graph(self.figure_3d, highlight=self.pair)
+        self.result.target.draw_3d_graph(self.figure_3d, highlight=self.pair if self.pair is not None else [])
         self.canvas_3d.draw()
 
     def project_direction(self):

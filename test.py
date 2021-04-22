@@ -1,9 +1,10 @@
+
 import matplotlib.pyplot as plt
 
 from crystalbase import parseFromRES
 from crystalsearch import cellToGraph
 
-target = cellToGraph(parseFromRES('./test3/0620_expF_0_7_expS_1_4_0620_b.res', multilayer=(False, False, True)))
+target = cellToGraph(parseFromRES('./test3/0620_expF_0_7_expS_1_4_0620_b.res', multilayer=(False, False, False)))
 fig = plt.Figure()
 target.draw_3d_graph(fig)
 fig.savefig('./11.png')

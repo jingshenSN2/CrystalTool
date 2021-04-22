@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class Ui_tabmatchdetail(object):
     def setupUi(self, tabmatchdetail):
@@ -40,6 +40,8 @@ class Ui_tabmatchdetail(object):
         self.l_detaial_3d.setObjectName("l_detaial_3d")
         self.vL_detail_3d.addWidget(self.l_detaial_3d)
         self.horizontalLayout.addLayout(self.vL_detail_3d)
+        self.horizontalLayout.setStretch(0, 1)
+        self.horizontalLayout.setStretch(2, 1)
 
         self.retranslateUi(tabmatchdetail)
         QtCore.QMetaObject.connectSlotsByName(tabmatchdetail)

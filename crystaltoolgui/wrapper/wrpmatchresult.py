@@ -50,6 +50,9 @@ class MatchResult(QWidget):
         self.selected_result = self.results[row_index]
         if not self.results[row_index].is_matched:
             self.ui.tV_results_detail.setModel(sim)
+            from ..main import MainUI
+            MainUI().tabmatchdetail.update_and_draw(self.selected_result)
+            MainUI().tab.setCurrentIndex(4)
             return
         detail = self.results[row_index].results
         sim.setRowCount(len(detail))

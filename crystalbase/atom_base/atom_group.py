@@ -74,11 +74,12 @@ class AtomGroup:
             r[2, 2] = c * np.sqrt(volume) / sing
             self.rotation_matrix = r
 
-    def __init__(self, name, multilayer=(True, True, True)):
+    def __init__(self, name, multilayer=(False, False, False)):
         """初始化AtomGroup类成员"""
         self.name = name
         self.atom_index, self.atom_mass, self.max_distances, self.max_connect = getAtomProperties()
         self.cell_parameter = self.CellParameter()
+        self.syms = []
         self.multilayer = multilayer
         self.atom_count = 0
         self.atom_dict = dict()
@@ -89,28 +90,56 @@ class AtomGroup:
         """设置晶胞参数"""
         self.cell_parameter.set_parameter(a, b, c, alpha, beta, gamma)
 
+    def set_symmetry(self, syms):
+        self.syms = syms
+
+    def _syms_atom(self, x, y, z):
+        """解析对称性，添加原子"""
+        atoms = [(x, y, z)]
+        if len(self.syms) == 0:
+            return atoms
+        for sym in self.syms:
+            new_atoms = []
+            for a in atoms:
+                cord = {'X': a[0], 'Y': a[1], 'Z': a[2]}
+                new_a = list(a)
+                for i in range(3):
+                    s = sym[i]
+                    l_s = len(s)
+                    if l_s == 1:  # 对称性类似X的情况
+                        new_a[i] = cord[s]
+                    elif l_s == 2:  # 对称性类似-X的情况
+                        new_a[i] = -cord[s[-1]]
+                    else:
+                        for symbol in ['+', '-']:
+                            if symbol in s:  # 对称性类似0.25+X的情况
+                                scale, c = s.split(symbol)
+                                try:
+                                    scale = float(scale)
+                                except ValueError:  # 对称性类似1/2+X的情况
+                                    a, b = map(int, scale.split('/'))
+                                    scale = a / b
+                                new_a[i] = scale + (cord[c] if symbol == '+' else -cord[c])
+                new_atoms.append(tuple(new_a))
+            atoms.extend(new_atoms)
+        return atoms
+
     def add_atom(self, element, index, x, y, z, intensity):
         """添加新原子"""
-        xyz_list = [(x, y, z)]
-        if self.multilayer[0]:
-            temp_list = []
-            for xyz in xyz_list:
-                temp_list.append(tuple([xyz[0] + 1, xyz[1], xyz[2]]))
-            xyz_list.extend(temp_list)
-        if self.multilayer[1]:
-            temp_list = []
-            for xyz in xyz_list:
-                temp_list.append(tuple([xyz[0], xyz[1] + 1, xyz[2]]))
-            xyz_list.extend(temp_list)
-        if self.multilayer[2]:
-            temp_list = []
-            for xyz in xyz_list:
-                temp_list.append(tuple([xyz[0], xyz[1], xyz[2] + 1]))
-            xyz_list.extend(temp_list)
+        xyz_list = self._syms_atom(x, y, z)
+        for i in range(3):
+            if self.multilayer[i]:
+                temp_list = []
+                for xyz in xyz_list:
+                    new_xyz = list(xyz)
+                    new_xyz[i] += 1
+                    temp_list.append(tuple(new_xyz))
+                xyz_list.extend(temp_list)
+
         for xyz in xyz_list:
-            new_xyz = self.cell_parameter.coordinate_transform(xyz[0], xyz[1], xyz[2])
+            new_xyz = self.cell_parameter.coordinate_transform(*xyz)
             self.atom_dict[self.atom_count] = Atom(element, index, self.atom_index[element], self.atom_mass[element],
-                                                   new_xyz[0], new_xyz[1], new_xyz[2], intensity)
+                                                   *new_xyz, intensity)
             self.atom_count += 1
 
     def distance_judge(self, atom1: Atom, atom2: Atom):

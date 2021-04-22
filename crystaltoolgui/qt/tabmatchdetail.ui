@@ -13,17 +13,17 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <item>
-    <layout class="QVBoxLayout" name="vL_detail_2d">
-     <item>
-      <layout class="QHBoxLayout" name="hL_detail_2d">
-       <item>
-        <widget class="QLabel" name="l_detail_2d">
-         <property name="text">
-          <string>二维投影图</string>
-         </property>
-        </widget>
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,1">
+      <item>
+          <layout class="QVBoxLayout" name="vL_detail_2d">
+              <item>
+                  <layout class="QHBoxLayout" name="hL_detail_2d">
+                      <item>
+                          <widget class="QLabel" name="l_detail_2d">
+                              <property name="text">
+                                  <string>二维投影图</string>
+                              </property>
+                          </widget>
        </item>
        <item>
         <widget class="QLineEdit" name="lE_detail_2d">
