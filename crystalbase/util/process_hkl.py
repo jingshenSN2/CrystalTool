@@ -71,8 +71,15 @@ def _edit_line(line, method, param):
         symbol = abs(a) / a
         return symbol * pow(symbol * a, param)
 
-    new_intensity = smart_exp(intensity_f)
-    new_sigma = smart_exp(sigma_f)
+    new_intensity, new_sigma = intensity_f, sigma_f
+    if method == 1:  # 强度幂（F+sigma）
+        new_intensity, new_sigma = smart_exp(intensity_f), smart_exp(sigma_f)
+    elif method == 2:  # 强度幂（F）
+        new_intensity = smart_exp(intensity_f)
+    elif method == 3:  # 强度幂（sigma）
+        new_sigma = smart_exp(sigma_f)
+    elif method == 4:  # 强度线性缩放（F+sigma）
+        new_intensity, new_sigma = intensity_f / param, sigma_f / param
 
     # 强度替换成新的
     new_line = new_line.replace(intensity, '%.2f' % new_intensity, 1)
