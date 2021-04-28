@@ -17,7 +17,6 @@ class ResMatcher(QWidget):
         self.ui.setupUi(self)
         self.match_signal.connect(self.set_process)
         self.ui.pB_match_choose_res.clicked.connect(self.open_res)
-        self.ui.pB_match_delete_res.clicked.connect(self.delete_selected_res)
         self.ui.pB_pdb.clicked.connect(self.open_pdb)
         self.ui.pB_match_start.clicked.connect(self.match)
 
@@ -72,11 +71,6 @@ class ResMatcher(QWidget):
             return
         self.ui.l_pdb.setText('已选%s' % self.pdb_file.split('/')[-1])
 
-    def delete_selected_res(self):
-        for index in self.ui.lV_match_res.selectedIndexes():
-            self.ui.lV_match_res.model().removeRow(index.row())
-            self.res_files.pop(index.row())
-
     @property
     def use_old_algorithm(self):
         return self.ui.rB_old_algorithm.isChecked()
@@ -98,6 +92,8 @@ class ResMatcher(QWidget):
     @property
     def report_features(self):
         features = []
+        if self.ui.cB_Tm.isChecked():
+            features.append('Tm')
         if self.ui.cB_Nm.isChecked():
             features.append('Nm')
         if self.ui.cB_Rwm.isChecked():

@@ -14,7 +14,7 @@ def _copy(src, dst):
     dst_file.close()
 
 
-def solve_hkl(hkl_file: str, ins_file: str, program='shelxt.exe'):
+def solve_hkl(hkl_file: str, ins_file: str, program='shelxt.exe', params=''):
     # 打开shelxt计算临时路径
     temp_path = os.path.dirname(__file__) + '/../../.temp/'
     hkl_path, hkl_full_name = os.path.split(hkl_file)
@@ -32,18 +32,19 @@ def solve_hkl(hkl_file: str, ins_file: str, program='shelxt.exe'):
         if file.endswith('.res'):
             old_res.add(file)
     # 执行shelxt，阻塞式
-    subprocess.Popen([program, new_name], cwd=temp_path, shell=True).wait()
+    command = [program, new_name]
+    shelxt_params = params.split(' ')
+    command.extend(shelxt_params)
+    subprocess.Popen(command, cwd=temp_path, shell=True).wait()
     # 删除临时hkl和ins
     os.remove('%s.hkl' % output_path)
     os.remove('%s.ins' % output_path)
+    os.remove('%s.lxt' % output_path)
     # 筛选出新RES文件并返回
     new_res = []
     for file in os.listdir(temp_path):
         if file.endswith('.res') and file not in old_res:
             new_res.append(file)
-    if len(new_res) == 0:
-        # 求解失败则移除日志
-        os.remove('%s.lxt' % output_path)
     return new_res
 
 

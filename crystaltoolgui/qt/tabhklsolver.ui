@@ -40,10 +40,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pB_solve_delete_hkl">
-         <property name="text">
-          <string>删除所选</string>
-         </property>
+        <widget class="QLabel" name="l_solve_hkl_count">
+            <property name="text">
+                <string>已选0个</string>
+            </property>
         </widget>
        </item>
       </layout>
@@ -71,28 +71,35 @@
          </property>
         </widget>
        </item>
-       <item alignment="Qt::AlignVCenter">
-        <widget class="QLabel" name="l_solve_ins">
-         <property name="text">
-          <string>未选择INS文件</string>
-         </property>
-        </widget>
-       </item>
+          <item alignment="Qt::AlignVCenter">
+              <widget class="QLabel" name="l_solve_ins">
+                  <property name="text">
+                      <string>未选择INS文件</string>
+                  </property>
+              </widget>
+          </item>
       </layout>
      </item>
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
+        <item>
+            <widget class="QLineEdit" name="lE_solve_xtparam">
+                <property name="placeholderText">
+                    <string>此处输入shelxt运行时参数</string>
+                </property>
+            </widget>
+        </item>
+        <item>
+            <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                    <size>
+                        <width>20</width>
+                        <height>40</height>
+                    </size>
+                </property>
+            </spacer>
+        </item>
      <item>
       <layout class="QHBoxLayout" name="hL_solve">
        <item>
@@ -139,22 +146,15 @@
        </property>
       </widget>
      </item>
-     <item>
-         <widget class="QListView" name="lV_solve_res">
-             <property name="selectionMode">
-                 <enum>QAbstractItemView::ExtendedSelection</enum>
-             </property>
-         </widget>
-     </item>
+        <item>
+            <widget class="QListView" name="lV_solve_res">
+                <property name="selectionMode">
+                    <enum>QAbstractItemView::ExtendedSelection</enum>
+                </property>
+            </widget>
+        </item>
      <item>
       <layout class="QHBoxLayout" name="hL_solve_pB2">
-       <item>
-        <widget class="QPushButton" name="pB_solve_delete_res">
-         <property name="text">
-          <string>删除所选</string>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QPushButton" name="pB_solve_send">
          <property name="text">
@@ -163,11 +163,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="cB_solve_autosend">
-         <property name="text">
-          <string>自动</string>
-         </property>
-        </widget>
+           <widget class="QLabel" name="l_solve_res_count">
+               <property name="text">
+                   <string>总计0个</string>
+               </property>
+           </widget>
        </item>
       </layout>
      </item>

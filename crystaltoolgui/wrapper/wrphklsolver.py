@@ -17,8 +17,6 @@ class HklSolver(QWidget):
         self.ui.setupUi(self)
         self.solve_signal.connect(self.set_process)
         self.ui.pB_solve_choose_hkl.clicked.connect(self.open_hkl)
-        self.ui.pB_solve_delete_hkl.clicked.connect(self.delete_selected_hkl)
-        self.ui.pB_solve_delete_res.clicked.connect(self.delete_selected_res)
         self.ui.pB_solve_ins.clicked.connect(self.open_ins)
         self.ui.pB_solve.clicked.connect(self.solve)
         self.ui.pB_solve_send.clicked.connect(self.send_selected)
@@ -38,6 +36,7 @@ class HklSolver(QWidget):
         self.set_text('开始求解...')
         thread = SolveThread(self.hkl_files, self.ins_files, self.solve_signal)
         thread.start()
+        self.ui.pB_solve.setEnabled(False)
 
     def set_process(self, process: int, new_res: list):
         if self.job_count == 0:
@@ -47,11 +46,13 @@ class HklSolver(QWidget):
         for file in new_res:
             if file not in self.res_files:
                 self.res_files.append(file)
+        self.ui.l_solve_res_count.setText('总计%d个' % len(self.res_files))
         slm = QStringListModel()
         slm.setStringList(self.res_files)
         self.ui.lV_solve_res.setModel(slm)
         if process == self.job_count:
             self.set_text('求解完成')
+            self.ui.pB_solve.setEnabled(True)
 
     def set_text(self, text: str):
         self.ui.l_solve.setText(text)
@@ -59,6 +60,7 @@ class HklSolver(QWidget):
 
     def update_hkl(self, hkl_files):
         self.hkl_files = hkl_files
+        self.ui.l_solve_hkl_count.setText('已选%d个' % len(hkl_files))
         slm = QStringListModel()
         slm.setStringList(self.hkl_files)
         self.ui.lV_solve_hkl.setModel(slm)
@@ -70,36 +72,17 @@ class HklSolver(QWidget):
         self.update_hkl(hkl_files)
 
     def open_ins(self):
-        self.ins_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的INS文件', directory='./', filter='Ins Files (*.ins)')
+        self.ins_files, success = QFileDialog.getOpenFileNames(caption='选择衍射结构的INS文件', directory='./',
+                                                               filter='Ins Files (*.ins)')
         if not success:
             return
         self.ui.l_solve_ins.setText('已选%s个INS文件' % len(self.ins_files))
         self.ui.l_solve_ins.setToolTip('\n'.join(self.ins_files))
 
-    def delete_selected_hkl(self):
-        model = self.ui.lV_solve_hkl.model()
-        for index in self.ui.lV_solve_hkl.selectedIndexes():
-            model.removeRow(index.row())
-        self.hkl_files.clear()
-        for row in range(model.rowCount()):
-            data = model.data(model.index(row), Qt.DisplayRole)
-            self.hkl_files.append(data)
-
-    def delete_selected_res(self):
-        model = self.ui.lV_solve_res.model()
-        for index in self.ui.lV_solve_res.selectedIndexes():
-            model.removeRow(index.row())
-        self.res_files.clear()
-        for row in range(model.rowCount()):
-            data = model.data(model.index(row), Qt.DisplayRole)
-            self.res_files.append(data)
-
     def send_selected(self):
-        res_files = []
-        for index in self.ui.lV_solve_res.selectedIndexes():
-            model = self.ui.lV_solve_res.model()
-            data = model.data(index, Qt.DisplayRole)
-            res_files.append(data)
-            model.removeRow(index.row())
         from .wrpresmatcher import ResMatcher
-        ResMatcher().update_res(res_files)
+        ResMatcher().update_res(self.res_files)
+
+    @property
+    def shelxt_params(self):
+        return self.ui.lE_solve_xtparam.text()

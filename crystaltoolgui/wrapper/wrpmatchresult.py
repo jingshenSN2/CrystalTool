@@ -28,13 +28,14 @@ class MatchResult(QWidget):
         sim.setHorizontalHeaderLabels(self.header)
         sim.setRowCount(result_len)
 
-        def add_one_row(sim, result, row_index):
+        def add_one_row(sim, result, row_index, stat='avg'):
             row_data = [result.target.name, '是' if result.is_matched else '否']
             for feat in self.report_feats:
-                if feat == 'Nm':
-                    row_data.append('%d' % result.best_feature[feat])
+                if feat in ['Nm', 'Tm']:
+                    row_data.append('%d' % (result.best_feature[feat] if stat == 'best' else result.avg_feature[feat]))
                 else:
-                    row_data.append('%.1f%%' % (result.best_feature[feat] * 100))
+                    row_data.append(
+                        '%.1f%%' % ((result.best_feature[feat] if stat == 'best' else result.avg_feature[feat]) * 100))
             for j in range(len(row_data)):
                 sim.setData(sim.index(row_index, j), row_data[j])
             print('\t'.join(row_data))

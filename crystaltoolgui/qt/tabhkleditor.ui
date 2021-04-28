@@ -40,10 +40,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pB_editor_delect_origin">
-         <property name="text">
-          <string>删除所选</string>
-         </property>
+        <widget class="QLabel" name="l_editor_count">
+            <property name="text">
+                <string>已选0个</string>
+            </property>
         </widget>
        </item>
       </layout>
@@ -93,7 +93,7 @@
        </item>
        <item>
         <property name="text">
-         <string>temp</string>
+            <string>待补充</string>
         </property>
        </item>
       </widget>
@@ -182,13 +182,6 @@
      <item>
       <layout class="QHBoxLayout" name="hL_editor_pB2">
        <item>
-        <widget class="QPushButton" name="pB_editor_reselect">
-         <property name="text">
-          <string>继续编辑所选</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pB_editor_send">
          <property name="text">
           <string>发送到求解器</string>
@@ -196,11 +189,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="cB_editor_autosend">
-         <property name="text">
-          <string>自动</string>
-         </property>
-        </widget>
+           <widget class="QLabel" name="l_editor_new_count">
+               <property name="text">
+                   <string>总计0个</string>
+               </property>
+           </widget>
        </item>
       </layout>
      </item>

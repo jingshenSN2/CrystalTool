@@ -21,6 +21,7 @@ class Result:
         self.rotation = None
         self.threshold = threshold
         self.sort_by = sort_by
+        self.avg_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
         self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
         self.results = []
         if self.is_matched:
@@ -34,9 +35,13 @@ class Result:
         """
         if base_query is not None:
             self.query = base_query
+        self.avg_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
         self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
         self.results.clear()
-        # 计算匹配上次数
+        # 只保留匹配上原子数最多的那些结果
+        max_nm = max([len(p.keys()) for p in self.match_pairs])
+        self.match_pairs = [p for p in self.match_pairs if len(p.keys()) == max_nm]
+        # 计算匹配上次数Tm
         tm_count = 0
         if 'Tm' in self.threshold:
             tm = self.threshold['Tm']
@@ -51,9 +56,10 @@ class Result:
                 self.is_matched = False
                 return
 
+        match_count = len(self.match_pairs)
         for p in self.match_pairs:
             # 计算评价指标
-            feats = {'Tm': -1, 'pair': p, 'Nm': len(p.keys()),
+            feats = {'Tm': tm_count, 'pair': p, 'Nm': len(p.keys()),
                      'Rwm': sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g]),
                      'Rwe2': sum([p[k].aindex ** 2 for k in p]) / sum([atom.aindex ** 2 for atom in self.query.g]),
                      'Ram': 1 - pow(sum([(k.mass - p[k].mass) ** 2 for k in p]) / sum([p[k].mass ** 2 for k in p]),
@@ -67,9 +73,10 @@ class Result:
                 if self.threshold[k] > feats[k]:
                     flag = False
             if flag:
-                # 更新结果到best_feature
+                # 更新结果到avg_feature和best_feature
                 for k in self.best_feature:
                     self.best_feature[k] = max(self.best_feature[k], feats[k])
+                    self.avg_feature[k] += feats[k] / match_count
                 self.results.append(feats)
 
         def sort_key(r):

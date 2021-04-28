@@ -16,20 +16,19 @@ class HklEditor(QWidget):
         self.ui.setupUi(self)
         self.edit_signal.connect(self.set_process)
         self.ui.pB_editor_choose.clicked.connect(self.open_hkl)
-        self.ui.pB_editor_delect_origin.clicked.connect(self.delete_selected_origin)
         self.ui.pB_editor_start.clicked.connect(self.edit)
-        self.ui.pB_editor_reselect.clicked.connect(self.reselect)
         self.ui.pB_editor_send.clicked.connect(self.send_selected)
 
     def update_hkl(self, hkl_files):
         self.hkl_files = hkl_files
+        self.ui.l_editor_count.setText('已选%d个' % len(hkl_files))
         slm = QStringListModel()
         slm.setStringList(self.hkl_files)
         self.ui.lV_editor_origin.setModel(slm)
 
     def open_hkl(self):
         hkl_files, success = QFileDialog.getOpenFileNames(caption='选择HKL文件', directory='./',
-                                                              filter='Hkl Files (*.hkl)')
+                                                          filter='Hkl Files (*.hkl)')
         if not success:
             return
         self.update_hkl(hkl_files)
@@ -45,6 +44,7 @@ class HklEditor(QWidget):
         self.new_hkl_files.clear()
         thread = EditThread(self.hkl_files, self.edit_method, self.edit_params, self.edit_signal)
         thread.start()
+        self.ui.pB_editor_start.setEnabled(False)
 
     def set_process(self, process: int, new_hkl: list):
         if self.job_count == 0:
@@ -52,45 +52,22 @@ class HklEditor(QWidget):
         self.set_text('正在生成新HKL...已完成%d/%d' % (process, self.job_count))
         self.ui.bar_editor.setValue(int(process * 100 / self.job_count))
         for h in new_hkl:
-            if h not in self.new_hkl_files:
-                self.new_hkl_files.append(h)
+            self.new_hkl_files.append(h)
+        self.ui.l_editor_new_count.setText('总计%d个' % len(self.new_hkl_files))
         slm = QStringListModel()
         slm.setStringList(self.new_hkl_files)
         self.ui.lV_editor_modified.setModel(slm)
         if process == self.job_count:
             self.set_text('生成结束')
+            self.ui.pB_editor_start.setEnabled(True)
 
     def set_text(self, text: str):
         self.ui.l_editor_start.setText(text)
         self.ui.l_editor_start.repaint()
 
-    def delete_selected_origin(self):
-        model = self.ui.lV_editor_origin.model()
-        for index in self.ui.lV_editor_origin.selectedIndexes():
-            model.removeRow(index.row())
-        self.hkl_files.clear()
-        for row in range(model.rowCount()):
-            data = model.data(model.index(row), Qt.DisplayRole)
-            self.hkl_files.append(data)
-
-    def reselect(self):
-        hkl_files = []
-        for index in self.ui.lV_editor_modified.selectedIndexes():
-            model = self.ui.lV_editor_modified.model()
-            data = model.data(index, Qt.DisplayRole)
-            hkl_files.append(data)
-            model.removeRow(index.row())
-        self.update_hkl(hkl_files)
-
     def send_selected(self):
-        hkl_files = []
-        for index in self.ui.lV_editor_modified.selectedIndexes():
-            model = self.ui.lV_editor_modified.model()
-            data = model.data(index, Qt.DisplayRole)
-            hkl_files.append(data)
-            model.removeRow(index.row())
         from .wrphklsolver import HklSolver
-        HklSolver().update_hkl(hkl_files)
+        HklSolver().update_hkl(self.hkl_files)
 
     @property
     def has_files(self):
