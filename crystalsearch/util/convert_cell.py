@@ -1,10 +1,12 @@
-from ..graph import Graph
 from crystalbase import AtomGroup
+from ..graph import Graph
 
 
 def cellToGraph(cell: AtomGroup):
     """晶胞类转图类"""
     g = Graph(cell.name)
+    for k, v, in cell.shelxt_score.items():
+        g.info[k] = v
     for k in cell.atom_dict:
         # 将晶胞中所有原子作为图的节点
         atom = cell.atom_dict[k]

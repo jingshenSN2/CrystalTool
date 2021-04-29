@@ -33,9 +33,11 @@ class ResMatcher(QWidget):
             self.set_text('缺失文件')
             return
         self.set_text('开始求解...')
+        self.ui.bar_match.setValue(0)
         thread = MatchThread(self.res_files, self.pdb_file, self.use_old_algorithm, self.max_loss_atom,
                              self.multilayer, self.threshold, self.sort_by, self.match_signal)
         thread.start()
+        self.ui.pB_match_start.setEnabled(True)
 
     def set_process(self, process: int, results: list):
         if self.job_count == 0:
@@ -45,6 +47,7 @@ class ResMatcher(QWidget):
         self.results = results
         if process == self.job_count:
             self.set_text('求解完成')
+            self.ui.pB_match_start.setEnabled(True)
             from ..main import MainUI
             MainUI().tabmatchresult.update_result(self.results, self.report_features)
             MainUI().tab.setCurrentIndex(3)
@@ -104,6 +107,12 @@ class ResMatcher(QWidget):
             features.append('Ram')
         if self.ui.cB_Rc.isChecked():
             features.append('Rc')
+        if self.ui.cB_R1.isChecked():
+            features.append('R1')
+        if self.ui.cB_Rweak.isChecked():
+            features.append('Rweak')
+        if self.ui.cB_Alpha.isChecked():
+            features.append('Alpha')
         return features
 
     @property

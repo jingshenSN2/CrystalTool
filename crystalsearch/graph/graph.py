@@ -12,6 +12,7 @@ class Graph:
 
     def __init__(self, name, nx_graph=None):
         self.name = name
+        self.info = {}
         self.g = nx.Graph(nx_graph)
 
     def __len__(self):

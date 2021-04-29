@@ -34,6 +34,8 @@ class HklSolver(QWidget):
             self.set_text('缺失文件')
             return
         self.set_text('开始求解...')
+        self.res_files.clear()
+        self.ui.bar_solve.setValue(0)
         thread = SolveThread(self.hkl_files, self.ins_files, self.solve_signal)
         thread.start()
         self.ui.pB_solve.setEnabled(False)

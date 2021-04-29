@@ -23,7 +23,7 @@ def parseFromRES(filename: str, multilayer=(False, False, False), remove_extra=T
             pattern = re.compile('R1 (\\d+\\.\\d+), Rweak (\\d+\\.\\d+), Alpha (\\d+\\.\\d+)')
             match = re.search(pattern, line)
             if match:
-                r1, rweak, al = match.groups()
+                r1, rweak, al = map(float, match.groups())
                 cell.set_shelxt_score(r1, rweak, al)
                 index = i + 1
                 break

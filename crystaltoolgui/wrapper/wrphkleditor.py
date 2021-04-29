@@ -42,6 +42,7 @@ class HklEditor(QWidget):
             return
         self.set_text('开始编辑...')
         self.new_hkl_files.clear()
+        self.ui.bar_editor.setValue(0)
         thread = EditThread(self.hkl_files, self.edit_method, self.edit_params, self.edit_signal)
         thread.start()
         self.ui.pB_editor_start.setEnabled(False)

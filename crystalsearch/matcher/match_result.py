@@ -21,8 +21,11 @@ class Result:
         self.rotation = None
         self.threshold = threshold
         self.sort_by = sort_by
-        self.avg_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
-        self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
+        info = self.target.info
+        self.base_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0,
+                             'Rc': 0, 'R1': info['R1'], 'Rweak': info['Rweak'], 'Alpha': info['Alpha']}
+        self.avg_feature = self.base_feature.copy()
+        self.best_feature = self.base_feature.copy()
         self.results = []
         if self.is_matched:
             self.calculate_match_result()
@@ -35,8 +38,8 @@ class Result:
         """
         if base_query is not None:
             self.query = base_query
-        self.avg_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
-        self.best_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0, 'Rc': 0}
+        self.avg_feature = self.base_feature.copy()
+        self.best_feature = self.base_feature.copy()
         self.results.clear()
         # 只保留匹配上原子数最多的那些结果
         max_nm = max([len(p.keys()) for p in self.match_pairs])
@@ -63,7 +66,10 @@ class Result:
                      'Rwm': sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g]),
                      'Rwe2': sum([p[k].aindex ** 2 for k in p]) / sum([atom.aindex ** 2 for atom in self.query.g]),
                      'Ram': 1 - pow(sum([(k.mass - p[k].mass) ** 2 for k in p]) / sum([p[k].mass ** 2 for k in p]),
-                                    0.5)}
+                                    0.5),
+                     'R1': self.base_feature['R1'],
+                     'Rweak': self.base_feature['Rweak'],
+                     'Alpha': self.base_feature['Alpha']}
             feats['Rc'], self.rotation = coordinate_error(p)
             # 检查结果是否符合汇报阈值
             flag = True
@@ -74,9 +80,11 @@ class Result:
                     flag = False
             if flag:
                 # 更新结果到avg_feature和best_feature
-                for k in self.best_feature:
-                    self.best_feature[k] = max(self.best_feature[k], feats[k])
-                    self.avg_feature[k] += feats[k] / match_count
+                for k in feats:
+                    if k in self.base_feature:
+                        self.best_feature[k] = max(self.best_feature[k], feats[k])
+                    if k in self.avg_feature:
+                        self.avg_feature[k] += feats[k] / match_count
                 self.results.append(feats)
 
         def sort_key(r):
@@ -87,7 +95,7 @@ class Result:
                     print('%s不是有效的排序依据，已自动忽略' % s[1:])
                     continue
                 k = r[s[1:]]
-                key.append(k if s[0] == '+' else -k)
+                key.append(k if s[0] == '-' else k)
             return tuple(key)
 
         self.results.sort(key=sort_key)
