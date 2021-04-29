@@ -1,3 +1,5 @@
+import re
+
 from ..atom_base import AtomGroup
 
 
@@ -13,8 +15,21 @@ def parseFromRES(filename: str, multilayer=(False, False, False), remove_extra=T
     res.close()
     length = len(res_lines)
     index = 0
-    #  读取晶胞参数
+    #  读取shelxt求解评分
     for i in range(length):
+        line = res_lines[i].rstrip('\n')
+        if line.startswith('REM SHELXT'):
+            line = line.rstrip('\n')
+            pattern = re.compile('R1 (\\d+\\.\\d+), Rweak (\\d+\\.\\d+), Alpha (\\d+\\.\\d+)')
+            match = re.search(pattern, line)
+            if match:
+                r1, rweak, al = match.groups()
+                cell.set_shelxt_score(r1, rweak, al)
+                index = i + 1
+                break
+
+    #  读取晶胞参数
+    for i in range(index, length):
         line = res_lines[i].rstrip('\n')
         if line.startswith('CELL'):
             line = line.rstrip('\n')

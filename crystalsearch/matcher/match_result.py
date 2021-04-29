@@ -42,16 +42,16 @@ class Result:
         max_nm = max([len(p.keys()) for p in self.match_pairs])
         self.match_pairs = [p for p in self.match_pairs if len(p.keys()) == max_nm]
         # 计算匹配上次数Tm
-        tm_count = 0
+        tm_count = 1 if self.is_matched else 0
+        tm_set = set()
+        for p in self.match_pairs:
+            new_set = tm_set.union(set(p.keys()))
+            if len(new_set) - len(tm_set) >= 0.5 * len(p.keys()):
+                # 当某个映射有50%的原子与其他映射不同时，认为是单独的一个匹配
+                tm_set = new_set
+                tm_count += 1
         if 'Tm' in self.threshold:
             tm = self.threshold['Tm']
-            tm_set = set()
-            for p in self.match_pairs:
-                new_set = tm_set.union(set(p.keys()))
-                if len(new_set) - len(tm_set) >= 0.5 * len(p.keys()):
-                    # 当某个映射有50%的原子与其他映射不同时，认为是单独的一个匹配
-                    tm_set = new_set
-                    tm_count += 1
             if tm_count < tm:
                 self.is_matched = False
                 return

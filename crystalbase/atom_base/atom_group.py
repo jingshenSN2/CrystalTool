@@ -80,6 +80,7 @@ class AtomGroup:
         self.atom_index, self.atom_mass, self.max_distances, self.max_connect = getAtomProperties()
         self.cell_parameter = self.CellParameter()
         self.syms = []
+        self.shelxt_score = {'R1': 1, 'Rweak': 1, 'Alpha': 1}
         self.multilayer = multilayer
         self.atom_count = 0
         self.atom_dict = dict()
@@ -173,3 +174,8 @@ class AtomGroup:
                 for b, d in delete:
                     self.bond_dict.pop(b)
             self.connect_dict[k] = max_connect
+
+    def set_shelxt_score(self, r1, rweak, alpha):
+        self.shelxt_score['R1'] = r1
+        self.shelxt_score['Rweak'] = rweak
+        self.shelxt_score['Alpha'] = alpha
