@@ -102,26 +102,11 @@ class AtomGroup:
         for sym in self.syms:
             new_atoms = []
             for a in atoms:
-                cord = {'X': a[0], 'Y': a[1], 'Z': a[2]}
-                new_a = list(a)
-                for i in range(3):
-                    s = sym[i]
-                    l_s = len(s)
-                    if l_s == 1:  # 对称性类似X的情况
-                        new_a[i] = cord[s]
-                    elif l_s == 2:  # 对称性类似-X的情况
-                        new_a[i] = -cord[s[-1]]
-                    else:
-                        for symbol in ['+', '-']:
-                            if symbol in s:  # 对称性类似0.25+X的情况
-                                scale, c = s.split(symbol)
-                                try:
-                                    scale = float(scale)
-                                except ValueError:  # 对称性类似1/2+X的情况
-                                    a, b = map(int, scale.split('/'))
-                                    scale = a / b
-                                new_a[i] = scale + (cord[c] if symbol == '+' else -cord[c])
-                new_atoms.append(tuple(new_a))
+                X, Y, Z = a[0], a[1], a[2]
+                X1 = eval(sym[0])
+                Y1 = eval(sym[1])
+                Z1 = eval(sym[2])
+                new_atoms.append(tuple([X1, Y1, Z1]))
             atoms.extend(new_atoms)
         return atoms
 
@@ -132,9 +117,9 @@ class AtomGroup:
             if self.multilayer[i]:
                 temp_list = []
                 for xyz in xyz_list:
-                    new_xyz = list(xyz)
-                    new_xyz[i] += 1
-                    temp_list.append(tuple(new_xyz))
+                    new_xyz1 = list(xyz)
+                    new_xyz1[i] -= 1
+                    temp_list.append(tuple(new_xyz1))
                 xyz_list.extend(temp_list)
 
         for xyz in xyz_list:
@@ -147,10 +132,7 @@ class AtomGroup:
         """辅助函数，判断两原子距离是否满足max_distances"""
         dist = (atom2.x - atom1.x) ** 2 + (atom2.y - atom1.y) ** 2 + (atom2.z - atom1.z) ** 2
         atom_pair = frozenset([atom1.element, atom2.element])
-        if dist <= self.max_distances[atom_pair] ** 2:
-            return True, dist
-        else:
-            return False, dist
+        return (dist <= self.max_distances[atom_pair] ** 2), dist
 
     def calc_neighbors(self):
         """计算原子键联关系"""
