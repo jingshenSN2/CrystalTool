@@ -36,7 +36,7 @@ class HklSolver(QWidget):
         self.set_text('开始求解...')
         self.res_files.clear()
         self.ui.bar_solve.setValue(0)
-        thread = SolveThread(self.hkl_files, self.ins_files, self.solve_signal)
+        thread = SolveThread(self.hkl_files, self.ins_files, self.solve_exe, self.solve_params, self.solve_signal)
         thread.start()
         self.ui.pB_solve.setEnabled(False)
 
@@ -86,5 +86,9 @@ class HklSolver(QWidget):
         ResMatcher().update_res(self.res_files)
 
     @property
-    def shelxt_params(self):
-        return self.ui.lE_solve_xtparam.text()
+    def solve_exe(self):
+        return self.ui.cB_solve_program.currentText()
+
+    @property
+    def solve_params(self):
+        return self.ui.lE_solve_param.text()

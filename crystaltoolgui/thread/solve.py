@@ -4,10 +4,12 @@ from crystalbase import solve_hkl
 
 
 class SolveThread(threading.Thread):
-    def __init__(self, hkl_files, ins_files, signal):
+    def __init__(self, hkl_files, ins_files, exe, params, signal):
         super(SolveThread, self).__init__()
         self.hkl_files = hkl_files
         self.ins_files = ins_files
+        self.exe = exe
+        self.params = params
         self.signal = signal
 
     def run(self):
@@ -15,6 +17,6 @@ class SolveThread(threading.Thread):
         process = 0
         for ins_file in self.ins_files:
             for hkl_file in self.hkl_files:
-                new_res = solve_hkl(hkl_file, ins_file)
+                new_res = solve_hkl(hkl_file, ins_file, self.exe, self.params)
                 process += 1
                 self.signal.emit(process, new_res)
