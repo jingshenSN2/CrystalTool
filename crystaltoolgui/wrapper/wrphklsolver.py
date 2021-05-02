@@ -82,8 +82,9 @@ class HklSolver(QWidget):
         self.ui.l_solve_ins.setToolTip('\n'.join(self.ins_files))
 
     def send_selected(self):
-        from .wrpresmatcher import ResMatcher
-        ResMatcher().update_res(self.res_files)
+        from ..main import MainUI
+        MainUI().tabresmatcher.update_res(self.res_files)
+        MainUI().setMatchTab()
 
     @property
     def solve_exe(self):

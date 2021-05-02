@@ -53,7 +53,7 @@ class MatchResult(QWidget):
             self.ui.tV_results_detail.setModel(sim)
             from ..main import MainUI
             MainUI().tabmatchdetail.update_and_draw(self.selected_result)
-            MainUI().tab.setCurrentIndex(4)
+            MainUI().setMatchDetailTab()
             return
         detail = self.results[row_index].results
         sim.setRowCount(len(detail))
@@ -61,7 +61,7 @@ class MatchResult(QWidget):
         def add_one_detail(sim, result, row_index):
             row_data = []
             for feat in self.report_feats:
-                if feat == 'Nm':
+                if feat in ['Nm', 'Tm']:
                     row_data.append('%d' % result[feat])
                 else:
                     row_data.append('%.1f%%' % (result[feat] * 100))
@@ -77,7 +77,7 @@ class MatchResult(QWidget):
         self.selected_pair = self.selected_result.results[row_index]['pair']
         from ..main import MainUI
         MainUI().tabmatchdetail.update_and_draw(self.selected_result, self.selected_pair)
-        MainUI().tab.setCurrentIndex(4)
+        MainUI().setMatchDetailTab()
 
     def to_res(self):
         # TODO

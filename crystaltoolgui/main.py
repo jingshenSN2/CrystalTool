@@ -18,5 +18,20 @@ class MainUI(QMainWindow):
         self.tab.addTab(self.tabhklsolver, 'HKL求解器')
         self.tab.addTab(self.tabresmatcher, 'RES匹配器')
         self.tab.addTab(self.tabmatchresult, '匹配结果')
-        self.tab.addTab(self.tabmatchdetail, '匹配结果详情')
+        self.tab.addTab(self.tabmatchdetail, '可视化')
         self.setCentralWidget(self.tab)
+
+    def setEditTab(self):
+        self.tab.setCurrentIndex(0)
+
+    def setSolveTab(self):
+        self.tab.setCurrentIndex(1)
+
+    def setMatchTab(self):
+        self.tab.setCurrentIndex(2)
+
+    def setMatchResultTab(self):
+        self.tab.setCurrentIndex(3)
+
+    def setMatchDetailTab(self):
+        self.tab.setCurrentIndex(4)

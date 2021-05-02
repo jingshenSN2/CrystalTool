@@ -42,15 +42,15 @@ class ResMatcher(QWidget):
     def set_process(self, process: int, results: list):
         if self.job_count == 0:
             return
-        self.set_text('正在求解...已完成%d/%d' % (process, self.job_count))
+        self.set_text('正在匹配...已完成%d/%d' % (process, self.job_count))
         self.ui.bar_match.setValue(int(process * 100 / self.job_count))
         self.results = results
         if process == self.job_count:
-            self.set_text('求解完成')
+            self.set_text('匹配完成')
             self.ui.pB_match_start.setEnabled(True)
             from ..main import MainUI
             MainUI().tabmatchresult.update_result(self.results, self.report_features)
-            MainUI().tab.setCurrentIndex(3)
+            MainUI().setMatchResultTab()
 
     def set_text(self, text: str):
         self.ui.l_match_start.setText(text)

@@ -67,8 +67,9 @@ class HklEditor(QWidget):
         self.ui.l_editor_start.repaint()
 
     def send_selected(self):
-        from .wrphklsolver import HklSolver
-        HklSolver().update_hkl(self.hkl_files)
+        from ..main import MainUI
+        MainUI().tabhklsolver.update_hkl(self.hkl_files)
+        MainUI().setSolveTab()
 
     @property
     def has_files(self):
