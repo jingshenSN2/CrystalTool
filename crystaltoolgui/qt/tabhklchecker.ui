@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>tabhklchecker</class>
+    <widget class="QWidget" name="tabhklchecker">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>922</width>
+                <height>585</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Form</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,0,1">
+            <item>
+                <layout class="QVBoxLayout" name="vL_check_1" stretch="0,0">
+                    <item>
+                        <widget class="QLabel" name="l_check_hkl">
+                            <property name="text">
+                                <string>HKL文件</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QTextBrowser" name="tB_check_view"/>
+                    </item>
+                </layout>
+            </item>
+            <item>
+                <widget class="Line" name="line">
+                    <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                    </property>
+                </widget>
+            </item>
+            <item>
+                <layout class="QVBoxLayout" name="vL_check_2" stretch="0,0,0">
+                    <property name="spacing">
+                        <number>9</number>
+                    </property>
+                    <property name="topMargin">
+                        <number>25</number>
+                    </property>
+                    <item>
+                        <layout class="QVBoxLayout" name="vL_check_method">
+                            <item>
+                                <widget class="QRadioButton" name="rB_check_pattern">
+                                    <property name="text">
+                                        <string>模式检查</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <layout class="QHBoxLayout" name="hL_check_pattern">
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_h1">
+                                            <property name="text">
+                                                <string>h</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_k1">
+                                            <property name="text">
+                                                <string>k</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_l1">
+                                            <property name="text">
+                                                <string>l</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLabel" name="l_check_pattern">
+                                            <property name="text">
+                                                <string>~=</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_h2">
+                                            <property name="text">
+                                                <string>h</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_k2">
+                                            <property name="text">
+                                                <string>k</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_l2">
+                                            <property name="text">
+                                                <string>l</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </item>
+                            <item>
+                                <widget class="QRadioButton" name="rB_check_seq">
+                                    <property name="text">
+                                        <string>序列检查</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <layout class="QHBoxLayout" name="hL_check_seq">
+                                    <item>
+                                        <widget class="QLabel" name="l_check_seq">
+                                            <property name="text">
+                                                <string>hkl:</string>
+                                            </property>
+                                            <property name="alignment">
+                                                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_seqh">
+                                            <property name="text">
+                                                <string>h</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_seqk">
+                                            <property name="text">
+                                                <string>0</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QLineEdit" name="lE_check_seql">
+                                            <property name="text">
+                                                <string>0</string>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <spacer name="verticalSpacer">
+                            <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                                <size>
+                                    <width>20</width>
+                                    <height>40</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" name="hL_check_bt">
+                            <item>
+                                <widget class="QPushButton" name="pB_check_choose">
+                                    <property name="text">
+                                        <string>选择HKL文件</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QPushButton" name="pB_check_start">
+                                    <property name="text">
+                                        <string>开始检查</string>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>

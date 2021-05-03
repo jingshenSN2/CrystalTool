@@ -9,11 +9,13 @@ class MainUI(QMainWindow):
         super().__init__()
         self.setWindowTitle('CrystalTool')
         self.tab = QTabWidget()
+        self.tabhklchecker = HklChecker()
         self.tabhkleditor = HklEditor()
         self.tabhklsolver = HklSolver()
         self.tabresmatcher = ResMatcher()
         self.tabmatchresult = MatchResult()
         self.tabmatchdetail = MatchDetail()
+        self.tab.addTab(self.tabhklchecker, 'HKL检查器')
         self.tab.addTab(self.tabhkleditor, 'HKL编辑器')
         self.tab.addTab(self.tabhklsolver, 'HKL求解器')
         self.tab.addTab(self.tabresmatcher, 'RES匹配器')
@@ -21,17 +23,20 @@ class MainUI(QMainWindow):
         self.tab.addTab(self.tabmatchdetail, '可视化')
         self.setCentralWidget(self.tab)
 
-    def setEditTab(self):
+    def setCheckTab(self):
         self.tab.setCurrentIndex(0)
 
-    def setSolveTab(self):
+    def setEditTab(self):
         self.tab.setCurrentIndex(1)
 
-    def setMatchTab(self):
+    def setSolveTab(self):
         self.tab.setCurrentIndex(2)
 
-    def setMatchResultTab(self):
+    def setMatchTab(self):
         self.tab.setCurrentIndex(3)
 
-    def setMatchDetailTab(self):
+    def setMatchResultTab(self):
         self.tab.setCurrentIndex(4)
+
+    def setMatchDetailTab(self):
+        self.tab.setCurrentIndex(5)

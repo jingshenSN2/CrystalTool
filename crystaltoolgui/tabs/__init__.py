@@ -1,3 +1,4 @@
+from .tabhklchecker import Ui_tabhklchecker
 from .tabhkleditor import Ui_tabhkleditor
 from .tabhklsolver import Ui_tabhklsolver
 from .tabmatchdetail import Ui_tabmatchdetail
