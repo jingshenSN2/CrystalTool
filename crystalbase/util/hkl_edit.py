@@ -26,7 +26,7 @@ def _edit_line(line, method, param, is_scale, hkl_min, hkl_max, scaler_min, scal
     if method in [0, 1]:  # 强度幂（F）
         new_intensity = _smart_exp(intensity_f, param)
         hkl_max = _smart_exp(hkl_max, param)
-    elif method in [0, 2]:  # 强度幂（sigma）
+    if method in [0, 2]:  # 强度幂（sigma）
         new_sigma = _smart_exp(sigma_f, param)
 
     if is_scale:
