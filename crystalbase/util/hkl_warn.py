@@ -1,11 +1,11 @@
 import pandas as pd
 
 
-def check_pattern(hkl_tuple, pattern):
+def check_pattern(hkl_file, pattern):
     pass
 
 
-def generate_hkl_by_pattern(hkl_tuple, pattern):
+def check_sequence(hkl_file, sequence):
     return 1, 1, 2
 
 

@@ -8,7 +8,6 @@
 
 from PyQt5 import QtCore, QtWidgets
 
-
 class Ui_tabhklchecker(object):
     def setupUi(self, tabhklchecker):
         tabhklchecker.setObjectName("tabhklchecker")
@@ -85,6 +84,10 @@ class Ui_tabhklchecker(object):
         self.vL_check_2.addLayout(self.vL_check_method)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.vL_check_2.addItem(spacerItem)
+        self.l_check_status = QtWidgets.QLabel(tabhklchecker)
+        self.l_check_status.setText("")
+        self.l_check_status.setObjectName("l_check_status")
+        self.vL_check_2.addWidget(self.l_check_status)
         self.hL_check_bt = QtWidgets.QHBoxLayout()
         self.hL_check_bt.setObjectName("hL_check_bt")
         self.pB_check_choose = QtWidgets.QPushButton(tabhklchecker)
@@ -120,3 +123,4 @@ class Ui_tabhklchecker(object):
         self.lE_check_seql.setText(_translate("tabhklchecker", "0"))
         self.pB_check_choose.setText(_translate("tabhklchecker", "选择HKL文件"))
         self.pB_check_start.setText(_translate("tabhklchecker", "开始检查"))
+
