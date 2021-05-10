@@ -8,6 +8,7 @@ class MainUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('CrystalTool')
+        self.setWindowState(Qt.WindowMaximized)
         self.tab = QTabWidget()
         self.tabhklchecker = HklChecker()
         self.tabhkleditor = HklEditor()

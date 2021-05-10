@@ -1,3 +1,5 @@
+import pandas as pd
+
 from ..libs import *
 from ..tabs import Ui_tabhklchecker
 from ..thread.check import CheckThread
@@ -5,7 +7,7 @@ from ..thread.check import CheckThread
 
 @singleton
 class HklChecker(QWidget):
-    check_signal = pyqtSignal(list)
+    check_signal = pyqtSignal(pd.DataFrame)
 
     def __init__(self):
         super().__init__()
@@ -22,27 +24,33 @@ class HklChecker(QWidget):
         if not success:
             return
         self.hkl_file = hkl_file
+        self.ui.l_check_status.setText('已选择%s' % hkl_file)
 
     def check(self):
-        if not self.has_files:
+        if not self.has_file:
             self.set_text('无可检查文件')
             return
         if not self.has_params:
             self.set_text('未提供检查方法和参数')
             return
         self.set_text('开始检查...')
-        thread = CheckThread(self.hkl_file, self.method, self.pattern, self.sequence, self.check_signal)
+        thread = CheckThread(self.hkl_file, self.method, self.pattern,
+                             self.sequence, self.conf_level, self.check_signal)
         thread.start()
         self.ui.pB_check_start.setEnabled(False)
 
     def update_result(self, output):
-        self.set_text('检查完成')
-        print(output)
+        self.set_text('检查完成, 共%d个问题' % len(output))
+        result_str = ''
+        for i, row in output.iterrows():
+            result_str += '{}. {} and {}:\n'.format(i + 1, row['k'], row['v'])
+            result_str += '强度分别为: {}, {}, t_value: {:.2f}\n'.format(row['k_int'], row['v_int'], row['t_value'])
+        self.ui.tB_check_view.setText(result_str)
         self.ui.pB_check_start.setEnabled(True)
 
     def set_text(self, text: str):
-        self.ui.l_check_status.setText(text)
-        self.ui.l_check_status.repaint()
+        self.ui.l_check_result.setText(text)
+        self.ui.l_check_result.repaint()
 
     @property
     def has_file(self):
@@ -69,6 +77,10 @@ class HklChecker(QWidget):
         if '' in hkl1 or '' in hkl2:
             return None
         return hkl1, hkl2
+
+    @property
+    def conf_level(self):
+        return self.ui.dSB_check_conf_level.value()
 
     @property
     def sequence(self):
