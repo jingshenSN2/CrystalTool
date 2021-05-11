@@ -2,19 +2,21 @@ import pandas as pd
 
 from ..libs import *
 from ..tabs import Ui_tabhklchecker
-from ..thread.check import CheckThread
+from ..thread.check import *
 
 
 @singleton
 class HklChecker(QWidget):
-    check_signal = pyqtSignal(pd.DataFrame)
+    check_pat_signal = pyqtSignal(pd.DataFrame)
+    check_seq_signal = pyqtSignal(pd.DataFrame)
 
     def __init__(self):
         super().__init__()
         self.hkl_file = ''
         self.ui = Ui_tabhklchecker()
         self.ui.setupUi(self)
-        self.check_signal.connect(self.update_result)
+        self.check_pat_signal.connect(self.update_pat_result)
+        self.check_seq_signal.connect(self.update_seq_result)
         self.ui.pB_check_start.clicked.connect(self.check)
         self.ui.pB_check_choose.clicked.connect(self.open_hkl)
 
@@ -34,17 +36,31 @@ class HklChecker(QWidget):
             self.set_text('未提供检查方法和参数')
             return
         self.set_text('开始检查...')
-        thread = CheckThread(self.hkl_file, self.method, self.pattern,
-                             self.sequence, self.conf_level, self.check_signal)
+        if self.method == 'pattern':
+            thread = CheckPairThread(self.hkl_file, self.pattern, self.conf_level, self.check_pat_signal)
+        else:
+            thread = CheckSeqThread(self.hkl_file, self.sequence, self.n_limit, self.check_seq_signal)
         thread.start()
         self.ui.pB_check_start.setEnabled(False)
 
-    def update_result(self, output):
+    def update_pat_result(self, output):
         self.set_text('检查完成, 共%d个问题' % len(output))
         result_str = ''
         for i, row in output.iterrows():
             result_str += '{}. {} and {}:\n'.format(i + 1, row['k'], row['v'])
             result_str += '强度分别为: {}, {}, t_value: {:.2f}\n'.format(row['k_int'], row['v_int'], row['t_value'])
+        self.ui.tB_check_view.setText(result_str)
+        self.ui.pB_check_start.setEnabled(True)
+
+    def update_seq_result(self, output):
+        self.set_text('检查完成, 共%d个问题' % len(output))
+        result_str = ''
+        for i, row in output.iterrows():
+            result_str += '{}: '.format(row['hkl'])
+            if row['exist']:
+                result_str += '{}\n'.format(row['int'])
+            else:
+                result_str += '不存在!\n'
         self.ui.tB_check_view.setText(result_str)
         self.ui.pB_check_start.setEnabled(True)
 
@@ -81,6 +97,10 @@ class HklChecker(QWidget):
     @property
     def conf_level(self):
         return self.ui.dSB_check_conf_level.value()
+
+    @property
+    def n_limit(self):
+        return self.ui.sB_check_n.value()
 
     @property
     def sequence(self):

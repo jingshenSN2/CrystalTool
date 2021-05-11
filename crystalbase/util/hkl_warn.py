@@ -8,8 +8,11 @@ def check_pattern(hkl_file, pattern, conf_level):
     return pd.DataFrame(result)
 
 
-def check_sequence(hkl_file, sequence):
-    return 1, 1, 2
+def check_sequence(hkl_file, pattern, n_limit):
+    hkl_data = HKLData(hkl_file)
+    sequence = hkl_data.find_seq_by_pattern(pattern, n_limit)
+    result = hkl_data.check_decrease_seq(sequence)
+    return pd.DataFrame(result)
 
 
 def _generate_hkl_by_pattern(hkl_tuple, pattern):
@@ -28,12 +31,31 @@ class HKLData:
 
     def __init__(self, hkl_file):
         df = pd.read_table(hkl_file, sep='\\s+', header=None, names=['h', 'k', 'l', 'Int', 'sInt', 'phase'])
+        df['h'] = df['h'].astype(int)
+        df['k'] = df['k'].astype(int)
+        df['l'] = df['l'].astype(int)
         self.line_number = {}
         self.hkl_dict = {}
         for index, row in df.iterrows():
             hkl_tuple = (row['h'], row['k'], row['l'])
             self.line_number[hkl_tuple] = index + 1
             self.hkl_dict[hkl_tuple] = (row['Int'], row['sInt'], row['phase'])
+
+    def find_seq_by_pattern(self, pattern, n_limit):
+        result = []
+        sh, sk, sl = pattern
+        for i in range(1, n_limit + 1):
+            h = k = l = n = i
+            hkl_tuple = eval(sh), eval(sk), eval(sl)
+            if hkl_tuple in self.hkl_dict:
+                result.append({'hkl': hkl_tuple, 'exist': True, 'int': self.hkl_dict[hkl_tuple]})
+            else:
+                result.append({'hkl': hkl_tuple, 'exist': False, 'int': (0, 0, 0)})
+        return result
+
+    def check_decrease_seq(self, sequence):
+        result = sequence
+        return result
 
     def find_pairs_by_pattern(self, pattern_pair):
         pairs = {}
