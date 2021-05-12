@@ -9,7 +9,7 @@ fig = plt.Figure()
 target.draw_3d_graph(fig)
 fig.savefig('./11.png')
 
-# query = graph.cellToGraph(util.parseFromPDB('./test2/mdcb.pdb')).max_subgraph()
+# query = graph.cellToGraph(parse.parseFromPDB('./test2/mdcb.pdb')).max_subgraph()
 
 # gm = matcher.GraphMatcher(target, query, True, 2, 1000)
 # result = gm.match()

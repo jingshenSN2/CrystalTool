@@ -1,5 +1,5 @@
 from crystalbase import parseFromRES, parseFromPDB
-from .convert_cell import cellToGraph
+from crystalsearch.graph.convert_cell import cellToGraph
 from ..matcher import GraphMatcherOld, GraphMatcherVF2
 
 
