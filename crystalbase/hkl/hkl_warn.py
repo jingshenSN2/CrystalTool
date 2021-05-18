@@ -6,16 +6,20 @@ from .space_group import generate_pairs_by_laue
 
 def check_laue(hkl_file, laue, error_rate):
     hkl_data = HKLData(hkl_file)
-    pairs = hkl_data.find_pairs_by_laue(laue)
-    result = hkl_data.check_pairs_by_laue(pairs, error_rate)
-    df_result = pd.DataFrame(result)
+    result = hkl_data.check_pairs_by_laue(laue, error_rate)
+    result_len = len(result)
     result_str = ''
-    for i, row in df_result.iterrows():
-        result_str += '{}:\n'.format(i + 1)
-        for hkl in row['hkl']:
-            result_str += '{}\n'.format(hkl)
-        result_str += 'outliers: {}\n'.format(row['outliers'])
-    return len(df_result), result_str
+    for i in range(result_len):
+        result_str += 'issue {}\n'.format(i + 1)
+        for row in result[i]['hkl']:
+            result_str += '({}, {}, {}): ({}, {}, {})\n'.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4],
+                                                                int(row[5]))
+        result_str += ' outliers:\n'
+        for row in result[i]['outliers']:
+            result_str += '({}, {}, {}): ({}, {}, {})\n'.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4],
+                                                                int(row[5]))
+        result_str += '\n'
+    return result_len, result_str
 
 
 def check_seq(hkl_file, laue, error_rate, seq_pattern):
@@ -34,49 +38,71 @@ def check_seq(hkl_file, laue, error_rate, seq_pattern):
 class HKLData:
 
     def __init__(self, hkl_file):
-        df = pd.read_table(hkl_file, sep='\\s+', header=None, names=['h', 'k', 'l', 'Int', 'sInt', 'phase'])
-        df['h'] = df['h'].astype(int)
-        df['k'] = df['k'].astype(int)
-        df['l'] = df['l'].astype(int)
+        self.hkl_df = pd.read_table(hkl_file, sep='\\s+', header=None,
+                                    names=['h', 'k', 'l', 'Int', 'sInt', 'phase']).fillna(-1)
+        self.int_df = self.hkl_df['Int']
+        self.sigma_df = self.hkl_df['sInt']
         self.hkl_dict = {}
-        for index, row in df.iterrows():
+        for index, row in self.hkl_df.iterrows():
             hkl_tuple = tuple(map(int, [row['h'], row['k'], row['l']]))
-            if hkl_tuple in self.hkl_dict:
-                #  TODO 支持重复HKL指标
-                print('发现重复的HKL指标{}，当前版本程序暂不支持，后出现的会覆盖前者'.format(hkl_tuple))
-            self.hkl_dict[hkl_tuple] = (row['Int'], row['sInt'], row['phase'])
+            if hkl_tuple not in self.hkl_dict:
+                self.hkl_dict[hkl_tuple] = []
+            self.hkl_dict[hkl_tuple].append(index)  # 保存hkl指标行号
 
-    def _find_outlier(self, int_list, error_rate):
+    def _find_outlier(self, index_list, error_rate):
         outlier = []
-        if len(int_list) == 1:  # 只有一个点，不需要计算离群值
+        if len(index_list) == 1:  # 一个点，不需要计算离群值
             return outlier
-        all_mean = np.mean([self.hkl_dict[hkl][0] for hkl in int_list])  # 所有hkl的平均强度
-        for test_hkl in int_list:
-            other_mean = np.mean([self.hkl_dict[hkl][0] for hkl in int_list if hkl != test_hkl])  # 排除test_hkl之后的平均强度
-            t_value = np.abs(all_mean - other_mean) / self.hkl_dict[test_hkl][1]  # 均值之差 / sigma
-            if t_value > error_rate:
-                outlier.append(test_hkl)
+        # if len(index_list) == 2:  # 两个点，用t检验
+        #     idx1, idx2 = index_list
+        #     mean_sigma = (self.sigma_df[idx1] + self.sigma_df[idx2]) / 2
+        #     t_value = np.abs(self.int_df[idx1] - self.int_df[idx2]) / mean_sigma
+        #     if t_value > error_rate:
+        #         outlier.append(idx1)
+        #     return outlier
+        intensity = self.int_df[index_list]
+        q75, q25 = np.percentile(intensity, [75, 25])
+        # iqr = q75 - q25
+        # upper_limit, lower_limit = q75 + 1.5 * iqr, q25 - 1.5 * iqr
+        for test_idx in index_list:
+            sigma = self.sigma_df[test_idx]
+            if q25 - error_rate * sigma < self.int_df[test_idx] < q75 + error_rate * sigma:
+                continue
+            outlier.append(test_idx)
+        # all_sd = np.std(self.int_df[index_list])  # 所有hkl的强度方差
+        # for i in range(len(index_list)):
+        #     test_idx = index_list[i]
+        #     other_idx = index_list[:i] + index_list[i + 1:]
+        #     other_sd = np.std(self.int_df[other_idx])  # 排除test_hkl之后的强度方差
+        #     t_value = (all_sd - other_sd) / self.sigma_df[test_idx]
+        #     if t_value > error_rate:
+        #         outlier.append(test_idx)
         return outlier
 
-    def find_pairs_by_laue(self, laue):
-        result = []
+    def _find_pairs_by_laue(self, laue):
+        result = []  # 按laue群分组后的所有hkl
         dup_check = set()
         for hkl_tuple in self.hkl_dict:
             if hkl_tuple in dup_check:  # 已经包含在其他组里
                 continue
             new_pair_list = generate_pairs_by_laue(hkl_tuple, laue)  # 按对称性分在同一组的hkl指标
-            exist_pair_list = [hkl for hkl in new_pair_list if hkl in self.hkl_dict]
+            exist_pair_list = [hkl for hkl in new_pair_list if hkl in self.hkl_dict]  # 存在的hkl指标
             dup_check = dup_check.union(exist_pair_list)
             result.append({'hkl': exist_pair_list})
         return result
 
-    def check_pairs_by_laue(self, pair_list, error_rate):
+    def check_pairs_by_laue(self, laue, error_rate):
         result = []
-        for p in pair_list:
-            pairs = p['hkl']
-            outliers = self._find_outlier(pairs, error_rate)
+        all_pairs_list = self._find_pairs_by_laue(laue)
+        for pairs_list in all_pairs_list:
+            pairs = pairs_list['hkl']
+            index_of_pairs = []
+            for p in pairs:
+                index_of_pairs.extend(self.hkl_dict[p])
+            outliers = self._find_outlier(index_of_pairs, error_rate)
             if len(outliers) != 0:
-                result.append({'hkl': [(*p, *self.hkl_dict[p]) for p in pairs], 'outliers': outliers})
+                normal = [idx for idx in index_of_pairs if idx not in outliers]
+                result.append({'hkl': self.hkl_df.values[normal], 'outliers': self.hkl_df.values[outliers]})
         return result
 
     def find_seq_by_pattern(self, pattern, n_limit=20):
