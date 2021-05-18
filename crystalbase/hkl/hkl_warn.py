@@ -20,7 +20,10 @@ class HKLData:
         df['l'] = df['l'].astype(int)
         self.hkl_dict = {}
         for index, row in df.iterrows():
-            hkl_tuple = (int(row['h']), int(row['k']), int(row['l']))
+            hkl_tuple = tuple(map(int, [row['h'], row['k'], row['l']]))
+            if hkl_tuple in self.hkl_dict:
+                #  TODO 支持重复HKL指标
+                print('发现重复的HKL指标{}，当前版本程序暂不支持，后出现的会覆盖前者'.format(hkl_tuple))
             self.hkl_dict[hkl_tuple] = (row['Int'], row['sInt'], row['phase'])
 
     def _find_outlier(self, int_list, error_rate):
