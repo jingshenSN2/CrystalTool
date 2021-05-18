@@ -1,30 +1,14 @@
+import numpy as np
 import pandas as pd
 
+from .space_group import generate_pairs_by_laue
 
-def check_pattern(hkl_file, pattern, conf_level):
+
+def check_laue(hkl_file, laue, error_rate):
     hkl_data = HKLData(hkl_file)
-    pairs = hkl_data.find_pairs_by_pattern(pattern)
-    result = hkl_data.check_equal_pairs(pairs, conf_level)
+    pairs = hkl_data.find_pairs_by_laue(laue)
+    result = hkl_data.check_pairs_by_laue(pairs, error_rate)
     return pd.DataFrame(result)
-
-
-def check_sequence(hkl_file, pattern, n_limit):
-    hkl_data = HKLData(hkl_file)
-    sequence = hkl_data.find_seq_by_pattern(pattern, n_limit)
-    result = hkl_data.check_decrease_seq(sequence)
-    return pd.DataFrame(result)
-
-
-def _generate_hkl_by_pattern(hkl_tuple, pattern):
-    h, k, l = hkl_tuple
-    ph, pk, pl = pattern
-    new_hkl_tuple = eval(ph), eval(pk), eval(pl)
-    return new_hkl_tuple
-
-
-def _match_pattern(hkl_tuple, pattern):
-    new_hkl_tuple = _generate_hkl_by_pattern(hkl_tuple, pattern)
-    return hkl_tuple == new_hkl_tuple
 
 
 class HKLData:
@@ -34,19 +18,50 @@ class HKLData:
         df['h'] = df['h'].astype(int)
         df['k'] = df['k'].astype(int)
         df['l'] = df['l'].astype(int)
-        self.line_number = {}
         self.hkl_dict = {}
         for index, row in df.iterrows():
-            hkl_tuple = (row['h'], row['k'], row['l'])
-            self.line_number[hkl_tuple] = index + 1
+            hkl_tuple = (int(row['h']), int(row['k']), int(row['l']))
             self.hkl_dict[hkl_tuple] = (row['Int'], row['sInt'], row['phase'])
+
+    def _find_outlier(self, int_list, error_rate):
+        outlier = []
+        if len(int_list) == 1:
+            return outlier
+        all_mean = np.mean([self.hkl_dict[hkl][0] for hkl in int_list])  # 所有hkl的平均强度
+        for test_hkl in int_list:
+            other_mean = np.mean([self.hkl_dict[hkl][0] for hkl in int_list if hkl != test_hkl])  # 排除test_hkl之后的平均强度
+            t_value = np.abs(all_mean - other_mean) / self.hkl_dict[test_hkl][1]  # 均值之差 / sigma
+            if t_value > error_rate:
+                outlier.append(test_hkl)
+        return outlier
+
+    def find_pairs_by_laue(self, laue):
+        result = []
+        dup_check = set()
+        for hkl_tuple in self.hkl_dict:
+            if hkl_tuple in dup_check:  # 已经包含在其他组里
+                continue
+            new_pair_list = generate_pairs_by_laue(hkl_tuple, laue)  # 按对称性分在同一组的hkl指标
+            exist_pair_list = [hkl for hkl in new_pair_list if hkl in self.hkl_dict]
+            dup_check = dup_check.union(exist_pair_list)
+            result.append({'hkl': exist_pair_list})
+        return result
+
+    def check_pairs_by_laue(self, pair_list, error_rate):
+        result = []
+        for p in pair_list:
+            pairs = p['hkl']
+            outliers = self._find_outlier(pairs, error_rate)
+            if len(outliers) != 0:
+                result.append({'hkl': [(*p, *self.hkl_dict[p]) for p in pairs], 'outliers': outliers})
+        return result
 
     def find_seq_by_pattern(self, pattern, n_limit):
         result = []
         sh, sk, sl = pattern
         for i in range(1, n_limit + 1):
-            h = k = l = n = i
-            hkl_tuple = eval(sh), eval(sk), eval(sl)
+            params = {'h': i, 'k': i, 'l': i, 'n': i}
+            hkl_tuple = eval(sh, params), eval(sk, params), eval(sl, params)
             if hkl_tuple in self.hkl_dict:
                 result.append({'hkl': hkl_tuple, 'exist': True, 'int': self.hkl_dict[hkl_tuple]})
             else:
@@ -55,30 +70,4 @@ class HKLData:
 
     def check_decrease_seq(self, sequence):
         result = sequence
-        return result
-
-    def find_pairs_by_pattern(self, pattern_pair):
-        pairs = {}
-        hklp1, hklp2 = pattern_pair
-        for hkl_tuple in self.hkl_dict:
-            if not _match_pattern(hkl_tuple, hklp1):
-                continue
-            pair_hkl_tuple = _generate_hkl_by_pattern(hkl_tuple, hklp2)
-            if pair_hkl_tuple in self.hkl_dict:
-                pairs[hkl_tuple] = pair_hkl_tuple
-        return pairs
-
-    def check_equal_pairs(self, pairs, conf_level):
-        result = []
-        dup_check = set()
-        for k, v in pairs.items():
-            if (v, k) in dup_check:  # 已经检验过
-                continue
-            dup_check.add((k, v))
-            int1, sigma1, phase1 = self.hkl_dict[k]
-            int2, sigma2, phase2 = self.hkl_dict[v]
-            t_value = abs(int1 - int2) / pow((sigma1 ** 2 + sigma2 ** 2) / 2, 0.5)
-            if t_value > conf_level:
-                result.append({'k': k, 'v': v, 't_value': t_value,
-                               'k_int': self.hkl_dict[k], 'v_int': self.hkl_dict[v]})
         return result
