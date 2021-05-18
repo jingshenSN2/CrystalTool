@@ -56,7 +56,7 @@ class HKLData:
                 result.append({'hkl': [(*p, *self.hkl_dict[p]) for p in pairs], 'outliers': outliers})
         return result
 
-    def find_seq_by_pattern(self, pattern, n_limit):
+    def find_seq_by_pattern(self, pattern, n_limit=20):
         result = []
         sh, sk, sl = pattern
         for i in range(1, n_limit + 1):

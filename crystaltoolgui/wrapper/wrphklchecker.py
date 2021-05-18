@@ -40,8 +40,9 @@ class HklChecker(QWidget):
         result_str = ''
         for i, row in output.iterrows():
             result_str += '{}:\n'.format(i + 1)
-            result_str += '\n'.join(row['hkl'])
-            result_str += '\noutliers: {}\n'.format(row['outliers'])
+            for hkl in row['hkl']:
+                result_str += '{}\n'.format(hkl)
+            result_str += 'outliers: {}\n'.format(row['outliers'])
         self.ui.tB_check_view.setText(result_str)
         self.ui.pB_check_start.setEnabled(True)
 
