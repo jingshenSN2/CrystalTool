@@ -25,7 +25,7 @@ class HKLData:
 
     def _find_outlier(self, int_list, error_rate):
         outlier = []
-        if len(int_list) == 1:
+        if len(int_list) == 1:  # 只有一个点，不需要计算离群值
             return outlier
         all_mean = np.mean([self.hkl_dict[hkl][0] for hkl in int_list])  # 所有hkl的平均强度
         for test_hkl in int_list:

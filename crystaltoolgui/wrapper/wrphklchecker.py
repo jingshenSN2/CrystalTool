@@ -68,5 +68,6 @@ class HklChecker(QWidget):
 
     @property
     def sequence(self):
-        seq_hkl = self.ui.cB_check_seqh.text(), self.ui.cB_check_seqk.text(), self.ui.cB_check_seql.text()
-        return seq_hkl
+        return self.ui.cB_check_seqh.currentText(), \
+               self.ui.cB_check_seqk.currentText(), \
+               self.ui.cB_check_seql.currentText()
