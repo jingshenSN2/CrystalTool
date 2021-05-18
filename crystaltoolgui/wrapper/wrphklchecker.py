@@ -1,5 +1,3 @@
-import pandas as pd
-
 from ..libs import *
 from ..tabs import Ui_tabhklchecker
 from ..thread.check import *
@@ -7,7 +5,7 @@ from ..thread.check import *
 
 @singleton
 class HklChecker(QWidget):
-    check_signal = pyqtSignal(pd.DataFrame)
+    check_signal = pyqtSignal(int, str)
 
     def __init__(self):
         super().__init__()
@@ -31,19 +29,13 @@ class HklChecker(QWidget):
             self.set_text('无可检查文件')
             return
         self.set_text('开始检查...')
-        thread = CheckThread(self.hkl_file, self.laue, self.error_level, self.check_signal)
+        thread = CheckThread(self.hkl_file, self.laue, self.error_level, self.sequence, self.check_signal)
         thread.start()
         self.ui.pB_check_start.setEnabled(False)
 
-    def update_result(self, output):
-        self.set_text('检查完成, 共%d个问题' % len(output))
-        result_str = ''
-        for i, row in output.iterrows():
-            result_str += '{}:\n'.format(i + 1)
-            for hkl in row['hkl']:
-                result_str += '{}\n'.format(hkl)
-            result_str += 'outliers: {}\n'.format(row['outliers'])
-        self.ui.tB_check_view.setText(result_str)
+    def update_result(self, issue_count, output):
+        self.set_text('检查完成, 共%d个问题' % issue_count)
+        self.ui.tB_check_view.setText(output)
         self.ui.pB_check_start.setEnabled(True)
 
     def set_text(self, text: str):
@@ -68,6 +60,8 @@ class HklChecker(QWidget):
 
     @property
     def sequence(self):
-        return self.ui.cB_check_seqh.currentText(), \
-               self.ui.cB_check_seqk.currentText(), \
-               self.ui.cB_check_seql.currentText()
+        if self.is_seq:
+            return self.ui.cB_check_seqh.currentText(), \
+                   self.ui.cB_check_seqk.currentText(), \
+                   self.ui.cB_check_seql.currentText()
+        return None

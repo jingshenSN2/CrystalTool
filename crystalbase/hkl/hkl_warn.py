@@ -8,7 +8,27 @@ def check_laue(hkl_file, laue, error_rate):
     hkl_data = HKLData(hkl_file)
     pairs = hkl_data.find_pairs_by_laue(laue)
     result = hkl_data.check_pairs_by_laue(pairs, error_rate)
-    return pd.DataFrame(result)
+    df_result = pd.DataFrame(result)
+    result_str = ''
+    for i, row in df_result.iterrows():
+        result_str += '{}:\n'.format(i + 1)
+        for hkl in row['hkl']:
+            result_str += '{}\n'.format(hkl)
+        result_str += 'outliers: {}\n'.format(row['outliers'])
+    return len(df_result), result_str
+
+
+def check_seq(hkl_file, laue, error_rate, seq_pattern):
+    hkl_data = HKLData(hkl_file)
+    seq = hkl_data.find_seq_by_pattern(seq_pattern)
+    result = hkl_data.check_seq_by_laue(laue, seq)
+    df_result = pd.DataFrame(result)
+    result_str = ''
+    for i, row in df_result.iterrows():
+        result_str += '{}. exist: {}\n'.format(i + 1, row['exist'])
+        for hkl in row['hkl']:
+            result_str += '{}\n'.format(hkl)
+    return len(df_result), result_str
 
 
 class HKLData:
@@ -65,12 +85,18 @@ class HKLData:
         for i in range(1, n_limit + 1):
             params = {'h': i, 'k': i, 'l': i, 'n': i}
             hkl_tuple = eval(sh, params), eval(sk, params), eval(sl, params)
-            if hkl_tuple in self.hkl_dict:
-                result.append({'hkl': hkl_tuple, 'exist': True, 'int': self.hkl_dict[hkl_tuple]})
-            else:
-                result.append({'hkl': hkl_tuple, 'exist': False, 'int': (0, 0, 0)})
+            result.append({'hkl': hkl_tuple, 'exist': hkl_tuple in self.hkl_dict})
         return result
 
-    def check_decrease_seq(self, sequence):
-        result = sequence
+    def check_seq_by_laue(self, laue, sequence):
+        result = []
+        for hkl_seq in sequence:
+            hkl_tuple = hkl_seq['hkl']
+            if hkl_seq['exist']:
+                hkl_tuples = generate_pairs_by_laue(hkl_tuple, laue)
+                exist_hkl_list = [hkl for hkl in hkl_tuples if hkl in self.hkl_dict]
+                exist_int_list = [(*p, *self.hkl_dict[p]) for p in exist_hkl_list]
+                result.append({'hkl': exist_int_list, 'exist': True})
+            else:
+                result.append({'hkl': [hkl_tuple], 'exist': False})
         return result
