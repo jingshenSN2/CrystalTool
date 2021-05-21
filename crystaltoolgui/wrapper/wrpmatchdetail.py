@@ -19,41 +19,50 @@ class MatchDetail(QWidget):
         self.ui.setupUi(self)
         self.result = None
         self.pair = None
-        self.figure_2d = plt.figure()
-        self.axe1_2d = self.figure_2d.add_subplot(1, 2, 1)
-        self.axe2_2d = self.figure_2d.add_subplot(1, 2, 2)
-        self.figure_3d = plt.figure()
-        self.canvas_2d = FigureCanvas(self.figure_2d)
-        self.canvas_3d = FigureCanvas(self.figure_3d)
-        self.ui.vL_detail_2d.addWidget(self.canvas_2d)
-        self.ui.vL_detail_3d.addWidget(self.canvas_3d)
+        self.res_2d = plt.subplots()
+        self.pdb_2d = plt.subplots()
+        self.res_3d = plt.figure()
+        self.pdb_3d = plt.figure()
+        self.canvas_res_2d = FigureCanvas(self.res_2d[0])
+        self.canvas_pdb_2d = FigureCanvas(self.pdb_2d[0])
+        self.canvas_res_3d = FigureCanvas(self.res_3d)
+        self.canvas_pdb_3d = FigureCanvas(self.pdb_3d)
+        hL_res_2d = QHBoxLayout(self.ui.t_res_2d)
+        hL_pdb_2d = QHBoxLayout(self.ui.t_pdb_2d)
+        hL_res_3d = QHBoxLayout(self.ui.t_res_3d)
+        hL_pdb_3d = QHBoxLayout(self.ui.t_pdb_3d)
+        hL_res_2d.addWidget(self.canvas_res_2d)
+        hL_pdb_2d.addWidget(self.canvas_pdb_2d)
+        hL_res_3d.addWidget(self.canvas_res_3d)
+        hL_pdb_3d.addWidget(self.canvas_pdb_3d)
         self.ui.pB_detail_2d.clicked.connect(self._draw_2d)
 
-    def update_and_draw(self, result=None, pair=None):
-        if result is not None:
-            self.result = result
-        if pair is not None:
-            self.pair = pair
-            self._draw_2d()
+    def update_and_draw(self, result, pair=None):
+        self.result = result
+        self.pair = pair if pair else {}
+        self._draw_2d()
         self._draw_3d()
 
     def _draw_2d(self):
-        if self.result is None or self.pair is None:
+        if self.result is None:
             print('未找到绘图所需的匹配结果和映射关系...')
             return
         pd = self.project_direction()
-        self.axe1_2d.clear()
-        self.axe2_2d.clear()
-        self.result.target.draw_graph(self.axe1_2d, self.pair.keys(), direction=pd, rotation=self.result.rotation)
-        self.result.query.draw_graph(self.axe2_2d, self.pair.values(), direction=pd)
-        self.canvas_2d.draw()
+        self.res_2d[1].clear()
+        self.pdb_2d[1].clear()
+        self.result.target.draw_graph(self.res_2d[1], self.pair.keys(), direction=pd, rotation=self.result.rotation)
+        self.result.query.draw_graph(self.pdb_2d[1], self.pair.values(), direction=pd)
+        self.canvas_res_2d.draw()
+        self.canvas_pdb_2d.draw()
 
     def _draw_3d(self):
         if self.result is None:
             print('未找到绘图所需的匹配结果...')
             return
-        self.result.target.draw_3d_graph(self.figure_3d, highlight=self.pair if self.pair is not None else [])
-        self.canvas_3d.draw()
+        self.result.target.draw_3d_graph(self.res_3d, highlight=self.pair.keys())
+        self.result.query.draw_3d_graph(self.pdb_3d, highlight=self.pair.values())
+        self.canvas_res_3d.draw()
+        self.canvas_pdb_3d.draw()
 
     def project_direction(self):
         text = self.ui.lE_detail_2d.text()

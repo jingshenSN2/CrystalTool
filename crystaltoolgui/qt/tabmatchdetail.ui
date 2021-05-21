@@ -24,24 +24,41 @@
                                   <string>二维投影图</string>
                               </property>
                           </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lE_detail_2d">
-         <property name="placeholderText">
-          <string>投影平面法向量，默认(0,0,1)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pB_detail_2d">
-         <property name="text">
-          <string>重新绘制</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+                      </item>
+                      <item>
+                          <widget class="QLineEdit" name="lE_detail_2d">
+                              <property name="placeholderText">
+                                  <string>投影平面法向量，默认(0,0,1)</string>
+                              </property>
+                          </widget>
+                      </item>
+                      <item>
+                          <widget class="QPushButton" name="pB_detail_2d">
+                              <property name="text">
+                                  <string>重新绘制</string>
+                              </property>
+                          </widget>
+                      </item>
+                  </layout>
+              </item>
+              <item>
+                  <widget class="QTabWidget" name="tW_detail_2d">
+                      <property name="currentIndex">
+                          <number>1</number>
+                      </property>
+                      <widget class="QWidget" name="t_res_2d">
+                          <attribute name="title">
+                              <string>RES结构</string>
+                          </attribute>
+                      </widget>
+                      <widget class="QWidget" name="t_pdb_2d">
+                          <attribute name="title">
+                              <string>PDB片段</string>
+                          </attribute>
+                      </widget>
+                  </widget>
+              </item>
+          </layout>
    </item>
    <item>
     <widget class="Line" name="line_detail">
@@ -51,15 +68,32 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="vL_detail_3d">
-     <item>
-      <widget class="QLabel" name="l_detaial_3d">
-       <property name="text">
-        <string>3D图（可旋转）</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+       <layout class="QVBoxLayout" name="vL_detail_3d">
+           <item>
+               <widget class="QLabel" name="l_detaial_3d">
+                   <property name="text">
+                       <string>3D图（可旋转）</string>
+                   </property>
+               </widget>
+           </item>
+           <item>
+               <widget class="QTabWidget" name="tW_detail_3d">
+                   <property name="currentIndex">
+                       <number>1</number>
+                   </property>
+                   <widget class="QWidget" name="t_res_3d">
+                       <attribute name="title">
+                           <string>RES结构</string>
+                       </attribute>
+                   </widget>
+                   <widget class="QWidget" name="t_pdb_3d">
+                       <attribute name="title">
+                           <string>PDB片段</string>
+                       </attribute>
+                   </widget>
+               </widget>
+           </item>
+       </layout>
    </item>
   </layout>
  </widget>
