@@ -12,37 +12,39 @@ def _copy(src, dst):
 
 
 def solve_hkl(hkl_file: str, ins_file: str, program='xs.exe', params=''):
-    # ´ò¿ªshelxt¼ÆËãÁÙÊ±Â·¾¶
-    temp_path = os.path.dirname(__file__) + '/../../.temp/'
+    # æ‰“å¼€æ±‚è§£å·¥ä½œç›®å½•
+    temp_path = os.path.dirname(__file__) + '/../../.solve_workspace/'
     hkl_path, hkl_full_name = os.path.split(hkl_file)
     ins_path, ins_full_name = os.path.split(ins_file)
     hkl_name = hkl_full_name.split('.')[0]
     ins_name = ins_full_name.split('.')[0]
     new_name = '%s_%s' % (hkl_name, ins_name)
     output_path = temp_path + new_name
-    # ÖØÃüÃû²¢¸´ÖÆµ½ÁÙÊ±ÎÄ¼ş¼Ğ
+    # é‡å‘½åhklå’Œinså¹¶å¤åˆ¶åˆ°æ±‚è§£å·¥ä½œç›®å½•
     _copy(hkl_file, '%s.hkl' % output_path)
     _copy(ins_file, '%s.ins' % output_path)
-    # ¼ÇÂ¼Ä¿Â¼ÏÂÒÑ´æÔÚµÄRESÎÄ¼ş
+    # è®°å½•ç›®å½•ä¸‹å·²å­˜åœ¨çš„RESæ–‡ä»¶
     old_res = set()
     for file in os.listdir(temp_path):
         if file.endswith('.res'):
             old_res.add(file)
-    # Ö´ĞĞshelxt£¬×èÈûÊ½
+    # æ‰§è¡Œæ±‚è§£ç¨‹åºï¼Œé˜»å¡å¼
     command = [program, new_name]
     solve_params = params.split(' ')
     command.extend(solve_params)
     subprocess.Popen(command, cwd=temp_path, shell=True).wait()
-    # É¾³ıÁÙÊ±hklºÍins
+    # åˆ é™¤ä¸´æ—¶hklå’Œins
     try:
         if program == 'shelxt.exe':
+            # shelxtä¼šç”Ÿæˆæ–°çš„hklï¼Œå¯ä»¥åˆ æ‰æ—§çš„
             os.remove('%s.hkl' % output_path)
         os.remove('%s.ins' % output_path)
         os.remove('%s.lst' % output_path)
         os.remove('%s.lxt' % output_path)
     except FileNotFoundError:
+        # xsç”Ÿæˆlstï¼Œshelxtç”Ÿæˆlxt
         pass
-    # É¸Ñ¡³öĞÂRESÎÄ¼ş²¢·µ»Ø
+    # ç­›é€‰å‡ºæ–°RESæ–‡ä»¶å¹¶è¿”å›
     new_res = []
     for file in os.listdir(temp_path):
         if file.endswith('.res') and file not in old_res:
