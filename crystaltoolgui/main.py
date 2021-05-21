@@ -1,5 +1,16 @@
+import os
+import sys
+
 from .libs import *
 from .wrapper import *
+
+
+def main():
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(os.path.dirname(__file__) + '/icon.png'))
+    window = MainUI()
+    window.show()
+    sys.exit(app.exec_())
 
 
 @singleton

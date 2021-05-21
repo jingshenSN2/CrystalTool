@@ -9,16 +9,17 @@ from PyQt5.QtCore import QStringListModel
 from PyQt5.QtGui import QIcon
 from PyQt5.QtGui import QStandardItemModel
 
+# window
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QTabWidget
+
 # layout
 from PyQt5.QtWidgets import QFormLayout
 from PyQt5.QtWidgets import QGridLayout
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QVBoxLayout
-
-# window
-from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtWidgets import QTabWidget
 
 # widget
 from PyQt5.QtWidgets import QLabel
