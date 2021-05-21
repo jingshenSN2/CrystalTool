@@ -1,6 +1,5 @@
 import networkx as nx
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 
 from .project import project3d
 
@@ -62,6 +61,7 @@ class Graph:
 
     def draw_graph(self, axes, highlight=None, direction=(0, 0, 1), rotation=None):
         """用matlotlib画二维投影图"""
+        axes.clear()
         points = self.get_node_attributes('location')
         if rotation is not None:
             for k in points:
@@ -76,11 +76,11 @@ class Graph:
         nx.draw_networkx_edge_labels(self.g, pos, edge_labels=edge_label, ax=axes)
         axes.axis('off')
 
-    def draw_3d_graph(self, fig, highlight=None):
+    def draw_3d_graph(self, axes, highlight=None):
         """用matlotlib画三维图"""
+        axes.clear()
         points = self.get_node_attributes('location')
         label = self.get_node_attributes('label')
-        ax = Axes3D(fig)
         if highlight is None:
             highlight = []
         for key, value in points.items():
@@ -88,13 +88,13 @@ class Graph:
             if key in highlight:
                 c = 'red'  # 高亮原子用红色表示
             xi, yi, zi = value
-            ax.scatter(xi, yi, zi, label[key], c=c, alpha=0.9)
+            axes.scatter(xi, yi, zi, label[key], c=c, alpha=0.9)
         for i, j in enumerate(self.edges()):
             # 用两端原子的坐标连线，绘制化学键
             x = np.array((points[j[0]][0], points[j[1]][0]))
             y = np.array((points[j[0]][1], points[j[1]][1]))
             z = np.array((points[j[0]][2], points[j[1]][2]))
-            ax.plot(x, y, z, c='black', alpha=0.9)
+            axes.plot(x, y, z, c='black', alpha=0.9)
 
     def number_of_edges(self, u, v):
         return self.g.number_of_edges(u, v)

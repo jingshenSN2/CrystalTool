@@ -7,6 +7,7 @@ from ..tabs import Ui_tabmatchdetail
 
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
@@ -19,14 +20,16 @@ class MatchDetail(QWidget):
         self.ui.setupUi(self)
         self.result = None
         self.pair = None
-        self.res_2d = plt.subplots()
-        self.pdb_2d = plt.subplots()
-        self.res_3d = plt.figure()
-        self.pdb_3d = plt.figure()
-        self.canvas_res_2d = FigureCanvas(self.res_2d[0])
-        self.canvas_pdb_2d = FigureCanvas(self.pdb_2d[0])
-        self.canvas_res_3d = FigureCanvas(self.res_3d)
-        self.canvas_pdb_3d = FigureCanvas(self.pdb_3d)
+        self.fig_res_2d, self.ax_res_2d = plt.subplots()
+        self.fig_pdb_2d, self.ax_pdb_2d = plt.subplots()
+        self.fig_res_3d = plt.figure()
+        self.fig_pdb_3d = plt.figure()
+        self.ax_res_3d = Axes3D(self.fig_res_3d)
+        self.ax_pdb_3d = Axes3D(self.fig_pdb_3d)
+        self.canvas_res_2d = FigureCanvas(self.fig_res_2d)
+        self.canvas_pdb_2d = FigureCanvas(self.fig_pdb_2d)
+        self.canvas_res_3d = FigureCanvas(self.fig_res_3d)
+        self.canvas_pdb_3d = FigureCanvas(self.fig_pdb_3d)
         hL_res_2d = QHBoxLayout(self.ui.t_res_2d)
         hL_pdb_2d = QHBoxLayout(self.ui.t_pdb_2d)
         hL_res_3d = QHBoxLayout(self.ui.t_res_3d)
@@ -48,10 +51,8 @@ class MatchDetail(QWidget):
             print('未找到绘图所需的匹配结果和映射关系...')
             return
         pd = self.project_direction()
-        self.res_2d[1].clear()
-        self.pdb_2d[1].clear()
-        self.result.target.draw_graph(self.res_2d[1], self.pair.keys(), direction=pd, rotation=self.result.rotation)
-        self.result.query.draw_graph(self.pdb_2d[1], self.pair.values(), direction=pd)
+        self.result.target.draw_graph(self.ax_res_2d, self.pair.keys(), direction=pd, rotation=self.result.rotation)
+        self.result.query.draw_graph(self.ax_pdb_2d, self.pair.values(), direction=pd)
         self.canvas_res_2d.draw()
         self.canvas_pdb_2d.draw()
 
@@ -59,8 +60,8 @@ class MatchDetail(QWidget):
         if self.result is None:
             print('未找到绘图所需的匹配结果...')
             return
-        self.result.target.draw_3d_graph(self.res_3d, highlight=self.pair.keys())
-        self.result.query.draw_3d_graph(self.pdb_3d, highlight=self.pair.values())
+        self.result.target.draw_3d_graph(self.ax_res_3d, highlight=self.pair.keys())
+        self.result.query.draw_3d_graph(self.ax_pdb_3d, highlight=self.pair.values())
         self.canvas_res_3d.draw()
         self.canvas_pdb_3d.draw()
 
