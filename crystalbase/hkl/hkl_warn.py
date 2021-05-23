@@ -12,10 +12,12 @@ def check_laue(hkl_file, laue, error_rate):
     for i in range(result_len):
         result_str += 'issue {}\n'.format(i + 1)
         for row in result[i]['hkl']:
+            # 强度正常的指标
             result_str += '({}, {}, {}): ({}, {}, {})\n'.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4],
                                                                 int(row[5]))
         result_str += ' outliers:\n'
         for row in result[i]['outliers']:
+            # 强度异常的指标
             result_str += '({}, {}, {}): ({}, {}, {})\n'.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4],
                                                                 int(row[5]))
         result_str += '\n'
@@ -24,15 +26,15 @@ def check_laue(hkl_file, laue, error_rate):
 
 def check_seq(hkl_file, laue, error_rate, seq_pattern):
     hkl_data = HKLData(hkl_file)
-    seq = hkl_data.find_seq_by_pattern(seq_pattern)
-    result = hkl_data.check_seq_by_laue(laue, seq)
-    df_result = pd.DataFrame(result)
+    result = hkl_data.check_seq_by_laue(laue, seq_pattern)
+    result_len = len(result)
     result_str = ''
-    for i, row in df_result.iterrows():
-        result_str += '{}. exist: {}\n'.format(i + 1, row['exist'])
-        for hkl in row['hkl']:
-            result_str += '{}\n'.format(hkl)
-    return len(df_result), result_str
+    for i in range(len(result)):
+        result_str += '{}. {}:\n'.format(i + 1, result[i]['exist'])
+        for row in result[i]['hkl_list']:
+            result_str += '({}, {}, {}): ({}, {}, {})\n'.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4],
+                                                                int(row[5]))
+    return result_len, result_str
 
 
 class HKLData:
@@ -53,17 +55,8 @@ class HKLData:
         outlier = []
         if len(index_list) == 1:  # 一个点，不需要计算离群值
             return outlier
-        # if len(index_list) == 2:  # 两个点，用t检验
-        #     idx1, idx2 = index_list
-        #     mean_sigma = (self.sigma_df[idx1] + self.sigma_df[idx2]) / 2
-        #     t_value = np.abs(self.int_df[idx1] - self.int_df[idx2]) / mean_sigma
-        #     if t_value > error_rate:
-        #         outlier.append(idx1)
-        #     return outlier
         intensity = self.int_df[index_list]
         q75, q25 = np.percentile(intensity, [75, 25])
-        # iqr = q75 - q25
-        # upper_limit, lower_limit = q75 + 1.5 * iqr, q25 - 1.5 * iqr
         for test_idx in index_list:
             sigma = self.sigma_df[test_idx]
             if q25 - error_rate * sigma < self.int_df[test_idx] < q75 + error_rate * sigma:
@@ -97,32 +90,27 @@ class HKLData:
         for pairs_list in all_pairs_list:
             pairs = pairs_list['hkl']
             index_of_pairs = []
-            for p in pairs:
+            for p in pairs:  # 记录该组的所有行号
                 index_of_pairs.extend(self.hkl_dict[p])
             outliers = self._find_outlier(index_of_pairs, error_rate)
             if len(outliers) != 0:
+                # 发现异常，汇报
                 normal = [idx for idx in index_of_pairs if idx not in outliers]
                 result.append({'hkl': self.hkl_df.values[normal], 'outliers': self.hkl_df.values[outliers]})
         return result
 
-    def find_seq_by_pattern(self, pattern, n_limit=20):
+    def check_seq_by_laue(self, laue, seq_pattern, n_limit=20):
         result = []
-        sh, sk, sl = pattern
+        sequence = []
+        sh, sk, sl = seq_pattern
         for i in range(1, n_limit + 1):
             params = {'h': i, 'k': i, 'l': i, 'n': i}
-            hkl_tuple = eval(sh, params), eval(sk, params), eval(sl, params)
-            result.append({'hkl': hkl_tuple, 'exist': hkl_tuple in self.hkl_dict})
-        return result
-
-    def check_seq_by_laue(self, laue, sequence):
-        result = []
-        for hkl_seq in sequence:
-            hkl_tuple = hkl_seq['hkl']
-            if hkl_seq['exist']:
-                hkl_tuples = generate_pairs_by_laue(hkl_tuple, laue)
-                exist_hkl_list = [hkl for hkl in hkl_tuples if hkl in self.hkl_dict]
-                exist_int_list = [(*p, *self.hkl_dict[p]) for p in exist_hkl_list]
-                result.append({'hkl': exist_int_list, 'exist': True})
-            else:
-                result.append({'hkl': [hkl_tuple], 'exist': False})
+            hkl_tuple = eval(sh, params), eval(sk, params), eval(sl, params)  # 按n计算hkl指标
+            sequence.append(hkl_tuple)
+        for hkl_tuple in sequence:
+            hkl_tuples = generate_pairs_by_laue(hkl_tuple, laue)
+            exist_hkl_list = [hkl for hkl in hkl_tuples if hkl in self.hkl_dict]  # 存在的指标
+            result.append({'hkl': hkl_tuple,
+                           'hkl_list': self.hkl_df.values[exist_hkl_list],
+                           'exist': len(exist_hkl_list) != 0})
         return result
