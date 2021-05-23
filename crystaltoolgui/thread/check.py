@@ -1,6 +1,6 @@
 import threading
 
-from crystalbase import check_laue, check_seq
+from crystalbase import check_laue, check_seq, laue_group_name
 
 
 class CheckThread(threading.Thread):

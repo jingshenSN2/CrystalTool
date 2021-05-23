@@ -12,6 +12,8 @@ class HklChecker(QWidget):
         self.hkl_file = ''
         self.ui = Ui_tabhklchecker()
         self.ui.setupUi(self)
+        for idx, name in laue_group_name.items():
+            self.ui.cB_check_laue.setItemText(idx, name)
         self.check_signal.connect(self.update_result)
         self.ui.pB_check_start.clicked.connect(self.check)
         self.ui.pB_check_choose.clicked.connect(self.open_hkl)

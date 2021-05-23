@@ -11,7 +11,7 @@ def generate_pairs_by_laue(hkl_tuple, laue):
 
 
 laue_group_name = {
-    0: '1',
+    0: '0',
     1: '-1',
     2: '2/m',
     3: 'mmm',
@@ -104,7 +104,18 @@ symmetric_operations = {
         ('-k', '-h', '-l'),
         ('-h', 'h+k', '-l'),
         ('h+k', '-k', '-l')],  # laue group: -31m
-    10: [('h', 'k', 'l')],  # laue group: -3m(R)
+    10: [('h', 'k', 'l'),
+         ('k', 'l', 'h'),
+         ('l', 'h', 'k'),
+         ('k', 'h', 'l'),
+         ('h', 'l', 'k'),
+         ('l', 'k', 'h'),
+         ('-h', '-k', '-l'),
+         ('-k', '-l', '-h'),
+         ('-l', '-h', '-k'),
+         ('-k', '-h', '-l'),
+         ('-h', '-l', '-k'),
+         ('-l', '-k', '-h')],  # laue group: -3m(R)
     11: [('h', 'k', 'l'),
          ('-h-k', 'h', 'l'),
          ('k', '-h-k', 'l'),
