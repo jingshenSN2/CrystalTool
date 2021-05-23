@@ -2,7 +2,7 @@ from crystalbase import AtomGroup
 from .graph import Graph
 
 
-def cellToGraph(cell: AtomGroup):
+def cell_to_graph(cell: AtomGroup):
     """晶胞类转图类"""
     g = Graph(cell.name)
     for k, v, in cell.shelxt_score.items():

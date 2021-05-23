@@ -1,7 +1,7 @@
 from ..atom_base import AtomGroup
 
 
-def parseFromPDB(filename: str):
+def parse_from_pdb(filename: str):
     """解析pdb文件中的晶胞信息"""
     name = filename.split('/')[-1]
     cell = AtomGroup(name)

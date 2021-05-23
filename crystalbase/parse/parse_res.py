@@ -3,7 +3,7 @@ import re
 from ..atom_base import AtomGroup
 
 
-def parseFromRES(filename: str, multilayer=(False, False, False), remove_extra=True):
+def parse_from_res(filename: str, multilayer=(False, False, False), remove_extra=True):
     """解析res文件中的晶胞信息"""
     name = filename.split('/')[-1]
     cell = AtomGroup(name, multilayer)
