@@ -3,7 +3,7 @@ from collections import defaultdict
 
 import numpy as np
 
-from ..config import getAtomProperties
+from .get_atom_properties import getAtomProperties
 
 
 class Atom:

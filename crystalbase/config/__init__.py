@@ -1,1 +1,0 @@
-from .get_atom_properties import getAtomProperties
