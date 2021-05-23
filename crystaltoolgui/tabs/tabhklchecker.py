@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_tabhklchecker(object):
     def setupUi(self, tabhklchecker):
@@ -62,7 +62,7 @@ class Ui_tabhklchecker(object):
         self.rB_check_seq.setObjectName("rB_check_seq")
         self.hL_check_seq.addWidget(self.rB_check_seq)
         self.l_check_seq = QtWidgets.QLabel(tabhklchecker)
-        self.l_check_seq.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.l_check_seq.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.l_check_seq.setObjectName("l_check_seq")
         self.hL_check_seq.addWidget(self.l_check_seq)
         self.cB_check_seqh = QtWidgets.QComboBox(tabhklchecker)
@@ -131,7 +131,7 @@ class Ui_tabhklchecker(object):
         tabhklchecker.setWindowTitle(_translate("tabhklchecker", "Form"))
         self.pB_check_choose.setText(_translate("tabhklchecker", "选择HKL文件"))
         self.l_check_status.setText(_translate("tabhklchecker", "未选择文件"))
-        self.l_check_pattern.setText(_translate("tabhklchecker", "Laue群："))
+        self.l_check_pattern.setText(_translate("tabhklchecker", "Laue群"))
         self.cB_check_laue.setItemText(0, _translate("tabhklchecker", "1"))
         self.cB_check_laue.setItemText(1, _translate("tabhklchecker", "-1"))
         self.cB_check_laue.setItemText(2, _translate("tabhklchecker", "2/m"))
@@ -170,3 +170,4 @@ class Ui_tabhklchecker(object):
         self.cB_check_seql.setItemText(5, _translate("tabhklchecker", "-n"))
         self.pB_check_start.setText(_translate("tabhklchecker", "开始检查"))
         self.l_check_hkl.setText(_translate("tabhklchecker", "检查结果"))
+

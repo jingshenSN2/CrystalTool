@@ -1,327 +1,327 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>tabhklchecker</class>
-    <widget class="QWidget" name="tabhklchecker">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1196</width>
-                <height>726</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>Form</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,1">
-            <item>
-                <layout class="QVBoxLayout" name="vL_check_1" stretch="0,0,0,0,0,0,0">
-                    <property name="spacing">
-                        <number>9</number>
-                    </property>
-                    <property name="topMargin">
-                        <number>25</number>
-                    </property>
-                    <item>
-                        <widget class="QPushButton" name="pB_check_choose">
-                            <property name="text">
-                                <string>选择HKL文件</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QLabel" name="l_check_status">
-                            <property name="text">
-                                <string>未选择文件</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <layout class="QFormLayout" name="fL_check">
-                            <item row="0" column="0">
-                                <widget class="QLabel" name="l_check_pattern">
-                                    <property name="text">
-                                        <string>Laue群：</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item row="0" column="1">
-                                <widget class="QComboBox" name="cB_check_laue">
-                                    <item>
-                                        <property name="text">
-                                            <string>1</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-1</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>2/m</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>mmm</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>4/m</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>4/mmm</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-3</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-3(R)</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-3m1</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-31m</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-3m(R)</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>6/m</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>6/mmm</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>m-3</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>m-3m</string>
-                                        </property>
-                                    </item>
-                                </widget>
-                            </item>
-                            <item row="1" column="0">
-                                <widget class="QLabel" name="l_check_conf_level">
-                                    <property name="text">
-                                        <string>汇报结果容错阈值</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item row="1" column="1">
-                                <widget class="QDoubleSpinBox" name="dSB_check_conf_level">
-                                    <property name="maximum">
-                                        <double>50.000000000000000</double>
-                                    </property>
-                                    <property name="value">
-                                        <double>5.000000000000000</double>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hL_check_seq">
-                            <item>
-                                <widget class="QCheckBox" name="rB_check_seq">
-                                    <property name="text">
-                                        <string>序列检查</string>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QLabel" name="l_check_seq">
-                                    <property name="text">
-                                        <string>hkl:</string>
-                                    </property>
-                                    <property name="alignment">
-                                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                                    </property>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QComboBox" name="cB_check_seqh">
-                                    <item>
-                                        <property name="text">
-                                            <string>0</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>1</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>2</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>3</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>n</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-n</string>
-                                        </property>
-                                    </item>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QComboBox" name="cB_check_seqk">
-                                    <item>
-                                        <property name="text">
-                                            <string>0</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>1</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>2</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>3</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>n</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-n</string>
-                                        </property>
-                                    </item>
-                                </widget>
-                            </item>
-                            <item>
-                                <widget class="QComboBox" name="cB_check_seql">
-                                    <item>
-                                        <property name="text">
-                                            <string>0</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>1</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>2</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>3</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>n</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>-n</string>
-                                        </property>
-                                    </item>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                    <item>
-                        <spacer name="verticalSpacer">
-                            <property name="orientation">
-                                <enum>Qt::Vertical</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                                <size>
-                                    <width>20</width>
-                                    <height>40</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </item>
-                    <item>
-                        <widget class="QLabel" name="l_check_result">
-                            <property name="text">
-                                <string/>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <layout class="QHBoxLayout" name="hL_check_bt">
-                            <item>
-                                <widget class="QPushButton" name="pB_check_start">
-                                    <property name="text">
-                                        <string>开始检查</string>
-                                    </property>
-                                </widget>
-                            </item>
-                        </layout>
-                    </item>
-                </layout>
-            </item>
-            <item>
-                <widget class="Line" name="line">
-                    <property name="orientation">
-                        <enum>Qt::Vertical</enum>
-                    </property>
-                </widget>
-            </item>
-            <item>
-                <layout class="QVBoxLayout" name="vL_check_2" stretch="0,0">
-                    <item>
-                        <widget class="QLabel" name="l_check_hkl">
-                            <property name="text">
-                                <string>检查结果</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QTextBrowser" name="tB_check_view"/>
-                    </item>
-                </layout>
-            </item>
-        </layout>
+ <class>tabhklchecker</class>
+ <widget class="QWidget" name="tabhklchecker">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1196</width>
+    <height>726</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,1">
+   <item>
+    <layout class="QVBoxLayout" name="vL_check_1" stretch="0,0,0,0,0,0,0">
+     <property name="spacing">
+      <number>9</number>
+     </property>
+     <property name="topMargin">
+      <number>25</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="pB_check_choose">
+       <property name="text">
+        <string>选择HKL文件</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="l_check_status">
+       <property name="text">
+        <string>未选择文件</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QFormLayout" name="fL_check">
+       <item row="0" column="0">
+        <widget class="QLabel" name="l_check_pattern">
+         <property name="text">
+          <string>Laue群</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="cB_check_laue">
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2/m</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mmm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>4/m</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>4/mmm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-3(R)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-3m1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-31m</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-3m(R)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>6/m</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>6/mmm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>m-3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>m-3m</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_check_conf_level">
+         <property name="text">
+          <string>汇报结果容错阈值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDoubleSpinBox" name="dSB_check_conf_level">
+         <property name="maximum">
+          <double>50.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>5.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hL_check_seq">
+       <item>
+        <widget class="QCheckBox" name="rB_check_seq">
+         <property name="text">
+          <string>序列检查</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="l_check_seq">
+         <property name="text">
+          <string>hkl:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cB_check_seqh">
+         <item>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>n</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-n</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cB_check_seqk">
+         <item>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>n</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-n</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cB_check_seql">
+         <item>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>n</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>-n</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="l_check_result">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hL_check_bt">
+       <item>
+        <widget class="QPushButton" name="pB_check_start">
+         <property name="text">
+          <string>开始检查</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
     </widget>
-    <resources/>
-    <connections/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="vL_check_2" stretch="0,0">
+     <item>
+      <widget class="QLabel" name="l_check_hkl">
+       <property name="text">
+        <string>检查结果</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="tB_check_view"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>
