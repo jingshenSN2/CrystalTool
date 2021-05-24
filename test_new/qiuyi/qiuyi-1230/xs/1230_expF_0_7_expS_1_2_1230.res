@@ -1,0 +1,17 @@
+TITL 1230 in P6(3)mc 
+CELL 0.71073  12.4770  12.4770   4.8820  90.000  90.000 120.000 
+ZERR    8.00   0.0018   0.0018   0.0010   0.000   0.000   0.000 
+LATT -1 
+SYMM -Y, X-Y, Z 
+SYMM -X+Y, -X, Z 
+SYMM -X, -Y, 0.5+Z 
+SYMM Y, -X+Y, 0.5+Z 
+SYMM X-Y, X, 0.5+Z 
+SYMM -Y, -X, Z 
+SYMM -X+Y, Y, Z 
+SYMM X, X-Y, Z 
+SYMM Y, X, 0.5+Z 
+SYMM X-Y, -Y, 0.5+Z 
+SYMM -X, -X+Y, 0.5+Z 
+SFAC O H V CO 
+UNIT 8 8 8 8 
