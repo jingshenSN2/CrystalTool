@@ -12,7 +12,7 @@ def check_laue(hkl_file, laue, error_rate):
     hkl_format = '  ({}, {}, {}): ({}, {}, {})\n'
     for i in range(result_len):
         result_str += '{} normal:\n'.format(i + 1)
-        for row in result[i]['hkl']:  # 强度正常的指标
+        for row in result[i]['normal']:  # 强度正常的指标
             result_str += hkl_format.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4], int(row[5]))
         result_str += '  high_var:\n'
         for row in result[i]['high_var']:  # 强度方差过大的指标
@@ -53,7 +53,7 @@ class HKLData:
 
     def _find_outlier(self, index_list, error_rate):
         outlier = []
-        if len(index_list) == 1:  # 一个点，不需要计算离群值
+        if len(index_list) <= 1:  # 一个点，不需要计算离群值
             return outlier
         intensity = self.int_df[index_list]
         q75, q25 = np.percentile(intensity, [75, 25])
@@ -62,22 +62,15 @@ class HKLData:
             if q25 - error_rate * sigma < self.int_df[test_idx] < q75 + error_rate * sigma:
                 continue
             outlier.append(test_idx)
-        # all_sd = np.std(self.int_df[index_list])  # 所有hkl的强度方差
-        # for i in range(len(index_list)):
-        #     test_idx = index_list[i]
-        #     other_idx = index_list[:i] + index_list[i + 1:]
-        #     other_sd = np.std(self.int_df[other_idx])  # 排除test_hkl之后的强度方差
-        #     t_value = (all_sd - other_sd) / self.sigma_df[test_idx]
-        #     if t_value > error_rate:
-        #         outlier.append(test_idx)
         return outlier
 
     def _find_high_var(self, index_list, error_rate):
         high_var = []
         for test_idx in index_list:
-            if self.int_df[test_idx] > error_rate * self.sigma_df[test_idx]:
+            #  TODO 方差过大值和离群值分开检查
+            if error_rate * self.int_df[test_idx] > 9 * self.sigma_df[test_idx]:
                 continue
-            high_var.append(test_idx)  # 强度小于error_rate倍的方差
+            high_var.append(test_idx)  # 强度小于9/error_rate倍的方差
         return high_var
 
     def _find_pairs_by_laue(self, laue):
@@ -104,10 +97,10 @@ class HKLData:
             normal_var = [idx for idx in index_of_pairs if idx not in high_var]  # 强度方差正常的指标
             outliers = self._find_outlier(normal_var, error_rate)  # 只在方差正常的指标里找离群值
             normal = [idx for idx in normal_var if idx not in outliers]  # 方差正常也不离群的指标
-            if len(index_of_pairs) > len(normal):  # 发现异常，汇报
+            if len(outliers) > 0:  # 发现异常，汇报
                 result.append({'normal': self.hkl_df.values[normal],
-                               'outliers': self.hkl_df.values[outliers],
-                               'high_var': self.hkl_df.values[high_var]})
+                               'high_var': self.hkl_df.values[high_var],
+                               'outliers': self.hkl_df.values[outliers]})
         return result
 
     def check_seq_by_laue(self, laue, seq_pattern, n_limit=20):
