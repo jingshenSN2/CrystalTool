@@ -1,0 +1,171 @@
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ +  SHELXT  -  CRYSTAL STRUCTURE SOLUTION - VERSION 2018/2            +
+ +  Copyright(c)  George M. Sheldrick 2010-2018  All Rights Reserved  +
+ +  Started at 17:00:45 on 17 Apr 2021                                +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ SHELXT should be started by:
+
+ shelxt name
+
+ to read name.ins and name.hkl, followed by any of the following switches
+ on the same line (default settings in square brackets). The cell, types of
+ element present and Laue group (but not space group or numbers of atoms)
+ are taken from the .ins file. Only CELL, LATT, SYMM, SFAC and HKLF are read
+ from this file. If -l is not set, the SYMM instructions set the Laue group.
+
+ General:
+ -l Laue group N (SADABS code). N=15 all hexagonal and trigonal
+ N=16 monoclinic with a unique, N=17 monoclinic with c unique
+ -tN use N threads, otherwise use 5 or max available, if less.
+ -d highest resolution to be employed [-d0.8]
+ -e fill out missing data to specified resolution [-eX]
+    where X is max(0.8,d-0.1) and d is the observed resolution
+
+ Phasing:
+ -q structure factors Go=E^q*Fo^(1-q) [-q0.5]
+ -iN NGo-(N-1)Gc map in dual space recycling [-i3]
+ -o switch OFF Patterson superpostion (not recommended)
+ -kN apply random omit every kth cycle [-k3]
+ -fX randomly omit fraction X of atoms [-f0.3]
+ -z sigma threshold for P1 peak-search [-z2.5]
+ -uX tangent expansion for E>X after random omit [off]
+ -v atomic volume threshold for P1 peak-search [-v13]
+ -m initial number of P1 dual space iterations [-m100]
+ -b spread factor for atom masks [-b3]
+ -jX CFOM = 0.01*CC - X*R(weak) [-j1]
+ -y CFOM = CHEM*CC (alternative to default -j1) [off]
+ -xX accept if CFOM > X+0.01*max(20-m,0) where m is try number [-x0.65]
+
+ CHEM is a 'chemical' figure of merit that should be between 1.0 (most
+ reasonable) and 0.0 (awful). Currently the only option (-y or -y1) is
+ the fraction of bond angles between 95 and 135 degrees ignoring the
+ 20% highest and 10% lowest peaks. This is only useful for organic
+ compounds and ligands, not for inorganics, but can be invaluable when
+ CC and R(weak) fail to distinguish between correct and incorrect P1
+ solutions.
+
+ Space group determination:
+ -s"Name" space group (replace "/" by "_" e.g. -s"P2(1)_c") [off]
+ -c space group restricted to the Sohncke space groups [off]
+ -n space group restricted to non-centrosymmetric [off]
+ -w worst alpha gap for a possible solution [-w0.15]
+ -p maximum number of atoms in full matrix, rest are blocked [-p20]
+ -g smallest gap in R1 to best cent. for non-cent. SG [-g0.02]
+ -h halt if R1 is less that this [-h0.08]
+ -r radius around peak for density integration [-r0.7]
+ -aX search ALL space groups in given Laue group with alpha < X [off]
+
+ -a overrides -g, -h and -w, but not -c or -n; -a without a number is
+ equivalent to -a0.3.
+
+ If the default settings fail, try -e0.7, -y or -a if the CC is good but the
+ solution is a mess, -q1 or -m1000 if all the CC values are less than
+ 0.85. Also worth trying is truncating noisy outer data with -d.
+
+ Command line parameters:  2_expF_1_0_expS_1_3_2
+
+  8 threads running in parallel
+
+ Unit-cell:   7.040   9.290  11.550   90.00   97.87   90.00
+
+ Laue group identified as number  2:   2/m                         
+
+    1635 reflections read from file 2_expF_1_0_expS_1_3_2.hkl
+
+ No equivalents for estimating merging R-values
+
+ Highest resln. = 0.797 A. For 1.2>d>1.1, <I/sig> =  16.6 and %(F>4sig) = 83.9
+    1635 unique reflections converted to     3050  with d > 0.800 A  in P1
+
+      19 data added to fill out missing data to  0.800A in P1
+
+ Fourier grid:    24 x  36 x  45:   0.293 x 0.258 x 0.257 A
+
+ Mean |E^2-1|    0kl  0.846    h0l  1.670    hk0  0.975    Rest  1.024
+   366 Reflections with E < 0.210 employed for R(weak)
+
+
+ Unique Patterson peaks (origin + d>1.7A) for superposition:
+
+    N      X        Y        Z    Height Distance
+    1   0.0000   0.0000   0.0000  999.00   0.000
+    2   0.2110   0.5000   0.0641  264.52   4.902
+    3   0.4960   0.5000   0.5000  174.67   7.848
+    4   0.8787   0.1884   0.1173  170.00   2.438
+    5   0.3848   0.0000   0.6202  128.10   5.463
+    6   0.1981   0.9035   0.1733  122.90   2.447
+    7   0.4963   0.8041   0.5000  109.29   6.584
+    8   0.5006   0.6624   0.5000  107.80   7.070
+    9   0.7670   0.0000   0.3924  103.10   5.027
+   10   0.9118   0.3283   0.8220  102.50   3.683
+   11   0.4037   0.5000   0.3154  102.43   6.331
+   12   0.4991   0.0000   0.5000  102.38   6.336
+   13   0.4647   0.0000   0.4065   96.57   5.342
+   14   0.3219   0.5000   0.4655   91.22   7.231
+   15   0.3715   0.0000   0.1321   88.70   2.842
+   16   0.2272   0.4257   0.1518   87.93   4.528
+   17   0.7158   0.1320   0.5614   84.37   5.329
+   18   0.4073   0.4227   0.2387   83.44   5.393
+   19   0.0943   0.7440   0.2747   83.32   3.948
+   20   0.7567   0.1842   0.7446   82.65   3.631
+   21   0.8913   0.2840   0.1978   77.78   3.639
+   22   0.8380   0.0492   0.4866   77.35   5.904
+   23   0.1928   0.3817   0.9710   75.06   3.828
+   24   0.3794   0.1644   0.6234   74.79   5.619
+   25   0.9471   0.5000   0.4584   73.72   7.091
+   26   0.2896   0.2425   0.3405   73.11   4.744
+   27   0.2941   0.0796   0.0483   72.15   2.198
+   28   0.3417   0.7156   0.9490   71.69   3.675
+   29   0.5952   0.0847   0.2817   71.00   4.676
+   30   0.0298   0.3683   0.8925   69.64   3.656
+   31   0.9274   0.4528  -0.0022   69.63   4.238
+   32   0.0381   0.5000   0.0885   68.80   4.756
+   33   0.5826   0.4005   0.5942   68.28   6.378
+   34   0.4690   0.7318   0.4022   66.37   5.873
+   35   0.2092   0.0000   0.9039   64.29   1.962
+   36   0.2632   0.6855   0.4291   63.71   5.832
+   37   0.0035   0.5668   0.5541   62.48   6.539
+   38   0.3483   0.5000   0.1503   61.83   5.425
+   39   0.5000   0.5862   0.0000   61.14   5.212
+   40   0.8019   0.5000   0.4686   61.09   7.408
+
+   40 unique Patterson peaks with heights greater than  61 selected as
+ superposition vectors
+
+ Setup:   0.010 secs
+
+  8 threads running in parallel
+
+  Try N(iter)  CC   R(weak)   CHEM    CFOM    best  Sig(min) N(P1) Vol/N
+    1   100   93.27  0.0706  1.0000  0.8622  0.8622  2.022    49   15.27
+    2   100   93.30  0.0670  0.9677  0.8660  0.8660  2.479    50   14.97
+    3   100   93.35  0.0788  1.0000  0.8547  0.8660  2.456    49   15.27
+    4   100   93.10  0.0717  1.0000  0.8593  0.8660  2.085    46   16.27
+    5   100   93.13  0.0736  1.0000  0.8577  0.8660  2.116    47   15.92
+    6   100   93.28  0.0768  1.0000  0.8560  0.8660  2.275    48   15.59
+    7   100   93.47  0.0712  1.0000  0.8635  0.8660  2.267    51   14.67
+    8   100   93.47  0.0712  1.0000  0.8634  0.8660  2.331    48   15.59
+
+       8 attempts, solution  2 selected with best CFOM = 0.8660, Alpha0 = 0.075
+
+ Structure solution:       0.107 secs
+
+   8 Centrosymmetric and   6 non-centrosymmetric space groups evaluated
+
+ Space group determination:       0.014 secs
+
+   R1  Rweak Alpha SysAbs  Orientation      Space group  Flack_x  File                    Formula
+ 0.295 0.020 0.050 1.52      as input       P2(1)/n              2_expF_1_0_expS_1_3_2_a  C10 O
+ 0.272 0.019 0.016 1.44      as input       Pn            no Fp  2_expF_1_0_expS_1_3_2_b  C15 N4 O3
+
+ Assign elements and isotropic refinement     0.093 secs
+
+  Please cite: G.M. Sheldrick (2015) "SHELXT - Integrated space-group
+  and crystal-structure determination", Acta Cryst., A71, 3-8 (Open
+  Access) if SHELXT proves useful.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ +  SHELXT finished at 17:00:45    Total time:        0.224 secs  +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
