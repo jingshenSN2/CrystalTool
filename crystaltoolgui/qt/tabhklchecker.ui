@@ -39,7 +39,7 @@
      <item>
       <layout class="QFormLayout" name="fL_check">
        <item row="0" column="0">
-        <widget class="QLabel" name="l_check_pattern">
+        <widget class="QLabel" name="l_check_laue">
          <property name="text">
           <string>Laue群</string>
          </property>
@@ -124,15 +124,15 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="l_check_conf_level">
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_check_error_rate">
          <property name="text">
-          <string>汇报结果容错阈值</string>
+          <string>容错阈值</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QDoubleSpinBox" name="dSB_check_conf_level">
+       <item row="2" column="1">
+        <widget class="QDoubleSpinBox" name="dSB_check_error_rate">
          <property name="maximum">
           <double>50.000000000000000</double>
          </property>
@@ -141,12 +141,36 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_check_z_value">
+         <property name="text">
+          <string>方差Z值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_check_recursive">
+         <property name="text">
+          <string>迭代检查</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDoubleSpinBox" name="dSB_check_z_value"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="cB_check_recursive">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
       <layout class="QHBoxLayout" name="hL_check_seq">
        <item>
-        <widget class="QCheckBox" name="rB_check_seq">
+        <widget class="QCheckBox" name="cB_check_seq">
          <property name="text">
           <string>序列检查</string>
          </property>

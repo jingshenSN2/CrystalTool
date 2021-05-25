@@ -50,7 +50,7 @@ class HklChecker(QWidget):
 
     @property
     def is_seq(self):
-        return self.ui.rB_check_seq.isChecked()
+        return self.ui.cB_check_seq.isChecked()
 
     @property
     def laue(self):
@@ -66,7 +66,7 @@ class HklChecker(QWidget):
 
     @property
     def recursive(self):
-        return self.ui.cB_check_recursove.isChecked()
+        return self.ui.cB_check_recursive.isChecked()
 
     @property
     def sequence(self):
