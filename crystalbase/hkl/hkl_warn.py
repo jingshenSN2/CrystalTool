@@ -4,22 +4,27 @@ import pandas as pd
 from .space_group import generate_pairs_by_laue
 
 
-def check_laue(hkl_file, laue, error_rate):
+def _print_table(table):
+    table_str = ''
+    hkl_format = '  ({}, {}, {}): ({}, {}, {})\n'  # 依次是h,k,l,F2,sigma(F2),phase
+    for row in table:
+        table_str += hkl_format.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4], int(row[5]))
+    return table_str
+
+
+def check_laue(hkl_file, laue, z_value, error_rate, recursive):
     hkl_data = HKLData(hkl_file)
-    result = hkl_data.check_pairs_by_laue(laue, error_rate)
+    result = hkl_data.check_pairs_by_laue(laue, z_value, error_rate, recursive)
     result_len = len(result)
     result_str = ''
-    hkl_format = '  ({}, {}, {}): ({}, {}, {})\n'
     for i in range(result_len):
         result_str += '{} normal:\n'.format(i + 1)
-        for row in result[i]['normal']:  # 强度正常的指标
-            result_str += hkl_format.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4], int(row[5]))
-        result_str += '  high_var:\n'
-        for row in result[i]['high_var']:  # 强度方差过大的指标
-            result_str += hkl_format.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4], int(row[5]))
+        result_str += _print_table(result[i]['normal'])  # 强度正常的指标
+        if len(result[i]['high_var']) != 0:
+            result_str += '  high_var:\n'
+            result_str += _print_table(result[i]['high_var'])  # 强度方差过大的指标
         result_str += '  outliers:\n'
-        for row in result[i]['outliers']:  # 强度离群的指标
-            result_str += hkl_format.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4], int(row[5]))
+        result_str += _print_table(result[i]['outliers'])  # 强度离群的指标
         result_str += '\n'
     return result_len, result_str
 
@@ -31,9 +36,7 @@ def check_seq(hkl_file, laue, error_rate, seq_pattern):
     result_str = ''
     for i in range(len(result)):
         result_str += '{}. {}:\n'.format(i + 1, result[i]['exist'])
-        for row in result[i]['hkl_list']:
-            result_str += '({}, {}, {}): ({}, {}, {})\n'.format(int(row[0]), int(row[1]), int(row[2]), row[3], row[4],
-                                                                int(row[5]))
+        result_str += _print_table(result[i]['hkl_list'])
     return result_len, result_str
 
 
@@ -51,7 +54,7 @@ class HKLData:
                 self.hkl_dict[hkl_tuple] = []
             self.hkl_dict[hkl_tuple].append(index)  # 保存hkl指标行号
 
-    def _find_outlier(self, index_list, error_rate):
+    def _find_outlier_recursive(self, index_list, error_rate):
         outlier = []
         if len(index_list) <= 1:  # 一个点，不需要计算离群值
             return outlier
@@ -64,14 +67,26 @@ class HKLData:
             outlier.append(test_idx)
         return outlier
 
-    def _find_high_var(self, index_list, error_rate):
+    def _find_outlier(self, index_list, error_rate, recursive=False):
+        outlier = new_outlier = self._find_outlier_recursive(index_list, error_rate)
+        normal = [idx for idx in index_list if idx not in outlier]
+        if not recursive:
+            return outlier, normal
+        while True:
+            if len(new_outlier) == 0:
+                return outlier, normal
+            new_outlier = self._find_outlier_recursive(normal, error_rate)
+            normal = [idx for idx in normal if idx not in new_outlier]
+
+    def _find_high_var(self, index_list, z_value):
         high_var = []
+        normal_var = []
         for test_idx in index_list:
-            #  TODO 方差过大值和离群值分开检查
-            if error_rate * self.int_df[test_idx] > 9 * self.sigma_df[test_idx]:
-                continue
-            high_var.append(test_idx)  # 强度小于9/error_rate倍的方差
-        return high_var
+            if self.int_df[test_idx] > z_value * self.sigma_df[test_idx]:
+                normal_var.append(test_idx)
+            else:
+                high_var.append(test_idx)  # 强度小于z_value倍的方差
+        return high_var, normal_var
 
     def _find_pairs_by_laue(self, laue):
         result = []  # 按laue群分组后的所有hkl
@@ -85,7 +100,7 @@ class HKLData:
             result.append({'hkl': exist_pair_list})
         return result
 
-    def check_pairs_by_laue(self, laue, error_rate):
+    def check_pairs_by_laue(self, laue, z_value, error_rate, recursive):
         result = []
         all_pairs_list = self._find_pairs_by_laue(laue)
         for pairs_list in all_pairs_list:
@@ -93,10 +108,8 @@ class HKLData:
             index_of_pairs = []
             for p in pairs:  # 记录该组的所有行号
                 index_of_pairs.extend(self.hkl_dict[p])
-            high_var = self._find_high_var(index_of_pairs, error_rate)  # 强度方差过大的指标
-            normal_var = [idx for idx in index_of_pairs if idx not in high_var]  # 强度方差正常的指标
-            outliers = self._find_outlier(normal_var, error_rate)  # 只在方差正常的指标里找离群值
-            normal = [idx for idx in normal_var if idx not in outliers]  # 方差正常也不离群的指标
+            high_var, normal_var = self._find_high_var(index_of_pairs, z_value)  # 强度方差过大的指标
+            outliers, normal = self._find_outlier(normal_var, error_rate, recursive)  # 只在方差正常的指标里找离群值
             if len(outliers) > 0:  # 发现异常，汇报
                 result.append({'normal': self.hkl_df.values[normal],
                                'high_var': self.hkl_df.values[high_var],

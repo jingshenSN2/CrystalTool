@@ -31,7 +31,7 @@ class HklChecker(QWidget):
             self.set_text('无可检查文件')
             return
         self.set_text('开始检查...')
-        thread = CheckThread(self.hkl_file, self.laue, self.error_level, self.sequence, self.check_signal)
+        thread = CheckThread(self.hkl_file, self.laue, self.z_value, self.error_level, self.recursive, self.sequence, self.check_signal)
         thread.start()
         self.ui.pB_check_start.setEnabled(False)
 
@@ -57,8 +57,16 @@ class HklChecker(QWidget):
         return self.ui.cB_check_laue.currentIndex()
 
     @property
+    def z_value(self):
+        return self.ui.dSB_check_z_value.value()
+
+    @property
     def error_level(self):
-        return self.ui.dSB_check_conf_level.value()
+        return self.ui.dSB_check_error_rate.value()
+
+    @property
+    def recursive(self):
+        return self.ui.cB_check_recursove.isChecked()
 
     @property
     def sequence(self):
