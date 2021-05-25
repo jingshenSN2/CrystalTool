@@ -76,6 +76,7 @@ class HKLData:
             if len(new_outlier) == 0:
                 return outlier, normal
             new_outlier = self._find_outlier_recursive(normal, error_rate)
+            outlier.extend(new_outlier)
             normal = [idx for idx in normal if idx not in new_outlier]
 
     def _find_high_var(self, index_list, z_value):
