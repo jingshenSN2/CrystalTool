@@ -1,4 +1,4 @@
 venv/
-test_old/
+test_data/
 __pycache__/
 .idea/
