@@ -7,7 +7,7 @@ from .wrapper import *
 
 def main():
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(os.path.dirname(__file__) + '/icon.png'))
+    app.setWindowIcon(QIcon(os.path.dirname(__file__) + '/icon.svg'))
     window = MainUI()
     window.show()
     sys.exit(app.exec_())
