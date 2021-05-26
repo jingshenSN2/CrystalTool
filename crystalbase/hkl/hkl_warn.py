@@ -35,8 +35,9 @@ def check_seq(hkl_file, laue, error_rate, seq_pattern):
     result_len = len(result)
     result_str = ''
     for i in range(len(result)):
-        result_str += '{}. {}:\n'.format(i + 1, result[i]['exist'])
+        result_str += 'n={} {}\n'.format(i + 1, '' if result[i]['exist'] else 'not exists')
         result_str += _print_table(result[i]['hkl_list'])
+        result_str += '\n'
     return result_len, result_str
 
 
@@ -117,7 +118,7 @@ class HKLData:
                                'outliers': self.hkl_df.values[outliers]})
         return result
 
-    def check_seq_by_laue(self, laue, seq_pattern, n_limit=20):
+    def check_seq_by_laue(self, laue, seq_pattern, n_limit=30):
         result = []
         sequence = []
         sh, sk, sl = seq_pattern
@@ -125,10 +126,17 @@ class HKLData:
             params = {'h': i, 'k': i, 'l': i, 'n': i}
             hkl_tuple = eval(sh, params), eval(sk, params), eval(sl, params)  # 按n计算hkl指标
             sequence.append(hkl_tuple)
-        for hkl_tuple in sequence:
+
+        last_exist = 0  # 记录最后一个存在的指标
+        for i in range(len(sequence)):
+            hkl_tuple = sequence[i]
             hkl_tuples = generate_pairs_by_laue(hkl_tuple, laue)
-            exist_hkl_list = [hkl for hkl in hkl_tuples if hkl in self.hkl_dict]  # 存在的指标
+            exist_hkl_list = []
+            for hkl in hkl_tuples:
+                if hkl in self.hkl_dict:
+                    exist_hkl_list.extend(self.hkl_dict[hkl])  # 存在的指标
+                    last_exist = i
             result.append({'hkl': hkl_tuple,
                            'hkl_list': self.hkl_df.values[exist_hkl_list],
                            'exist': len(exist_hkl_list) != 0})
-        return result
+        return result[:last_exist + 1]  # 舍去后面不存在的指标
