@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,1">
    <item>
-    <layout class="QVBoxLayout" name="vL_check_1" stretch="0,0,0,0,0,0,0">
+    <layout class="QVBoxLayout" name="vL_check_1" stretch="0,0,0,0,0,0,0,0,0,0,0">
      <property name="spacing">
       <number>9</number>
      </property>
@@ -37,15 +37,15 @@
       </widget>
      </item>
      <item>
-      <layout class="QFormLayout" name="fL_check">
-       <item row="0" column="0">
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="1" column="0">
         <widget class="QLabel" name="l_check_laue">
          <property name="text">
           <string>Laue群</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="1" column="1">
         <widget class="QComboBox" name="cB_check_laue">
          <item>
           <property name="text">
@@ -124,6 +124,33 @@
          </item>
         </widget>
        </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rB_check_varout">
+       <property name="text">
+        <string>方差/离群值检查</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QFormLayout" name="fL_check">
+       <property name="horizontalSpacing">
+        <number>-1</number>
+       </property>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_check_z_value">
+         <property name="text">
+          <string>方差Z值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDoubleSpinBox" name="dSB_check_z_value"/>
+       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="l_check_error_rate">
          <property name="text">
@@ -141,22 +168,12 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="l_check_z_value">
-         <property name="text">
-          <string>方差Z值</string>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="0">
         <widget class="QLabel" name="l_check_recursive">
          <property name="text">
           <string>迭代检查</string>
          </property>
         </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QDoubleSpinBox" name="dSB_check_z_value"/>
        </item>
        <item row="3" column="1">
         <widget class="QCheckBox" name="cB_check_recursive">
@@ -168,25 +185,39 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="hL_check_seq">
-       <item>
-        <widget class="QCheckBox" name="cB_check_seq">
+      <widget class="QRadioButton" name="rB_check_seq">
+       <property name="text">
+        <string>序列检查</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="l_check_seq_h">
          <property name="text">
-          <string>序列检查</string>
+          <string>H</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="l_check_seq">
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_check_seq_k">
          <property name="text">
-          <string>hkl:</string>
+          <string>K</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_check_seq_l">
+         <property name="text">
+          <string>L</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
         <widget class="QComboBox" name="cB_check_seqh">
          <item>
           <property name="text">
@@ -220,7 +251,7 @@
          </item>
         </widget>
        </item>
-       <item>
+       <item row="1" column="1">
         <widget class="QComboBox" name="cB_check_seqk">
          <item>
           <property name="text">
@@ -254,7 +285,7 @@
          </item>
         </widget>
        </item>
-       <item>
+       <item row="2" column="1">
         <widget class="QComboBox" name="cB_check_seql">
          <item>
           <property name="text">
@@ -304,6 +335,31 @@
       </spacer>
      </item>
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="l_check_save_opt">
+         <property name="text">
+          <string>保存选项</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_check_delete_var">
+         <property name="text">
+          <string>删除方差过大值</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_check_delete_outlier">
+         <property name="text">
+          <string>删除离群值</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
       <widget class="QLabel" name="l_check_result">
        <property name="text">
         <string/>
@@ -316,6 +372,13 @@
         <widget class="QPushButton" name="pB_check_start">
          <property name="text">
           <string>开始检查</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pB_check_with_save">
+         <property name="text">
+          <string>检查并保存到新文件</string>
          </property>
         </widget>
        </item>

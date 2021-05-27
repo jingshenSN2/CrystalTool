@@ -1,3 +1,5 @@
+from crystalbase import laue_group_name
+
 from ..libs import *
 from ..tabs import Ui_tabhklchecker
 from ..thread.check import *
@@ -16,6 +18,7 @@ class HklChecker(QWidget):
             self.ui.cB_check_laue.setItemText(idx, name)
         self.check_signal.connect(self.update_result)
         self.ui.pB_check_start.clicked.connect(self.check)
+        self.ui.pB_check_with_save.clicked.connect(self.check)
         self.ui.pB_check_choose.clicked.connect(self.open_hkl)
 
     def open_hkl(self):
@@ -31,14 +34,17 @@ class HklChecker(QWidget):
             self.set_text('无可检查文件')
             return
         self.set_text('开始检查...')
-        thread = CheckThread(self.hkl_file, self.laue, self.z_value, self.error_level, self.recursive, self.sequence, self.check_signal)
+        thread = CheckThread(self.hkl_file, self.laue, self.z_value, self.error_rate, self.recursive,
+                             self.save_option, self.sequence, self.check_signal)
         thread.start()
         self.ui.pB_check_start.setEnabled(False)
+        self.ui.pB_check_with_save.setEnabled(False)
 
     def update_result(self, issue_count, output):
-        self.set_text('检查完成, 共%d个问题' % issue_count)
+        self.set_text('检查完成, 共找到%d组指标' % issue_count)
         self.ui.tB_check_view.setText(output)
         self.ui.pB_check_start.setEnabled(True)
+        self.ui.pB_check_with_save.setEnabled(True)
 
     def set_text(self, text: str):
         self.ui.l_check_result.setText(text)
@@ -50,7 +56,7 @@ class HklChecker(QWidget):
 
     @property
     def is_seq(self):
-        return self.ui.cB_check_seq.isChecked()
+        return self.ui.rB_check_seq.isChecked()
 
     @property
     def laue(self):
@@ -61,12 +67,17 @@ class HklChecker(QWidget):
         return self.ui.dSB_check_z_value.value()
 
     @property
-    def error_level(self):
+    def error_rate(self):
         return self.ui.dSB_check_error_rate.value()
 
     @property
     def recursive(self):
         return self.ui.cB_check_recursive.isChecked()
+
+    @property
+    def save_option(self):
+        return {'remove_high_var': self.ui.cB_check_delete_var.isChecked(),
+                'remove_outlier': self.ui.cB_check_delete_outlier.isChecked()}
 
     @property
     def sequence(self):
