@@ -76,8 +76,8 @@ class HklChecker(QWidget):
 
     @property
     def save_option(self):
-        return {'remove_high_var': self.ui.cB_check_delete_var.isChecked(),
-                'remove_outlier': self.ui.cB_check_delete_outlier.isChecked()}
+        return {'remove_high_var': self.ui.cB_check_save_opt.currentIndex() in [0, 2],
+                'remove_outlier': self.ui.cB_check_save_opt.currentIndex() in [1, 2]}
 
     @property
     def sequence(self):

@@ -8,7 +8,7 @@ normal_format = '{:5d} {:3d} {:3d} {:3d} {:9.2f} {:9.2f} {:2d}\n'
 issue_format = '{:5d} {:3d} {:3d} {:3d} {:9.2f} {:9.2f} {:2d} {:5.2f}\n'
 
 
-def check_laue(hkl_file, laue, z_value, error_rate, recursive, save_option):
+def check_laue(hkl_file: str, laue: int, z_value: float, error_rate: float, recursive: bool, save_option: dict):
     hkl_data = HKLData(hkl_file)
     issue_count = 0
     issue_str = '#line  h    k    l     F2   sigma   p  Z/b\n'
@@ -38,7 +38,9 @@ def check_laue(hkl_file, laue, z_value, error_rate, recursive, save_option):
     if save_option['remove_outlier']:
         remove_indexes.extend(all_outlier_indexes)
 
-    hkl_data.save_to_hkl(remove_indexes=remove_indexes)
+    new_hkl_file = hkl_file.replace('.hkl', '_new.hkl')
+
+    hkl_data.save_to_hkl(new_hkl_file, remove_indexes=remove_indexes)
 
     return issue_count, issue_str
 
