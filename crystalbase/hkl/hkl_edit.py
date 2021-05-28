@@ -1,42 +1,11 @@
 import re
 
 import numpy as np
-import pandas as pd
 
-edit_hkl_methods = {0: 'expFS', 1: 'expF', 2: 'expS'}
-float_pat = re.compile('(-?\\d+\\.\\d*)\\s+(-?\\d+\\.\\d*)')
+from .hkl_base import HKLData
 
-
-def _smart_exp(a, p):
-    if a == 0:
-        return a
-    symbol = abs(a) / a
-    return symbol * pow(symbol * a, p)
-
-
-def _edit_line(line, method, param, is_scale, hkl_min, hkl_max, scaler_min, scaler_max):
-    new_line = line
-    # 正则匹配两个浮点数，分别是强度和强度方差
-    result = re.search(float_pat, line).groups()
-    if result is None:
-        return new_line
-    intensity, sigma = result[0], result[1]
-    intensity_f, sigma_f = float(intensity), float(sigma)
-    new_intensity, new_sigma = intensity_f, sigma_f
-    if method in [0, 1]:  # 强度幂（F）
-        new_intensity = _smart_exp(intensity_f, param)
-        hkl_max = _smart_exp(hkl_max, param)
-    if method in [0, 2]:  # 强度幂（sigma）
-        new_sigma = _smart_exp(sigma_f, param)
-
-    if is_scale:
-        new_intensity = scaler_min + (scaler_max - scaler_min) * (new_intensity - hkl_min) / (hkl_max - hkl_min)
-        new_sigma = (scaler_max - scaler_min) * new_sigma / (hkl_max - hkl_min)
-
-    # 强度替换成新的
-    new_line = new_line.replace(intensity, '%.2f' % new_intensity, 1)
-    new_line = new_line.replace(sigma, '%.2f' % new_sigma, 1)
-    return new_line
+edit_hkl_methods = {0: 'm1', 1: 'm2'}
+edit_hkl_ranges = {0: 'fs', 1: 'f', 2: 's'}
 
 
 def _parse_params(params_str: str):
@@ -52,26 +21,37 @@ def _parse_params(params_str: str):
     return params
 
 
-def edit_hkl(hkl_file: str, method: int, params_str: str, is_scale, scaler_min, scaler_max):
-    df = pd.read_table(hkl_file, sep='\\s+', header=None, names=['h', 'k', 'l', 'Int', 'sInt', 'phase'])
-    hkl_min = df['Int'].min()
-    hkl_max = df['Int'].max()
+def edit_hkl(hkl_file: str, method: int, edit_range: int, params_str: str, is_scale, scaler_min, scaler_max):
+    hkl_data = HKLData(hkl_file)
+    hkl_df = hkl_data.hkl_df
 
-    hkl = open(hkl_file, 'r')
-    hkl_lines = hkl.readlines()
-    hkl.close()
-
-    output_list = []
-    params = _parse_params(params_str)
+    output_list = []  # 输出文件的名称
+    params = _parse_params(params_str)  # 解析参数范围
     for p in params:
-        # 创建新文件
-        p_str = str(round(p, 2)).replace('.', '_')
-        new_hkl_file = hkl_file.replace('.hkl', '_%s_%s.hkl' % (edit_hkl_methods[method], p_str))
-        new_hkl = open(new_hkl_file, 'w')
-        for line in hkl_lines:
-            # 处理每行并写入新文件
-            new_line = _edit_line(line, method, p, is_scale, hkl_min, hkl_max, scaler_min, scaler_max)
-            new_hkl.write(new_line)
-        new_hkl.close()
+        new_hkl_df = hkl_df.copy()
+
+        def edit_one(num):
+            new_num = np.abs(num)
+            if method == 0:
+                new_num = np.power(new_num, p)  # 方法1 I0 = I^p
+            if method == 1:
+                new_num = new_num * np.log(new_num * p)  # 方法2 I0 = I*log(I*p)
+            return new_num
+
+        if edit_range in [0, 2]:  # 调整强度
+            new_hkl_df['Int'] = new_hkl_df['Int'].apply(edit_one)
+        if edit_range in [1, 2]:  # 调整方差
+            new_hkl_df['sInt'] = new_hkl_df['sInt'].apply(edit_one)
+        if is_scale:  # 归一化
+            int_min = edit_one(hkl_df['Int'].min())
+            int_max= edit_one(hkl_df['Int'].max())
+            new_hkl_df['Int'] = new_hkl_df['Int'].apply(lambda num: scaler_min + (scaler_max - scaler_min) * (num - int_min) / (int_max - int_min))
+            new_hkl_df['sInt'] = new_hkl_df['sInt'].apply(lambda num: (scaler_max - scaler_min) * num / (int_max - int_min))
+        p_str = '{:.2f}'.format(p).replace('.', '_')
+        # 新文件名
+        new_hkl_file = hkl_file.replace('.hkl',
+                                        '_%s_%s.hkl' % (edit_hkl_methods[method] + edit_hkl_ranges[edit_range], p_str))
+        hkl_data.hkl_df = new_hkl_df
+        hkl_data.save_to_hkl(new_hkl_file)  # 保存到新文件
         output_list.append(new_hkl_file)
     return output_list
