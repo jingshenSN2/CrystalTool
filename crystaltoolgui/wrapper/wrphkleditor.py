@@ -43,8 +43,8 @@ class HklEditor(QWidget):
         self.set_text('开始编辑...')
         self.new_hkl_files.clear()
         self.ui.bar_editor.setValue(0)
-        thread = EditThread(self.hkl_files, self.edit_method, self.edit_params, self.is_norm,
-                            self.norm_min, self.norm_max, self.edit_signal)
+        thread = EditThread(self.hkl_files, self.edit_method, self.edit_range, self.edit_params,
+                            self.is_norm, self.norm_min, self.norm_max, self.edit_signal)
         thread.start()
         self.ui.pB_editor_start.setEnabled(False)
 
@@ -87,6 +87,10 @@ class HklEditor(QWidget):
     @property
     def edit_method(self):
         return self.ui.cB_editor_method.currentIndex()
+
+    @property
+    def edit_range(self):
+        return self.ui.cB_editor_range.currentIndex()
 
     @property
     def edit_params(self):
