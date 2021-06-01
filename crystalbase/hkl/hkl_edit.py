@@ -34,7 +34,7 @@ def edit_hkl(hkl_file: str, method: int, edit_range: int, params_str: str, is_sc
                 new_num = np.power(new_num, p)  # 方法1 I0 = I^p
             if method == 1:
                 new_num = new_num * np.log(new_num * p)  # 方法2 I0 = I*log(I*p)
-            return new_num
+            return new_num if num >= 0 else -new_num
 
         if edit_range in [0, 2]:  # 调整强度
             new_hkl_df['Int'] = new_hkl_df['Int'].apply(edit_one)
@@ -42,8 +42,9 @@ def edit_hkl(hkl_file: str, method: int, edit_range: int, params_str: str, is_sc
             new_hkl_df['sInt'] = new_hkl_df['sInt'].apply(edit_one)
         if is_scale:  # 归一化
             int_min = edit_one(hkl_df['Int'].min())
-            int_max= edit_one(hkl_df['Int'].max())
-            new_hkl_df['Int'] = new_hkl_df['Int'].apply(lambda num: scaler_min + (scaler_max - scaler_min) * (num - int_min) / (int_max - int_min))
+            int_max = edit_one(hkl_df['Int'].max())
+            new_hkl_df['Int'] = new_hkl_df['Int'].apply(
+                lambda num: scaler_min + (scaler_max - scaler_min) * (num - int_min) / (int_max - int_min))
             new_hkl_df['sInt'] = new_hkl_df['sInt'].apply(lambda num: (scaler_max - scaler_min) * num / (int_max - int_min))
         p_str = '{:.2f}'.format(p).replace('.', '_')
         # 新文件名
