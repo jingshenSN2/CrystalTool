@@ -31,15 +31,15 @@ class HKLData:
             result.append({'hkl': exist_pair_list})
         return result
 
-    def save_to_hkl(self, filename='new.hkl', remove_indexes=None):
+    def save_to_hkl(self, filename='new.hkl', remove_indexes=None, save_phase=False):
         hkl_df_copy = self.hkl_df.copy()
         if remove_indexes is not None:
             hkl_df_copy.drop(remove_indexes, inplace=True)
         new_hkl_str = ''
         for _, row in hkl_df_copy.iterrows():
-            new_hkl_str += ' {:3d} {:3d} {:3d} {:9.2f} {:9.2f} {:2d}\n'.format(int(row['h']), int(row['k']),
-                                                                               int(row['l']), row['Int'],
-                                                                               row['sInt'], int(row['phase']))
+            new_hkl_str += ' {:3d} {:3d} {:3d} {:7.2f} {:7.2f}\n'.format(int(row['h']), int(row['k']),
+                                                                         int(row['l']), row['Int'],
+                                                                         row['sInt'])
         new_hkl = open(filename, 'w+')
         new_hkl.write(new_hkl_str)
         new_hkl.close()

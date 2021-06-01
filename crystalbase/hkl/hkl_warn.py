@@ -3,7 +3,6 @@ import numpy as np
 from .hkl_base import HKLData
 from .space_group import generate_pairs_by_laue
 
-
 normal_format = '{:5d} {:3d} {:3d} {:3d} {:9.2f} {:9.2f} {:2d}\n'
 issue_format = '{:5d} {:3d} {:3d} {:3d} {:9.2f} {:9.2f} {:2d} {:5.2f}\n'
 
@@ -22,7 +21,7 @@ def check_laue(hkl_file: str, laue: int, z_value: float, error_rate: float, recu
             index_of_pairs.extend(hkl_data.hkl_dict[p])
         high_var, normal_var = _find_high_var(hkl_data, index_of_pairs, z_value)  # 强度方差过大的指标
         outliers, normal = _find_outlier(hkl_data, normal_var, error_rate, recursive)  # 只在方差正常的指标里找离群值
-        if len(high_var) + len(outliers) > 0:  # 发现异常，汇报
+        if len(outliers) > 0:  # 发现异常，汇报
             issue_count += 1
             issue_str += '{}:\n'.format(issue_count)
             issue_str += _report_issue_str(hkl_data.hkl_df.iloc[normal, :],

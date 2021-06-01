@@ -1,11 +1,9 @@
-import re
-
 import numpy as np
 
 from .hkl_base import HKLData
 
 edit_hkl_methods = {0: 'm1', 1: 'm2'}
-edit_hkl_ranges = {0: 'fs', 1: 'f', 2: 's'}
+edit_hkl_ranges = {0: 'f', 1: 's', 2: 'fs'}
 
 
 def _parse_params(params_str: str):
