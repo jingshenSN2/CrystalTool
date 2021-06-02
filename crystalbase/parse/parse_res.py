@@ -42,6 +42,15 @@ def parse_from_res(filename: str, multilayer=(False, False, False), remove_extra
     #  读取对称性信息
     for i in range(index, length):
         line = res_lines[i].rstrip('\n')
+        if line.startswith('LATT'):
+            line = line.replace('LATT', '').replace(' ', '')
+            latt = int(line)
+            cell.set_latt(latt)
+            index = i + 1
+            break
+
+    for i in range(index, length):
+        line = res_lines[i].rstrip('\n')
         if line.startswith('SYMM'):
             line = line.replace('SYMM', '').replace(' ', '')
             sym = tuple(line.split(','))

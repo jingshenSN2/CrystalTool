@@ -79,6 +79,7 @@ class AtomGroup:
         self.name = name
         self.atom_index, self.atom_mass, self.max_distances, self.max_connect = getAtomProperties()
         self.cell_parameter = self.CellParameter()
+        self.latt = 1
         self.syms = []
         self.shelxt_score = {'R1': 1, 'Rweak': 1, 'Alpha': 1}
         self.multilayer = multilayer
@@ -91,23 +92,29 @@ class AtomGroup:
         """设置晶胞参数"""
         self.cell_parameter.set_parameter(a, b, c, alpha, beta, gamma)
 
+    def set_latt(self, latt):
+        self.latt = latt
+
     def set_symmetry(self, syms):
         self.syms = syms
 
     def _syms_atom(self, x, y, z):
         """解析对称性，添加原子"""
         atoms = [(x, y, z)]
+        if self.latt == 2:  # 体心I
+            atoms.append((x + 0.5, y + 0.5, z + 0.5))
         if len(self.syms) == 0:
             return atoms
         for sym in self.syms:
             new_atoms = []
             for a in atoms:
-                X, Y, Z = a[0], a[1], a[2]
+                X, Y, Z = a
                 X1 = eval(sym[0])
                 Y1 = eval(sym[1])
                 Z1 = eval(sym[2])
                 new_atoms.append(tuple([X1, Y1, Z1]))
             atoms.extend(new_atoms)
+            break
         return atoms
 
     def add_atom(self, element, index, x, y, z, intensity):
