@@ -98,11 +98,15 @@ class AtomGroup:
     def set_symmetry(self, syms):
         self.syms = syms
 
+    def _latt_atom(self, x, y, z):
+        atoms = [(x, y, z)]
+        if self.latt in [-2, 2]:  # 体心I
+            atoms.append((x + 0.5, y + 0.5, z + 0.5))
+        return atoms
+
     def _syms_atom(self, x, y, z):
         """解析对称性，添加原子"""
-        atoms = [(x, y, z)]
-        if self.latt == 2:  # 体心I
-            atoms.append((x + 0.5, y + 0.5, z + 0.5))
+        atoms = self._latt_atom(x, y, z)
         if len(self.syms) == 0:
             return atoms
         for sym in self.syms:
@@ -112,7 +116,7 @@ class AtomGroup:
                 X1 = eval(sym[0])
                 Y1 = eval(sym[1])
                 Z1 = eval(sym[2])
-                new_atoms.append(tuple([X1, Y1, Z1]))
+                new_atoms.extend(self._latt_atom(X1, Y1, Z1))
             atoms.extend(new_atoms)
             break
         return atoms

@@ -31,7 +31,7 @@ class GraphMatcherVF2:
         self.G2 = G2
         self.G1_nodes = set(self.G1.nodes())
         self.G2_nodes = set(self.G2.nodes())
-        self.stop_len = len(G2) - loss_atom
+        self.stop_len = max(len(G2) - loss_atom, 2)
 
         self.core_1 = {}
         self.core_2 = {}
