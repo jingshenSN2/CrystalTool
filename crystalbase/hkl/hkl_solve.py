@@ -11,7 +11,7 @@ def _copy(src, dst):
     dst_file.close()
 
 
-def solve_hkl(hkl_file: str, ins_file: str, program='xs.exe', params=''):
+def solve_hkl(hkl_file: str, ins_file: str, program='shelxs', params=''):
     # 打开求解工作目录
     temp_path = os.path.dirname(__file__) + '/../../.solve_workspace/'
     hkl_path, hkl_full_name = os.path.split(hkl_file)
@@ -32,10 +32,10 @@ def solve_hkl(hkl_file: str, ins_file: str, program='xs.exe', params=''):
     command = [program, new_name]
     solve_params = params.split(' ')
     command.extend(solve_params)
-    subprocess.Popen(command, cwd=temp_path, shell=True).wait()
+    subprocess.Popen(command, cwd=temp_path, shell=True, env={'PATH': temp_path}).wait()
     # 删除临时hkl和ins
     try:
-        if program == 'shelxt.exe':
+        if 'shelxt' in program:
             # shelxt会生成新的hkl，可以删掉旧的
             os.remove('%s.hkl' % output_path)
         os.remove('%s.ins' % output_path)

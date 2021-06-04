@@ -88,7 +88,8 @@ class HklSolver(QWidget):
 
     @property
     def solve_exe(self):
-        return self.ui.cB_solve_program.currentText()
+        programs = ['shelxs', 'shelxt']
+        return programs[self.ui.cB_solve_program.currentIndex()]
 
     @property
     def solve_params(self):
