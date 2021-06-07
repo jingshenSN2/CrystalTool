@@ -29,10 +29,11 @@ def solve_hkl(hkl_file: str, ins_file: str, program='shelxs', params=''):
         if file.endswith('.res'):
             old_res.add(file)
     # 执行求解程序，阻塞式
-    command = [program, new_name]
-    solve_params = params.split(' ')
-    command.extend(solve_params)
-    subprocess.Popen(command, cwd=temp_path, shell=True, env={'PATH': temp_path}).wait()
+    command = program + ' ' + new_name
+    if params != '':
+        command += command + ' ' + params
+    do = subprocess.Popen(command, cwd=temp_path, shell=True, env={'PATH': temp_path})
+    do.wait()
     # 删除临时hkl和ins
     try:
         if 'shelxt' in program:

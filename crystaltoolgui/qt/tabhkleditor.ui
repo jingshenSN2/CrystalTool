@@ -85,6 +85,11 @@
            <string>X*ln(p*X)</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>X/p</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="2" column="1">

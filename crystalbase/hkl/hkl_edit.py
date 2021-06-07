@@ -2,7 +2,7 @@ import numpy as np
 
 from .hkl_base import HKLData
 
-edit_hkl_methods = {0: 'm1', 1: 'm2'}
+edit_hkl_methods = {0: 'm1', 1: 'm2', 2: 'm3'}
 edit_hkl_ranges = {0: 'f', 1: 's', 2: 'fs'}
 
 
@@ -34,6 +34,8 @@ def edit_hkl(hkl_file: str, method: int, edit_range: int, params_str: str, is_sc
                 new_num = np.power(new_num, p)  # 方法1 I0 = I^p
             if method == 1:
                 new_num = new_num * np.log(new_num * p)  # 方法2 I0 = I*log(I*p)
+            if method == 2:
+                new_num = new_num / p  # 方法3 I0 = I / p
             return new_num if num >= 0 else -new_num
 
         if edit_range in [0, 2]:  # 调整强度
