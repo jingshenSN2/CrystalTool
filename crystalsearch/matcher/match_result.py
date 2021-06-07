@@ -22,8 +22,8 @@ class Result:
         self.threshold = threshold
         self.sort_by = sort_by
         info = self.target.info
-        self.base_feature = {'Nm': 0, 'Tm': 0, 'Rwm': 0, 'Rwe2': 0, 'Ram': 0,
-                             'Rc': 0, 'R1': info['R1'], 'Rweak': info['Rweak'], 'Alpha': info['Alpha']}
+        self.base_feature = {'Nm': 0, 'Tm': 0, 'Rw': 0, 'Ra': 0, 'Rb': 0, 'Rc': 0,
+                             'R1': info['R1'], 'Rweak': info['Rweak'], 'Alpha': info['Alpha']}
         self.avg_feature = self.base_feature.copy()
         self.best_feature = self.base_feature.copy()
         self.results = []
@@ -63,10 +63,9 @@ class Result:
         for p in self.match_pairs:
             # 计算评价指标
             feats = {'Tm': tm_count, 'pair': p, 'Nm': len(p.keys()),
-                     'Rwm': sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g]),
-                     'Rwe2': sum([p[k].aindex ** 2 for k in p]) / sum([atom.aindex ** 2 for atom in self.query.g]),
-                     'Ram': 1 - pow(sum([(k.mass - p[k].mass) ** 2 for k in p]) / sum([p[k].mass ** 2 for k in p]),
-                                    0.5),
+                     'Rw': sum([p[k].mass for k in p]) / sum([atom.mass for atom in self.query.g]),
+                     'Ra': 1 - pow(sum([(k.mass - p[k].mass) ** 2 for k in p]) / sum([p[k].mass ** 2 for k in p]), 0.5),
+                     'Rb': sum(v for k, v in self.target.subgraph(p.keys()).degree()) / sum(self.target.degree(k) for k in p),
                      'R1': self.base_feature['R1'],
                      'Rweak': self.base_feature['Rweak'],
                      'Alpha': self.base_feature['Alpha']}
@@ -91,11 +90,12 @@ class Result:
             # 排序函数，会自动解析sort_by字符串为排序规则
             key = []
             for s in self.sort_by:
-                if s[1:] not in r:
-                    print('%s不是有效的排序依据，已自动忽略' % s[1:])
+                sstrip = s.strip('+-')
+                if sstrip not in r:
+                    print('%s不是有效的排序依据，已自动忽略' % s)
                     continue
-                k = r[s[1:]]
-                key.append(k if s[0] == '-' else k)
+                k = r[sstrip]
+                key.append(-k if '-' in s else k)
             return tuple(key)
 
         self.results.sort(key=sort_key)

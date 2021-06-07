@@ -99,12 +99,12 @@ class ResMatcher(QWidget):
             features.append('Tm')
         if self.ui.cB_Nm.isChecked():
             features.append('Nm')
-        if self.ui.cB_Rwm.isChecked():
-            features.append('Rwm')
-        if self.ui.cB_Rwe2.isChecked():
-            features.append('Rwe2')
-        if self.ui.cB_Ram.isChecked():
-            features.append('Ram')
+        if self.ui.cB_Rw.isChecked():
+            features.append('Rw')
+        if self.ui.cB_Ra.isChecked():
+            features.append('Ra')
+        if self.ui.cB_Rb.isChecked():
+            features.append('Rb')
         if self.ui.cB_Rc.isChecked():
             features.append('Rc')
         if self.ui.cB_R1.isChecked():

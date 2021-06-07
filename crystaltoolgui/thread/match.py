@@ -27,11 +27,16 @@ class MatchThread(threading.Thread):
             self.signal.emit(process, [])
 
         def sort_key(r):
+            # 排序函数，会自动解析sort_by字符串为排序规则
             feat = r.best_feature
             key = []
             for s in self.sort_by:
-                k = feat[s[1:]]
-                key.append(k if s[0] == '+' else -k)
+                sstrip = s.strip('+-')
+                if sstrip not in feat:
+                    print('%s不是有效的排序依据，已自动忽略' % s)
+                    continue
+                k = feat[sstrip]
+                key.append(-k if '-' in s else k)
             return tuple(key)
 
         results.sort(key=sort_key)

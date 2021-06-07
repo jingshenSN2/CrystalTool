@@ -24,11 +24,11 @@
       </widget>
      </item>
      <item>
-         <widget class="QListView" name="lV_match_res">
-             <property name="selectionMode">
-                 <enum>QAbstractItemView::ExtendedSelection</enum>
-             </property>
-         </widget>
+      <widget class="QListView" name="lV_match_res">
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="hL_match_pB1">
@@ -39,13 +39,13 @@
          </property>
         </widget>
        </item>
-          <item>
-              <widget class="QLabel" name="l_solve_count">
-                  <property name="text">
-                      <string>已选0个</string>
-                  </property>
-              </widget>
-          </item>
+       <item>
+        <widget class="QLabel" name="l_solve_count">
+         <property name="text">
+          <string>已选0个</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
@@ -106,222 +106,222 @@
          </property>
         </widget>
        </item>
-          <item row="2" column="1">
-              <widget class="QComboBox" name="cB_threshold">
-                  <property name="currentText">
-                      <string>无</string>
-                  </property>
-                  <property name="currentIndex">
-                      <number>0</number>
-                  </property>
-                  <item>
-                      <property name="text">
-                          <string>无</string>
-                      </property>
-                  </item>
-                  <item>
-                      <property name="text">
-                          <string>Tm(匹配上次数)</string>
-                      </property>
-                  </item>
-                  <item>
-                      <property name="text">
-                          <string>Nm(匹配上原子数)</string>
-                      </property>
-                  </item>
-                  <item>
-                      <property name="text">
-                          <string>Rwm(质量加权匹配比例)</string>
-                      </property>
-                  </item>
-                  <item>
-                      <property name="text">
-                          <string>Rwe2(电子加权匹配比例)</string>
-                      </property>
-                  </item>
-                  <item>
-                      <property name="text">
-                          <string>Ram(元素匹配相似度)</string>
-                      </property>
-                  </item>
-                  <item>
-                      <property name="text">
-                          <string>Rc(坐标匹配相似度)</string>
-                      </property>
-                  </item>
-              </widget>
-          </item>
-          <item row="3" column="0">
-              <widget class="QLabel" name="l_dBS_threshold">
-                  <property name="text">
-                      <string>汇报阈值</string>
-                  </property>
-              </widget>
-          </item>
-          <item row="3" column="1">
-              <widget class="QDoubleSpinBox" name="dSB_threshold"/>
-          </item>
-          <item row="0" column="1">
-              <widget class="QRadioButton" name="rB_old_algorithm">
-                  <property name="text">
-                      <string/>
-                  </property>
-              </widget>
-          </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cB_threshold">
+         <property name="currentText">
+          <string>无</string>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>无</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Tm(匹配上次数)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Nm(匹配上原子数)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Rwm(质量加权匹配比例)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Rwe2(电子加权匹配比例)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Ram(元素匹配相似度)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Rc(坐标匹配相似度)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="l_dBS_threshold">
+         <property name="text">
+          <string>汇报阈值</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QDoubleSpinBox" name="dSB_threshold"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QRadioButton" name="rB_old_algorithm">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
-        <item>
-            <layout class="QHBoxLayout" name="hL_match_thickness">
-                <item>
-                    <widget class="QLabel" name="l_match_thick">
-                        <property name="text">
-                            <string>晶胞加层</string>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QCheckBox" name="cB_thick_x">
-                        <property name="text">
-                            <string>x</string>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QCheckBox" name="cB_thick_y">
-                        <property name="text">
-                            <string>y</string>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QCheckBox" name="cB_thick_z">
-                        <property name="text">
-                            <string>z</string>
-                        </property>
-                    </widget>
-                </item>
-            </layout>
-        </item>
-        <item>
-            <layout class="QGridLayout" name="gL_match_output">
-                <item row="4" column="1">
-                    <widget class="QCheckBox" name="cB_Rwm">
-                        <property name="text">
-                            <string>Rwm</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="4" column="2">
-                    <widget class="QCheckBox" name="cB_Rwe2">
-                        <property name="text">
-                            <string>Rwe2</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="0">
-                    <widget class="QLabel" name="l_match_output">
-                        <property name="text">
-                            <string>输出指标</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="2">
-                    <widget class="QCheckBox" name="cB_Nm">
-                        <property name="text">
-                            <string>Nm</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="1">
-                    <widget class="QCheckBox" name="cB_Tm">
-                        <property name="text">
-                            <string>Tm</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="5" column="1">
-                    <widget class="QCheckBox" name="cB_R1">
-                        <property name="text">
-                            <string>R1</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="5" column="3">
-                    <widget class="QCheckBox" name="cB_Alpha">
-                        <property name="text">
-                            <string>Alpha</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="5" column="2">
-                    <widget class="QCheckBox" name="cB_Rweak">
-                        <property name="text">
-                            <string>Rweak</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="1" column="3">
-                    <widget class="QCheckBox" name="cB_Ram">
-                        <property name="text">
-                            <string>Ram</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-                <item row="4" column="3">
-                    <widget class="QCheckBox" name="cB_Rc">
-                        <property name="text">
-                            <string>Rc</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </item>
-            </layout>
-        </item>
-        <item>
-            <layout class="QHBoxLayout" name="hL_match_sort">
-                <item>
-                    <widget class="QLabel" name="l_match_sort">
-                        <property name="text">
-                            <string>排序规则</string>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <widget class="QLineEdit" name="lE_match_sort">
-                        <property name="inputMask">
-                            <string/>
-                        </property>
-                        <property name="text">
-                            <string>-Tm,-Rwm,-Nm,-Ram</string>
-                        </property>
-                        <property name="maxLength">
-                            <number>32767</number>
+     <item>
+      <layout class="QHBoxLayout" name="hL_match_thickness">
+       <item>
+        <widget class="QLabel" name="l_match_thick">
+         <property name="text">
+          <string>晶胞加层</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_thick_x">
+         <property name="text">
+          <string>x</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_thick_y">
+         <property name="text">
+          <string>y</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cB_thick_z">
+         <property name="text">
+          <string>z</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gL_match_output">
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="cB_Ra">
+         <property name="text">
+          <string>Ra</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="cB_Rb">
+         <property name="text">
+          <string>Rb</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="l_match_output">
+         <property name="text">
+          <string>输出指标</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="cB_Nm">
+         <property name="text">
+          <string>Nm</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="cB_Tm">
+         <property name="text">
+          <string>Tm</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QCheckBox" name="cB_R1">
+         <property name="text">
+          <string>R1</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="QCheckBox" name="cB_Alpha">
+         <property name="text">
+          <string>Alpha</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="cB_Rweak">
+         <property name="text">
+          <string>Rweak</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QCheckBox" name="cB_Rw">
+         <property name="text">
+          <string>Rw</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="QCheckBox" name="cB_Rc">
+         <property name="text">
+          <string>Rc</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="hL_match_sort">
+       <item>
+        <widget class="QLabel" name="l_match_sort">
+         <property name="text">
+          <string>排序规则</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lE_match_sort">
+         <property name="inputMask">
+          <string/>
+         </property>
+         <property name="text">
+          <string>-Tm,-Nm</string>
+         </property>
+         <property name="maxLength">
+          <number>32767</number>
          </property>
         </widget>
        </item>

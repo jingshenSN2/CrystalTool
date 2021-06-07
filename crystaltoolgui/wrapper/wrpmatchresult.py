@@ -28,7 +28,7 @@ class MatchResult(QWidget):
         sim.setHorizontalHeaderLabels(self.header)
         sim.setRowCount(result_len)
 
-        def add_one_row(sim, result, row_index, stat='avg'):
+        def add_one_row(sim, result, row_index, stat='best'):
             row_data = [result.target.name, '是' if result.is_matched else '否']
             for feat in self.report_feats:
                 if feat in ['Nm', 'Tm']:
