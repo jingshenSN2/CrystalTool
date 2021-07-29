@@ -33,9 +33,9 @@ symmetric_operations = {
     1: [('h', 'k', 'l'),
         ('-h', '-k', '-l')],  # laue group: -1
     2: [('h', 'k', 'l'),
-        ('-h', 'k', 'l'),
+        ('-h', 'k', '-l'),
         ('h', '-k', 'l'),
-        ('h', 'k', '-l')],  # laue group: 2/m
+        ('-h', '-k', '-l')],  # laue group: 2/m
     3: [('h', 'k', 'l'),
         ('-h', '-k', '-l'),
         ('-h', 'k', 'l'),
