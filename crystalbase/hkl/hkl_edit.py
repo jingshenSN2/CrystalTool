@@ -19,7 +19,7 @@ def _parse_params(params_str: str):
     return params
 
 
-def edit_hkl(hkl_file: str, method: int, edit_range: int, params_str: str, is_scale, scaler_min, scaler_max):
+def edit_hkl(hkl_file: str, method: int, edit_range: int, params_str: str, is_scale):
     hkl_data = HKLData(hkl_file)
     hkl_df = hkl_data.hkl_df
 
@@ -42,17 +42,11 @@ def edit_hkl(hkl_file: str, method: int, edit_range: int, params_str: str, is_sc
             new_hkl_df['Int'] = new_hkl_df['Int'].apply(edit_one)
         if edit_range in [1, 2]:  # 调整方差
             new_hkl_df['sInt'] = new_hkl_df['sInt'].apply(edit_one)
-        if is_scale:  # 归一化
-            int_min = edit_one(hkl_df['Int'].min())
-            int_max = edit_one(hkl_df['Int'].max())
-            new_hkl_df['Int'] = new_hkl_df['Int'].apply(
-                lambda num: scaler_min + (scaler_max - scaler_min) * (num - int_min) / (int_max - int_min))
-            new_hkl_df['sInt'] = new_hkl_df['sInt'].apply(lambda num: (scaler_max - scaler_min) * num / (int_max - int_min))
         p_str = '{:.2f}'.format(p).replace('.', '_')
         # 新文件名
         new_hkl_file = hkl_file.replace('.hkl',
                                         '_%s_%s.hkl' % (edit_hkl_methods[method] + edit_hkl_ranges[edit_range], p_str))
         hkl_data.hkl_df = new_hkl_df
-        hkl_data.save_to_hkl(new_hkl_file)  # 保存到新文件
+        hkl_data.save_to_hkl(new_hkl_file, norm=is_scale)  # 保存到新文件
         output_list.append(new_hkl_file)
     return output_list

@@ -67,132 +67,98 @@
      </property>
      <item>
       <layout class="QFormLayout" name="fL_editor">
-       <item row="0" column="1">
-        <widget class="QComboBox" name="cB_editor_method">
-         <property name="currentText">
-          <string>X^p</string>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <item>
-          <property name="text">
+          <item row="0" column="0">
+              <widget class="QLabel" name="L_editor_method">
+                  <property name="text">
+                      <string>编辑方式</string>
+                  </property>
+              </widget>
+          </item>
+          <item row="0" column="1">
+              <widget class="QComboBox" name="cB_editor_method">
+                  <property name="currentText">
+                      <string>X^p</string>
+                  </property>
+                  <property name="currentIndex">
+                      <number>0</number>
+                  </property>
+                  <item>
+                      <property name="text">
            <string>X^p</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>X*ln(p*X)</string>
+              <string>X*ln(p*X)</string>
           </property>
          </item>
-         <item>
-          <property name="text">
-           <string>X/p</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lE_editor_params">
-         <property name="toolTip">
-          <string>支持begin:step:end或single两种格式，用英文逗号分隔</string>
-         </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="placeholderText">
-          <string>此处输入修改参数范围</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="L_editor_method">
-         <property name="text">
-          <string>编辑方式</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="l_editor_params">
-         <property name="text">
-          <string>参数范围</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="l_editor_norm">
-         <property name="text">
-          <string>是否归一化</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="cB_editor_norm">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="l_editor_min">
-         <property name="text">
-          <string>归一最小值</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="l_editor_max">
-         <property name="text">
-          <string>归一最大值</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QDoubleSpinBox" name="dSB_editor_min">
-         <property name="maximum">
-          <double>10000.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QDoubleSpinBox" name="dSB_editor_max">
-         <property name="minimum">
-          <double>100.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>100000.000000000000000</double>
-         </property>
-         <property name="value">
-          <double>1000.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="l_editor_range">
-         <property name="text">
-          <string>编辑范围</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="cB_editor_range">
-         <item>
-          <property name="text">
-           <string>F2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>sigma(F2)</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>both</string>
-          </property>
-         </item>
-        </widget>
-       </item>
+                  <item>
+                      <property name="text">
+                          <string>X/p</string>
+                      </property>
+                  </item>
+              </widget>
+          </item>
+          <item row="1" column="0">
+              <widget class="QLabel" name="l_editor_range">
+                  <property name="text">
+                      <string>编辑范围</string>
+                  </property>
+              </widget>
+          </item>
+          <item row="1" column="1">
+              <widget class="QComboBox" name="cB_editor_range">
+                  <item>
+                      <property name="text">
+                          <string>F2</string>
+                      </property>
+                  </item>
+                  <item>
+                      <property name="text">
+                          <string>sigma(F2)</string>
+                      </property>
+                  </item>
+                  <item>
+                      <property name="text">
+                          <string>both</string>
+                      </property>
+                  </item>
+              </widget>
+          </item>
+          <item row="2" column="0">
+              <widget class="QLabel" name="l_editor_params">
+                  <property name="text">
+                      <string>参数范围</string>
+                  </property>
+              </widget>
+          </item>
+          <item row="2" column="1">
+              <widget class="QLineEdit" name="lE_editor_params">
+                  <property name="toolTip">
+                      <string>支持begin:step:end或single两种格式，用英文逗号分隔</string>
+                  </property>
+                  <property name="statusTip">
+                      <string/>
+                  </property>
+                  <property name="placeholderText">
+                      <string>此处输入修改参数范围</string>
+                  </property>
+              </widget>
+          </item>
+          <item row="3" column="0">
+              <widget class="QLabel" name="l_editor_norm">
+                  <property name="text">
+                      <string>保留原始强度</string>
+                  </property>
+              </widget>
+          </item>
+          <item row="3" column="1">
+              <widget class="QCheckBox" name="cB_editor_norm">
+                  <property name="text">
+                      <string/>
+                  </property>
+              </widget>
+          </item>
       </layout>
      </item>
      <item>

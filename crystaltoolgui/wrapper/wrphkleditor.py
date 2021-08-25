@@ -43,8 +43,8 @@ class HklEditor(QWidget):
         self.set_text('开始编辑...')
         self.new_hkl_files.clear()
         self.ui.bar_editor.setValue(0)
-        thread = EditThread(self.hkl_files, self.edit_method, self.edit_range, self.edit_params,
-                            self.is_norm, self.norm_min, self.norm_max, self.edit_signal)
+        thread = EditThread(self.hkl_files, self.edit_method, self.edit_range, self.edit_params, self.is_norm,
+                            self.edit_signal)
         thread.start()
         self.ui.pB_editor_start.setEnabled(False)
 
@@ -98,12 +98,4 @@ class HklEditor(QWidget):
 
     @property
     def is_norm(self):
-        return self.ui.cB_editor_norm.isChecked()
-
-    @property
-    def norm_min(self):
-        return self.ui.dSB_editor_min.value()
-
-    @property
-    def norm_max(self):
-        return self.ui.dSB_editor_max.value()
+        return not self.ui.cB_editor_norm.isChecked()
