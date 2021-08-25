@@ -9,7 +9,6 @@ class HKLData:
     def __init__(self, hkl_file):
         self.hkl_df = pd.read_table(hkl_file, sep='\\s+', header=None,
                                     names=['h', 'k', 'l', 'Int', 'sInt', 'phase', 'z', 'b']).fillna(1)
-
         self.int_df = self.hkl_df['Int'].apply(np.abs)
         self.sigma_df = self.hkl_df['sInt'].apply(np.abs)
         self.hkl_dict = {}
@@ -36,10 +35,13 @@ class HKLData:
         if remove_indexes is not None:
             hkl_df_copy.drop(remove_indexes, inplace=True)
         new_hkl_str = ''
+        max_int = hkl_df_copy['Int'].max()
+        factor = 99999.0 / max_int
+        print(max_int, factor)
         for _, row in hkl_df_copy.iterrows():
-            new_hkl_str += ' {:3d} {:3d} {:3d} {:7.2f} {:7.2f}\n'.format(int(row['h']), int(row['k']),
-                                                                         int(row['l']), row['Int'],
-                                                                         row['sInt'])
+            new_hkl_str += ' {:3d} {:3d} {:3d} {:7d} {:7d}\n'.format(int(row['h']), int(row['k']),
+                                                                     int(row['l']), int(row['Int'] * factor),
+                                                                     int(row['sInt'] * factor))
         new_hkl = open(filename, 'w+')
         new_hkl.write(new_hkl_str)
         new_hkl.close()
